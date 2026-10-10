@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="650" viewBox="0 0 1200 650">
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L10,3 L0,6 Z" fill="#334155"/></marker></defs>
+<rect width="1200" height="650" fill="#f8fafc"/><style>text{font-family:Arial,sans-serif;fill:#0f172a}.box{fill:#fff;stroke:#334155;stroke-width:2;rx:10}.blue{fill:#e0f2fe;stroke:#0369a1;stroke-width:2;rx:10}.line{stroke:#334155;stroke-width:2;marker-end:url(#arrow)}</style>
+<text x="600" y="38" text-anchor="middle" font-size="25" font-weight="bold">GigMap - Container and Layered Viewpoints</text>
+<text x="35" y="82" font-size="18" font-weight="bold">C4 Container View</text>
+<rect class="blue" x="35" y="105" width="170" height="55"/><text x="120" y="138" text-anchor="middle" font-size="15">Aplicacion</text>
+<rect class="box" x="270" y="105" width="150" height="55"/><text x="345" y="138" text-anchor="middle" font-size="15">API Gateway</text>
+<rect class="box" x="475" y="80" width="170" height="48"/><text x="560" y="110" text-anchor="middle" font-size="14">Identity Service</text>
+<rect class="box" x="475" y="140" width="170" height="48"/><text x="560" y="170" text-anchor="middle" font-size="14">Concert Service</text>
+<rect class="box" x="710" y="80" width="170" height="48"/><text x="795" y="110" text-anchor="middle" font-size="14">Attendance Service</text>
+<rect class="box" x="710" y="140" width="170" height="48"/><text x="795" y="170" text-anchor="middle" font-size="14">Community Service</text>
+<rect class="box" x="945" y="110" width="180" height="55"/><text x="1035" y="143" text-anchor="middle" font-size="14">Notification Service</text>
+<path class="line" d="M205 132 H270"/><path class="line" d="M420 132 H475"/><path class="line" d="M645 104 H710"/><path class="line" d="M880 132 H945"/>
+<text x="35" y="270" font-size="18" font-weight="bold">Layered View - Concert Service</text>
+<rect class="blue" x="70" y="310" width="170" height="60"/><text x="155" y="346" text-anchor="middle" font-size="15">API / Controller</text>
+<rect class="box" x="300" y="310" width="190" height="60"/><text x="395" y="346" text-anchor="middle" font-size="15">Application Services</text>
+<rect class="box" x="550" y="310" width="180" height="60"/><text x="640" y="346" text-anchor="middle" font-size="15">Domain Rules</text>
+<rect class="box" x="790" y="310" width="190" height="60"/><text x="885" y="346" text-anchor="middle" font-size="15">Repository Adapter</text>
+<rect class="box" x="1030" y="310" width="120" height="60"/><text x="1090" y="346" text-anchor="middle" font-size="15">PostgreSQL</text>
+<path class="line" d="M240 340 H300"/><path class="line" d="M490 340 H550"/><path class="line" d="M730 340 H790"/><path class="line" d="M980 340 H1030"/>
+<text x="35" y="470" font-size="18" font-weight="bold">UML Sequence - Publicar concierto</text>
+<path class="line" d="M120 540 H1080"/><path class="line" d="M270 540 V595"/><path class="line" d="M520 540 V595"/><path class="line" d="M770 540 V595"/><path class="line" d="M1020 540 V595"/>
+<text x="120" y="525" text-anchor="middle" font-size="14">Artista</text><text x="270" y="525" text-anchor="middle" font-size="14">App</text><text x="520" y="525" text-anchor="middle" font-size="14">Gateway</text><text x="770" y="525" text-anchor="middle" font-size="14">Concert</text><text x="1020" y="525" text-anchor="middle" font-size="14">DB</text>
+<text x="600" y="620" text-anchor="middle" font-size="14">POST /api/v1/concerts -> valida JWT -> valida dominio -> persiste -> 201 Created</text>
+</svg>

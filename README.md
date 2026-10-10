@@ -99,6 +99,7 @@ Lizarbe Alvarez, Ariana Nickole (u202311704)
   - 4.1. Desing Concepts, ViewPoints & ER Diagrams
   - 4.1.1. Principles Statements<br>
   - 4.1.2. Approaches Statements Architectural Styles & Patterns<br>
+  - 4.1.2.1. Selected Architectural Styles & Patterns<br>
   - 4.1.3. Context Diagram<br>
   - 4.1.4. Approach driven ViewPoints Diagrams<br>
   - 4.1.5. Relational/Non Relational Database Diagram<br>
@@ -161,15 +162,87 @@ URL de repositorio del reporte del proyecto: `https://github.com/fundamentos2026
   - [2.3. Needfinding](#23-needfinding)
     - [2.3.1. User Personas](#231-user-personas)
     - [2.3.2. User Task Matrix](#232-user-task-matrix)
-    - [2.3.3. Empathy Mapping](#233-empathy-mapping)
-    - [2.3.4. As-is Scenario Mapping](#234-as-is-scenario-mapping)
+    - [2.3.3. User Journey Mapping](#233-user-journey-mapping)
+    - [2.3.4. Empathy Mapping](#234-empathy-mapping)
+    - [2.3.5. As-is Scenario Mapping](#235-as-is-scenario-mapping)
+  - [2.4. Ubiquitous Language](#24-ubiquitous-language)
 - [CAPÍTULO III: Requirements Specification](#capítulo-iii-requirements-specification)
   - [3.1. To-Be Scenario Mapping](#31-to-be-scenario-mapping)
   - [3.2. User Stories](#32-user-stories)
   - [3.3. Impact Mapping](#33-impact-mapping)
   - [3.4. Product Backlog](#34-product-backlog)
+- [Capítulo IV: Product Architecture Design](#capítulo-iv-product-architecture-design)
+  - [4.1. Desing Concepts, ViewPoints & ER Diagrams](#41-desing-concepts-viewpoints--er-diagrams)
+    - [4.1.1. Principles Statements](#411-principles-statements)
+    - [4.1.2. Approaches Statements Architectural Styles & Patterns](#412-approaches-statements-architectural-styles--patterns)
+    - [4.1.2.1. Selected Architectural Styles & Patterns](#4121-selected-architectural-styles--patterns)
+    - [4.1.3. Context Diagram](#413-context-diagram)
+    - [4.1.4. Approach driven ViewPoints Diagrams](#414-approach-driven-viewpoints-diagrams)
+    - [4.1.5. Relational/Non Relational Database Diagram](#415-relationalnon-relational-database-diagram)
+    - [4.1.6. Design Patterns](#416-design-patterns)
+    - [4.1.7. Tactics](#417-tactics)
+  - [4.2. Architectural Drivers](#42-architectural-drivers)
+    - [4.2.1. Design Purpose](#421-design-purpose)
+    - [4.2.2. Primary Functionality (Primary User Stories)](#422-primary-functionality-primary-user-stories)
+    - [4.2.3. Quality Attribute Scenarios](#423-quality-attribute-scenarios)
+    - [4.2.4. Constraints](#424-constraints)
+    - [4.2.5. Architectural Concerns](#425-architectural-concerns)
+  - [4.3. ADD Iterations](#43-add-iterations)
+    - [4.3.1. Iteration 0: Initial Architecture](#431-iteration-0-initial-architecture)
+      - [4.3.1.1. Architectural Design Backlog 1](#4311-architectural-design-backlog-1)
+      - [4.3.1.2. Establish Iteration Goal by Selecting Drivers](#4312-establish-iteration-goal-by-selecting-drivers)
+      - [4.3.1.3. Choose One or More Elements of the System to Refine](#4313-choose-one-or-more-elements-of-the-system-to-refine)
+      - [4.3.1.4. Choose One or More Design Concepts That Satisfy the Selected Drivers](#4314-choose-one-or-more-design-concepts-that-satisfy-the-selected-drivers)
+      - [4.3.1.5. Instantiate Architectural Elements, Allocate Responsibilities, and Define Interfaces](#4315-instantiate-architectural-elements-allocate-responsibilities-and-define-interfaces)
+      - [4.3.1.6. Sketch Views (C4 & UML) and Record Design Decisions](#4316-sketch-views-c4--uml-and-record-design-decisions)
+      - [4.3.1.7. Analysis of Current Design and Review Iteration Goal (Kanban Board)](#4317-analysis-of-current-design-and-review-iteration-goal-kanban-board)
 
 ## **Student Outcome**
+
+ABET – EAC - Student Outcome 4: <br>
+La capacidad de reconocer responsabilidades éticas y profesionales en situaciones de ingeniería y hacer juicios informados, considerando el impacto social, económico, cultural y tecnológico de GigMap.
+
+<table border="1">
+  <thead>
+    <tr>
+      <th>Criterio específico</th>
+      <th>Acciones realizadas hasta la entrega parcial</th>
+      <th>Conclusiones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>4.c.1 Reconoce responsabilidad ética y profesional en situaciones de ingeniería de software</td>
+      <td>
+        <strong>Acosta Elera, Abraam Bernabe</strong><br>
+        TB1: Participó en la consolidación del análisis de requisitos, la revisión de historias de usuario y la organización del informe. TP1: Colaboró en la revisión de criterios de aceptación y en la integración de evidencias de verificación del producto, procurando que los requisitos fueran trazables y comprensibles.<br><br>
+        <strong>Collantes Carrillo, Diego Mateo</strong><br>
+        TB1: Participó en el desarrollo del Capítulo IV y en la revisión de las historias de usuario, buscando que las decisiones arquitectónicas fueran claras y coherentes con las necesidades del producto. TP1: Colaboró en la revisión de la documentación técnica y en la consistencia entre requisitos, arquitectura y diseño.<br><br>
+        <strong>Lizarbe Alvarez, Ariana Nickole</strong><br>
+        TB1: Participó en la mejora de las historias de usuario y en la revisión de la experiencia de los usuarios finales. TP1: Desarrolló escenarios BDD en Gherkin para apoyar la verificación de historias de usuario y promover criterios de aceptación claros.
+      </td>
+      <td>
+        Hasta la entrega parcial, el equipo demostró responsabilidad profesional al organizar el trabajo, revisar los requisitos y relacionar las necesidades de fans y artistas con decisiones de diseño y verificación. La colaboración permitió mantener una base trazable para el desarrollo de GigMap.
+      </td>
+    </tr>
+    <tr>
+      <td>4.c.2 Emite juicios informados considerando el impacto de las soluciones de ingeniería de software en contextos globales, económicos, ambientales y sociales</td>
+      <td>
+        <strong>Acosta Elera, Abraam Bernabe</strong><br>
+        TB1: Analizó cómo GigMap puede mejorar el acceso a conciertos locales y la visibilidad de artistas emergentes. TP1: Participó en la revisión de las funcionalidades priorizadas considerando su valor para fans y artistas.<br><br>
+        <strong>Collantes Carrillo, Diego Mateo</strong><br>
+        TB1: Evaluó el impacto social y cultural de centralizar el descubrimiento de música en vivo. TP1: Contribuyó a relacionar atributos como seguridad, rendimiento y disponibilidad con la experiencia de los usuarios.<br><br>
+        <strong>Lizarbe Alvarez, Ariana Nickole</strong><br>
+        TB1: Aportó una perspectiva empática sobre las dificultades de fans y artistas para encontrar y difundir eventos. TP1: Analizó cómo las pruebas y criterios de aceptación ayudan a reducir errores que afectarían la confianza de los usuarios.
+      </td>
+      <td>
+        El equipo emitió juicios informados al considerar que GigMap no solo debe funcionar técnicamente, sino también proteger los datos de ubicación, facilitar el acceso cultural y generar valor para artistas independientes y comunidades locales.
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Legacy Student Outcome content retained below for version-history reference.
 
 ABET – EAC - Student Outcome 4: <br>
 La capacidad de reconocer responsabilidades éticas y profesionales en situaciones de ingeniería y hacer juicios informados, que deben considerar el impacto de las soluciones de ingeniería en contextos globales, económicos, ambientales y sociales.
@@ -262,7 +335,7 @@ Analizó los resultados de la validación considerando el impacto de GigMap en s
         TB1: <br>Evaluó la solución desde un enfoque analítico y creativo, considerando su impacto en la difusión de artistas emergentes y en la mejora de la experiencia de los usuarios dentro del ecosistema musical.<br>
         TP1: <br>Utilice pruebas automatizadas para garantizar un software más confiable y eficiente, reduciendo errores y mejorando la experiencia del usuario, lo que contribuye positivamente al impacto social y tecnológico de la aplicación.<br>
         TB2: <br> Evaluó el diseño experimental desde un enfoque analítico, considerando cómo las hipótesis, métricas, condiciones y el plan de tracking impactan en la validación de la solución y en la generación de valor para los usuarios y artistas dentro del ecosistema musical.<br>
-		TF:  <br>En el Shareback Session Artifacts: Learning Workflow, analicé junto con el equipo el impacto de la solución propuesta, considerando cómo podía contribuir a mejorar la seguridad en las operaciones mineras, reducir accidentes y generar beneficios sociales y económicos para las empresas y los trabajadores. La retroalimentación obtenida permitió tomar decisiones fundamentadas para mejorar el diseño y la funcionalidad del sistema.<br>
+    TF:  <br>En el Shareback Session Artifacts: Learning Workflow, analicé junto con el equipo el impacto de GigMap en la conexión entre fans y artistas emergentes. La retroalimentación obtenida permitió tomar decisiones fundamentadas para mejorar el descubrimiento de conciertos, la visibilidad de los artistas y la experiencia de la comunidad musical.<br>
       </td>
       <td>El equipo logró considerar el impacto de la solución propuesta desde una perspectiva más amplia, tomando en cuenta aspectos sociales, culturales y tecnológicos. A través del análisis de la problemática, se evidenció una intención clara de generar valor tanto para los usuarios como para los artistas emergentes. Asimismo, se evaluó cómo la solución puede influir en la forma en que las personas acceden a la música en vivo y participan en la escena local. Esto demuestra una capacidad para tomar decisiones informadas, alineadas con el contexto y las necesidades reales del entorno.<br><br>
       TP1: El equipo emitió juicios informados al diseñar las suites de testing (unitarias y de sistema) y los pipelines de DevOps, considerando cómo la robustez técnica se traduce en confianza social. La validación rigurosa de las entidades y flujos de usuario asegura que la plataforma sea una herramienta sostenible económicamente para los artistas y socialmente valiosa para los fans. La automatización garantiza que los cambios lleguen al usuario de forma rápida, segura y con un uso eficiente de recursos tecnológicos. <br><br>
@@ -272,6 +345,8 @@ Analizó los resultados de la validación considerando el impacto de GigMap en s
     </tr>
   </tbody>
 </table>
+
+-->
 
 # CAPÍTULO I: Introducción
 
@@ -287,6 +362,7 @@ Nuestra misión es conectar a las personas con la música en vivo mediante tecno
 
 | Estudiante                                                                                                                | Descripción                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 | ------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Acosta Elera, Abraam Bernabe (u202219199)** | Soy estudiante de Ingeniería de Software en la Universidad Peruana de Ciencias Aplicadas. Me interesa el análisis, el diseño y la construcción de soluciones tecnológicas. En este proyecto aporto al trabajo colaborativo, la organización de los requisitos y la revisión de la calidad del informe, con compromiso y responsabilidad. |
 | ![team member profile photo](assets/images/profiles/diego_collantes.png) **Collantes Carrillo, Diego Mateo (u202311823)** | Mi nombre es Diego Collantes. Tengo 20 años. Soy estudiante de octavo ciclo en la Universidad Peruana de Ciencias Aplicadas (UPC). Disfruto de leer, redactar y escuchar música en mi tiempo libre. Elegí esta carrera, ya que me interesó todo el proceso que hay detrás de cada aplicación o programa que usamos en nuestro día a día. Personalmente, espero ampliar mis conocimientos en este ámbito a lo largo de este curso. Además, estoy comprometido a contribuir en todo lo que sea posible con el equipo y a desempeñarme de manera adecuada.                                                                                                                                                                                                                     |
 | ![team member profile photo](assets/images/profiles/ariana_lizarbe.png) **Lizarbe Alvarez, Ariana Nickole (u202311704)**  | Mi nombre es Ariana Lizarbe, tengo 21 años y estoy cursando el octavo ciclo de la carrera de ingeniería de software en la Universidad Peruana de Ciencias Aplicadas. En mi tiempo libre fuera de la universidad, procuro mejorar mis habilidades blandas, como la empatía o inteligencia emocional. También, me esfuerzo en adquirir conocimientos que pueden ayudarme a desarrollarme como futura profesional, como distintos lenguajes de programación. A su vez, disfruto de escuchar música, podcasts, leer y ver series de televisión. Me comprometo a colaborar de manera activa y responsable en la creación de esta startup, aportando mis habilidades en pensamiento crítico, trabajo en equipo y adaptabilidad para alcanzar un trabajo de calidad sobresaliente. |
 
@@ -881,7 +957,7 @@ Finalmente, destacó que una herramienta como GigMap podría ayudar a superar la
 
 **Resumen:**
 
-Leo Nova es un artista independiente de indie pop con influencias electrónicas que gestiona su carrera por su cuenta y promociona sus eventos principalmente en Instagram, TikTok y Spotify. Aunque estas plataformas le ayudan, considera que existe una gran dificultad para lograr visibilidad local y conectar con el público adecuado, ya que las herramientas actuales no están pensadas para artistas emergentes. Frente a esto, valora muy positivamente la idea de GigMap, ya que un mapa de eventos musicales permitiría descubrir conciertos cercanos, mejorar su exposición y facilitar la conexión con nuevas audiencias; además, destaca como clave contar con perfiles personalizables, notificaciones a usuarios cercanos, estadísticas y herramientas de interacción con seguidores, viendo la app como una solución útil para crecer sin grandes presupuestos.
+Diego Zúñiga es un artista independiente de indie pop con influencias electrónicas que gestiona su carrera por su cuenta y promociona sus eventos principalmente en Instagram, TikTok y Spotify. Aunque estas plataformas le ayudan, considera que existe una gran dificultad para lograr visibilidad local y conectar con el público adecuado, ya que las herramientas actuales no están pensadas para artistas emergentes. Frente a esto, valora muy positivamente la idea de GigMap, ya que un mapa de eventos musicales permitiría descubrir conciertos cercanos, mejorar su exposición y facilitar la conexión con nuevas audiencias; además, destaca como clave contar con perfiles personalizables, notificaciones a usuarios cercanos, estadísticas y herramientas de interacción con seguidores, viendo la app como una solución útil para crecer sin grandes presupuestos.
 
 #### Entrevista #3
 
@@ -956,7 +1032,7 @@ Está compuesto por jóvenes músicos independientes que gestionan su carrera de
 
 #### Entrevistas incluidas
 
-- Entrevista #1: Zaleth Feijóo (19 años, Pueblo Libre)
+- Entrevista #1: Mathias Medina (20 años, La Molina)
 - Entrevista #2: Diego Zúñiga (20 años, Comas)
 - Entrevista #3: Diego Santos (27 años, San Miguel)
 
@@ -1034,7 +1110,31 @@ Los user personas son representaciones de los distintos tipos de usuarios que pe
 | Organizar y coordinar presentaciones en bares o festivales  | Ocasional  | Alta        |
 | Interactuar con su comunidad de seguidores                  | Frecuente  | Medio       |
 
-### 2.3.3. Empathy Mapping
+### 2.3.3. User Journey Mapping
+
+El User Journey Mapping representa la experiencia de los segmentos objetivo al intentar resolver sus necesidades actuales. Permite identificar los momentos de mayor frustración y relacionarlos con oportunidades concretas para GigMap.
+
+**Journey del fan de música**
+
+| Etapa | Acción del usuario | Pensamiento o expectativa | Dolor identificado | Oportunidad para GigMap |
+| --- | --- | --- | --- | --- |
+| Necesidad | Decide buscar un concierto para asistir. | "Quiero encontrar algo interesante y cercano." | No sabe dónde buscar y la información está dispersa. | Mostrar eventos cercanos en un mapa desde una sola aplicación. |
+| Exploración | Revisa redes sociales, páginas de venues y recomendaciones. | "Espero encontrar información completa y actualizada." | Invierte tiempo comparando fuentes y puede perder eventos pequeños. | Centralizar fecha, lugar, género, artista y estado del evento. |
+| Evaluación | Compara conciertos según género, fecha, distancia y precio. | "Necesito saber si realmente me conviene asistir." | Los datos pueden estar incompletos o desactualizados. | Incorporar filtros, detalle del evento y ubicación geográfica. |
+| Decisión | Elige un evento y coordina con sus amigos. | "Quiero confirmar mi plan y compartirlo." | No cuenta con una lista personal de eventos ni coordinación integrada. | Permitir confirmar asistencia, guardar el evento y compartirlo. |
+| Seguimiento | Espera el evento y revisa cambios o recordatorios. | "No quiero olvidar la fecha ni perder una actualización." | Las notificaciones de redes sociales no siempre son relevantes. | Enviar recordatorios y alertas personalizadas con consentimiento. |
+
+**Journey del artista emergente**
+
+| Etapa | Acción del usuario | Pensamiento o expectativa | Dolor identificado | Oportunidad para GigMap |
+| --- | --- | --- | --- | --- |
+| Planificación | Organiza una presentación y define sus datos. | "Necesito publicar mi evento de forma rápida." | Gestiona información en varias redes y herramientas. | Ofrecer un formulario único para crear conciertos. |
+| Publicación | Comparte el evento con sus seguidores. | "Quiero llegar a personas nuevas, no solo a quienes ya me siguen." | El alcance depende de algoritmos y presupuesto. | Exponer el evento a fans cercanos mediante mapa y filtros. |
+| Interacción | Responde consultas y busca conectar con su público. | "Quiero construir una comunidad alrededor de mi música." | Las redes mezclan contenido y no están enfocadas en eventos locales. | Proporcionar perfil artístico y comunidades temáticas. |
+| Seguimiento | Revisa interés y asistencia al evento. | "Necesito saber si mi promoción está funcionando." | Tiene poca información centralizada sobre su audiencia. | Registrar visualizaciones, asistencias y métricas básicas. |
+| Mejora | Usa los resultados para planificar próximas presentaciones. | "Quiero tomar mejores decisiones para crecer." | No dispone de datos simples y accionables. | Mostrar estadísticas de eventos y retroalimentación de usuarios. |
+
+### 2.3.4. Empathy Mapping
 
 **Diego Rivas**
 
@@ -1048,7 +1148,7 @@ Los user personas son representaciones de los distintos tipos de usuarios que pe
     <img src="assets/images/empathy-map/fan.png" alt="user_persona" style="width: 700px">
 </p>
 
-## 2.3.4. As-is Scenario Mapping
+### 2.3.5. As-is Scenario Mapping
 
 **Fans de la música:**
 
@@ -1061,6 +1161,28 @@ Los user personas son representaciones de los distintos tipos de usuarios que pe
 <p align="center">
   <img src="assets/images/as-is-scenario/artista.png" alt="as is scenario artistas" width="700">
 </p>
+
+## 2.4. Ubiquitous Language
+
+El lenguaje ubicuo establece los términos que el equipo utilizará de forma consistente en el análisis, el diseño, las historias de usuario, los endpoints y el código. Estos términos ayudan a mantener alineados el dominio del negocio y la arquitectura de GigMap.
+
+| Término | Definición en GigMap | Uso en el sistema |
+| --- | --- | --- |
+| Fan | Usuario que descubre conciertos, sigue artistas y registra su intención de asistir. | Actor principal de US01, US05, US13 y US17. |
+| Artista | Usuario que administra un perfil musical y publica conciertos. | Actor principal de US02 y US03. |
+| Concierto | Evento musical principal publicado por un artista, con fecha, ubicación y estado. | Entidad central de Concert Service. |
+| Evento asociado | Actividad vinculada a un concierto, como una reunión de fans o afterparty. | Gestionado mediante EP05 y US24-US34. |
+| Asistencia | Registro de la intención de un usuario de asistir a un concierto. | Relación entre Fan y Concierto; debe ser única por usuario y evento. |
+| Comunidad | Espacio temático donde los usuarios comparten publicaciones relacionadas con música o eventos. | Gestionado por Community Service. |
+| Membresía | Relación que representa que un usuario pertenece a una comunidad. | Permite controlar el acceso a publicaciones e interacciones. |
+| Publicación | Contenido creado por un usuario dentro de una comunidad, con texto o imagen. | Entidad `Post` y recurso `/api/v1/posts`. |
+| Género musical | Clasificación utilizada para describir conciertos y preferencias de los usuarios. | Se usa para filtrar y recomendar eventos. |
+| Ubicación | Coordenadas o dirección asociada al usuario o a un concierto. | Se utiliza con consentimiento y mediante el proveedor de mapas. |
+| Notificación | Mensaje generado por un evento del sistema y enviado al usuario. | Incluye recordatorios, conciertos cercanos e interacciones sociales. |
+| API Gateway | Punto de entrada que enruta solicitudes y aplica controles transversales. | Protege y versiona la API pública. |
+| Servicio | Componente autónomo que administra una capacidad del dominio. | User and Identity, Concert, Attendance, Community y Notification Services. |
+| Asistencia confirmada | Estado de una asistencia que fue registrada correctamente. | Produce el evento interno `AttendanceConfirmed`. |
+| Concierto publicado | Estado de un concierto visible para los usuarios. | Puede ser consultado mediante exploración y mapa. |
 
 # CAPÍTULO III: Requirements Specification
 
@@ -3415,7 +3537,7 @@ El diseño de GigMap no solo responde a necesidades de negocio, sino que se fund
 | Gestión de Proyecto | Trello (Tablero Kanban) |
 | Comunicación del Equipo | Slack / Discord |
 
-### 4.1.3. Architectural Styles & Patterns
+### 4.1.2.1. Selected Architectural Styles & Patterns
 
 Para satisfacer los atributos de calidad definidos en el ADD, se han seleccionado los siguientes estilos y patrones:
 
@@ -3430,9 +3552,227 @@ Para satisfacer los atributos de calidad definidos en el ADD, se han seleccionad
 - **Saga Pattern (Choreography-based):** Utilizado para gestionar la consistencia de datos en transacciones que cruzan múltiples microservicios (como el flujo de registro de asistencia y publicación de eventos) sin utilizar bloqueos de base de datos pesados.
 - **CQRS (Command Query Responsibility Segregation):** Aplicado parcialmente para separar las operaciones de actualización de datos (creación de conciertos o publicaciones) de las consultas de reportes complejos (listados de eventos o estadísticas de comunidad).
 
+### 4.1.3. Context Diagram
+
+El diagrama de contexto muestra a GigMap como un sistema que recibe interacciones de dos actores principales y depende de dos servicios externos. Los fans consultan conciertos, utilizan la geolocalización y registran su asistencia. Los artistas administran su perfil y publican eventos. GigMap no almacena directamente los mapas ni envía las notificaciones por sí mismo: delega esas funciones mediante adaptadores para reducir el acoplamiento con los proveedores externos.
+
+<p align="center">
+  <img src="assets/images/architecture/context-diagram.svg" alt="GigMap context diagram" width="900">
+</p>
+
+```mermaid
+flowchart LR
+  Fan[Fan]
+  Artist[Artista emergente]
+  GigMap((GigMap))
+  MapService[Proveedor externo de mapas]
+  PushService[Proveedor externo de notificaciones]
+
+  Fan -->|Busca conciertos, filtra eventos y confirma asistencia| GigMap
+  Artist -->|Gestiona perfil y publica conciertos| GigMap
+  GigMap -->|Solicita mapas y geocodificacion| MapService
+  GigMap -->|Envía recordatorios y alertas| PushService
+```
+
 ### 4.1.4. Approach driven ViewPoints Diagrams
 
+Los viewpoints seleccionados permiten observar la arquitectura desde tres perspectivas complementarias: estructura de contenedores, organización interna de un servicio y comportamiento de un flujo crítico.
+
+<p align="center">
+  <img src="assets/images/architecture/viewpoints-diagram.svg" alt="GigMap architecture viewpoints" width="1000">
+</p>
+
+**C4 - Container Viewpoint**
+
+Este viewpoint muestra los contenedores principales de GigMap y sus relaciones. Todos los clientes ingresan mediante el API Gateway; los servicios internos administran sus responsabilidades y utilizan PostgreSQL mediante repositorios.
+
+```mermaid
+flowchart TB
+  Client[Aplicacion movil y landing page]
+  Gateway[API Gateway]
+  Identity[User and Identity Service]
+  Concert[Concert Service]
+  Attendance[Attendance Service]
+  Community[Community Service]
+  Notification[Notification Service]
+  Database[(PostgreSQL)]
+  Maps[Map Provider Adapter]
+  Push[Push Provider Adapter]
+
+  Client --> Gateway
+  Gateway --> Identity
+  Gateway --> Concert
+  Gateway --> Attendance
+  Gateway --> Community
+  Identity --> Database
+  Concert --> Database
+  Attendance --> Database
+  Community --> Database
+  Concert --> Maps
+  Attendance -.->|AttendanceConfirmed| Notification
+  Concert -.->|ConcertCreated| Notification
+  Notification --> Push
+```
+
+**Layered Viewpoint - Concert Service**
+
+Este viewpoint representa la organización interna que se aplicará dentro de cada microservicio. La dependencia apunta hacia el dominio para que las reglas de negocio no dependan directamente de Spring Data, PostgreSQL o proveedores externos.
+
+```mermaid
+flowchart LR
+  Controller[API / Controller]
+  Application[Application Services]
+  Domain[Domain Model and Rules]
+  Repository[Repository Interface]
+  Persistence[Persistence Adapter]
+  PostgreSQL[(PostgreSQL)]
+
+  Controller --> Application
+  Application --> Domain
+  Application --> Repository
+  Repository --> Persistence
+  Persistence --> PostgreSQL
+```
+
+**UML Sequence Viewpoint - Publicar concierto**
+
+```mermaid
+sequenceDiagram
+  actor Artist as Artista
+  participant App as Aplicacion
+  participant Gateway as API Gateway
+  participant Concert as Concert Service
+  participant DB as PostgreSQL
+  participant Notification as Notification Service
+
+  Artist->>App: Completa formulario del concierto
+  App->>Gateway: POST /api/v1/concerts
+  Gateway->>Gateway: Valida JWT y rol Artist
+  Gateway->>Concert: Envia CreateConcertDTO
+  Concert->>Concert: Valida reglas de dominio
+  Concert->>DB: Guarda concierto
+  DB-->>Concert: Concert creado
+  Concert-->>Notification: Publica ConcertCreated
+  Concert-->>Gateway: 201 Created
+  Gateway-->>App: Respuesta con el concierto
+  App-->>Artist: Muestra evento publicado
+```
+
 ### 4.1.5. Relational/Non Relational Database Diagram
+
+En esta primera versión se selecciona un modelo relacional en PostgreSQL porque GigMap necesita mantener relaciones consistentes entre usuarios, artistas, conciertos, comunidades y asistencias. La base de datos se presenta como un modelo lógico común para documentar el dominio; en una implementación de microservicios, cada servicio deberá ser responsable de sus propias tablas y no acceder directamente a las tablas internas de otro servicio.
+
+<p align="center">
+  <img src="assets/images/architecture/database-diagram.svg" alt="GigMap relational database diagram" width="1000">
+</p>
+
+```mermaid
+erDiagram
+  USER ||--o| ARTIST_PROFILE : "has"
+  USER ||--o{ ATTENDANCE : "confirms"
+  CONCERT ||--o{ ATTENDANCE : "receives"
+  ARTIST_PROFILE ||--o{ CONCERT : "publishes"
+  USER ||--o{ COMMUNITY_MEMBERSHIP : "joins"
+  COMMUNITY ||--o{ COMMUNITY_MEMBERSHIP : "contains"
+  COMMUNITY ||--o{ POST : "has"
+  USER ||--o{ POST : "creates"
+  POST ||--o{ POST_REACTION : "receives"
+  USER ||--o{ POST_REACTION : "makes"
+  CONCERT ||--o{ RELATED_EVENT : "groups"
+  USER ||--o{ RELATED_EVENT : "creates"
+
+  USER {
+    uuid user_id PK
+    string email UK
+    string password_hash
+    string role
+    string display_name
+    string location_consent
+    datetime created_at
+  }
+
+  ARTIST_PROFILE {
+    uuid artist_id PK
+    uuid user_id FK
+    string stage_name
+    string biography
+    string photo_url
+  }
+
+  CONCERT {
+    uuid concert_id PK
+    uuid artist_id FK
+    string title
+    string description
+    string genre
+    datetime start_at
+    string venue_name
+    decimal latitude
+    decimal longitude
+    string status
+    datetime created_at
+  }
+
+  ATTENDANCE {
+    uuid attendance_id PK
+    uuid user_id FK
+    uuid concert_id FK
+    string status
+    datetime confirmed_at
+    datetime cancelled_at
+  }
+
+  COMMUNITY {
+    uuid community_id PK
+    uuid owner_id FK
+    string name
+    string description
+    datetime created_at
+  }
+
+  COMMUNITY_MEMBERSHIP {
+    uuid membership_id PK
+    uuid user_id FK
+    uuid community_id FK
+    datetime joined_at
+  }
+
+  POST {
+    uuid post_id PK
+    uuid community_id FK
+    uuid author_id FK
+    string content
+    string image_url
+    datetime created_at
+  }
+
+  POST_REACTION {
+    uuid reaction_id PK
+    uuid post_id FK
+    uuid user_id FK
+    string reaction_type
+    datetime created_at
+  }
+
+  RELATED_EVENT {
+    uuid related_event_id PK
+    uuid concert_id FK
+    uuid creator_id FK
+    string title
+    string location
+    datetime start_at
+    string status
+  }
+```
+
+**Restricciones principales del modelo:**
+
+- `USER.email` debe ser único.
+- La combinación `ATTENDANCE.user_id` y `ATTENDANCE.concert_id` debe ser única para evitar asistencias duplicadas.
+- La combinación `COMMUNITY_MEMBERSHIP.user_id` y `COMMUNITY_MEMBERSHIP.community_id` debe ser única.
+- La combinación `POST_REACTION.post_id` y `POST_REACTION.user_id` debe ser única.
+- `CONCERT.artist_id`, `ATTENDANCE.user_id`, `ATTENDANCE.concert_id`, `POST.community_id` y `POST.author_id` deben tener claves foráneas válidas.
+- Las coordenadas de `CONCERT` solo deben almacenarse cuando el usuario u organizador haya proporcionado información de ubicación válida.
 
 ### 4.1.6. Design Patterns
 
@@ -3591,3 +3931,179 @@ Estas preocupaciones no son todavía soluciones definitivas. Funcionan como entr
 Las iteraciones ADD permiten transformar los drivers arquitectónicos en una solución progresivamente más detallada. Para esta entrega se desarrollará una única primera iteración.
 
 ### 4.3.1. Iteration 0: Initial Architecture
+
+#### 4.3.1.1. Architectural Design Backlog 1
+
+El backlog arquitectónico reúne los aspectos que deben resolverse primero porque tienen mayor impacto en la estructura de GigMap. La prioridad se define considerando el riesgo técnico y la relación con las funcionalidades principales.
+
+| ID | Driver o preocupación | Historias relacionadas | Prioridad | Resultado esperado |
+| --- | --- | --- | --- | --- |
+| ADB-01 | Autenticación y autorización por roles | US02, US08, US09, US10 | Alta | Definir un acceso seguro para fans y artistas, con permisos diferenciados. |
+| ADB-02 | Descubrimiento geolocalizado de conciertos | US05, US06, US13, US22 | Alta | Definir cómo se consultan eventos cercanos y cómo se integra el proveedor de mapas. |
+| ADB-03 | Consistencia de asistencias | US17, US25 | Alta | Evitar asistencias duplicadas y mantener consistencia entre usuarios y eventos. |
+| ADB-04 | Rendimiento y escalabilidad | US01, US05, US06, US28 | Alta | Soportar consultas concurrentes mediante paginación, índices y escalamiento independiente. |
+| ADB-05 | Disponibilidad de integraciones externas | US05, US27, US28 | Media | Aislar fallos de mapas y notificaciones mediante adaptadores, timeouts y reintentos. |
+| ADB-06 | Evolución de contratos REST | TS-01, TS-04, TS-05, TS-22, TS-23 | Media | Mantener contratos versionados para que los clientes puedan evolucionar sin romperse. |
+
+#### 4.3.1.2. Establish Iteration Goal by Selecting Drivers
+
+El objetivo de la Iteración 0 es establecer una arquitectura inicial para el flujo principal de GigMap: un usuario inicia sesión, consulta conciertos cercanos y revisa el detalle de un evento; además, un fan puede confirmar su asistencia y un artista puede publicar un concierto.
+
+Para alcanzar este objetivo se seleccionan los siguientes drivers:
+
+- **Seguridad:** proteger el acceso mediante JWT y autorización por roles.
+- **Rendimiento:** responder las consultas de conciertos en menos de 2 segundos para el 95% de las solicitudes.
+- **Integridad:** impedir asistencias duplicadas y validar la existencia de los recursos antes de modificarlos.
+- **Escalabilidad:** permitir que el servicio de conciertos crezca sin escalar innecesariamente los servicios de usuarios o comunidades.
+- **Disponibilidad:** evitar que la caída de mapas o notificaciones inutilice la consulta principal de conciertos.
+
+El resultado de esta iteración será una vista inicial de componentes, responsabilidades, interfaces y relaciones entre los servicios principales. Las funcionalidades sociales y las notificaciones avanzadas se mantendrán como preocupaciones para iteraciones posteriores, aunque sus puntos de integración quedarán identificados.
+
+#### 4.3.1.3. Choose One or More Elements of the System to Refine
+
+El elemento seleccionado para refinar es la **plataforma GigMap**, representada inicialmente como un sistema único. Este elemento se descompone en los siguientes contenedores lógicos:
+
+| Elemento a refinar | Responsabilidad inicial | Drivers atendidos |
+| --- | --- | --- |
+| Aplicación móvil/web | Presentar mapas, formularios, listados y detalles de conciertos. | Usabilidad, rendimiento y privacidad. |
+| API Gateway | Recibir solicitudes, validar tokens, aplicar límites y enrutar peticiones. | Seguridad, evolución de contratos y disponibilidad. |
+| User and Identity Service | Registrar usuarios, iniciar sesión y administrar roles y perfiles. | Seguridad e integridad. |
+| Concert Service | Crear, consultar, filtrar y actualizar conciertos. | Rendimiento, escalabilidad e integridad. |
+| Attendance Service | Registrar y cancelar asistencias de fans. | Integridad y consistencia. |
+| Community Service | Gestionar comunidades, membresías y publicaciones. | Evolución y mantenibilidad. |
+| Notification Service | Preparar y enviar recordatorios y alertas cercanas. | Disponibilidad y procesamiento asíncrono. |
+| PostgreSQL | Persistir usuarios, conciertos, asistencias y comunidades. | Integridad y trazabilidad. |
+| Map Provider | Proporcionar mapas y geocodificación. | Integración externa y disponibilidad. |
+
+La selección de estos elementos permite refinar primero el flujo de mayor valor para GigMap sin intentar diseñar todos los detalles de la plataforma en una sola iteración.
+
+#### 4.3.1.4. Choose One or More Design Concepts That Satisfy the Selected Drivers
+
+| Driver seleccionado | Concepto de diseño | Justificación |
+| --- | --- | --- |
+| Seguridad | API Gateway, JWT y autorización por roles | Centraliza la validación inicial y evita que las operaciones privadas se expongan sin identidad y permisos válidos. Cada servicio también valida las reglas de autorización que le corresponden. |
+| Rendimiento | API REST versionada, paginación e índices geográficos | Reduce el volumen de datos por consulta y permite que la búsqueda de eventos cercanos utilice índices adecuados. |
+| Integridad | Repository Pattern, constraints únicas y validación de dominio | Mantiene las reglas de negocio separadas de PostgreSQL y evita más de una asistencia para el mismo usuario y concierto. |
+| Escalabilidad | Microservicios con responsabilidades delimitadas | Permite escalar Concert Service o Notification Service según su demanda sin replicar toda la plataforma. |
+| Disponibilidad | Adapter Pattern, timeouts y reintentos controlados | Aísla la dependencia de proveedores externos y permite que las funciones principales continúen cuando una integración falla. |
+| Mantenibilidad | Arquitectura por capas y DTOs | Separa API, aplicación, dominio e infraestructura, y evita exponer directamente las entidades internas. |
+| Comunicación eventual | Eventos internos para notificaciones | La confirmación de asistencia no debe esperar a que termine el envío de una notificación; esta puede procesarse de forma asíncrona. |
+
+En esta primera iteración no se aplicará CQRS ni Saga a todos los flujos. Se mantienen como alternativas para escenarios que realmente requieran separación de lecturas y escrituras o coordinación entre varios servicios. Esto evita agregar complejidad antes de validar la necesidad.
+
+#### 4.3.1.5. Instantiate Architectural Elements, Allocate Responsibilities, and Define Interfaces
+
+La siguiente asignación convierte los conceptos de diseño en elementos concretos de la arquitectura:
+
+| Elemento | Responsabilidades | Interfaces principales |
+| --- | --- | --- |
+| Aplicación móvil/web | Gestionar interacción, permisos de ubicación, navegación y presentación de respuestas. | HTTPS con `/api/v1/auth`, `/api/v1/concerts` y `/api/v1/attendances`. |
+| API Gateway | Validar JWT, aplicar autorización inicial, enrutar solicitudes y uniformizar errores. | API pública REST `/api/v1/*`. |
+| User and Identity Service | Registrar usuarios, autenticar credenciales, emitir JWT y administrar perfiles. | `POST /api/v1/auth/register`, `POST /api/v1/auth/login`, `GET/PUT /api/v1/users/{userId}`. |
+| Concert Service | Crear, listar, filtrar, consultar, actualizar y eliminar conciertos autorizados. | `GET/POST /api/v1/concerts`, `GET/PUT/DELETE /api/v1/concerts/{concertId}`. |
+| Attendance Service | Confirmar o cancelar la asistencia y evitar duplicados. | `POST/DELETE /api/v1/concerts/{concertId}/attendees`. |
+| Community Service | Crear comunidades, administrar membresías y gestionar publicaciones. | `/api/v1/communities` y `/api/v1/posts`. |
+| Notification Service | Consumir eventos internos, crear recordatorios y entregar notificaciones. | Consumidor de eventos `ConcertCreated` y `AttendanceConfirmed`; adaptador de proveedor push. |
+| PostgreSQL | Persistir datos con claves foráneas, índices y restricciones únicas. | Repositorios internos de cada servicio; no se expone directamente a los clientes. |
+| Map Provider Adapter | Traducir la API externa de mapas a una interfaz propia de GigMap. | `getNearbyEvents(latitude, longitude, radius)` y `geocode(address)`. |
+
+Las interfaces REST deben intercambiar DTOs, utilizar códigos HTTP consistentes y transportar el identificador del usuario autenticado a partir del JWT. Las entidades de dominio y las credenciales no se exponen directamente. Para la asistencia, la combinación `userId` y `concertId` deberá ser única en la persistencia.
+
+#### 4.3.1.6. Sketch Views (C4 & UML) and Record Design Decisions
+
+Los siguientes diagramas están escritos en Mermaid para que puedan visualizarse en GitHub y en editores compatibles. Representan las vistas iniciales de contexto, contenedores y un flujo UML de confirmación de asistencia.
+
+**C4 - Context View**
+
+```mermaid
+flowchart LR
+  Fan[Fan]
+  Artist[Artista]
+  GigMap((GigMap))
+  MapProvider[Proveedor de mapas]
+  PushProvider[Proveedor de notificaciones]
+
+  Fan -->|Descubre conciertos y confirma asistencia| GigMap
+  Artist -->|Publica conciertos y administra perfil| GigMap
+  GigMap -->|Consulta mapas y geocodificacion| MapProvider
+  GigMap -->|Envía alertas y recordatorios| PushProvider
+```
+
+**C4 - Container View**
+
+```mermaid
+flowchart LR
+  Client[Aplicacion movil/web]
+  Gateway[API Gateway]
+  Identity[User and Identity Service]
+  Concerts[Concert Service]
+  Attendance[Attendance Service]
+  Communities[Community Service]
+  Notifications[Notification Service]
+  Database[(PostgreSQL)]
+  Maps[Map Provider Adapter]
+  Push[Push Provider]
+
+  Client --> Gateway
+  Gateway --> Identity
+  Gateway --> Concerts
+  Gateway --> Attendance
+  Gateway --> Communities
+  Identity --> Database
+  Concerts --> Database
+  Attendance --> Database
+  Communities --> Database
+  Concerts --> Maps
+  Attendance -.->|AttendanceConfirmed| Notifications
+  Concerts -.->|ConcertCreated| Notifications
+  Notifications --> Push
+```
+
+**UML - Confirmar asistencia**
+
+```mermaid
+sequenceDiagram
+  actor Fan
+  participant App as Aplicacion movil
+  participant Gateway as API Gateway
+  participant Attendance as Attendance Service
+  participant Concert as Concert Service
+  participant DB as PostgreSQL
+  participant Notify as Notification Service
+
+  Fan->>App: Presiona Confirmar asistencia
+  App->>Gateway: POST /api/v1/concerts/{id}/attendees
+  Gateway->>Gateway: Valida JWT y rol Fan
+  Gateway->>Attendance: Solicita registro de asistencia
+  Attendance->>Concert: Verifica existencia y estado del concierto
+  Concert-->>Attendance: Concierto valido
+  Attendance->>DB: Inserta asistencia unica
+  DB-->>Attendance: Registro confirmado
+  Attendance-->>Gateway: 201 Created
+  Attendance-->>Notify: Publica AttendanceConfirmed
+  Gateway-->>App: Confirmacion de asistencia
+  App-->>Fan: Actualiza estado del boton
+```
+
+**Design Decisions**
+
+| ID | Decisión | Driver atendido | Consecuencia |
+| --- | --- | --- | --- |
+| ADR-01 | Usar API Gateway como entrada única para los clientes. | Seguridad y evolución de contratos. | Simplifica el acceso externo, pero introduce un componente crítico que debe monitorearse. |
+| ADR-02 | Separar Concert Service y Attendance Service. | Escalabilidad e integridad. | Permite evolucionar ambos dominios, pero exige contratos claros entre servicios. |
+| ADR-03 | Mantener PostgreSQL como persistencia principal en esta iteración. | Integridad y restricciones del proyecto. | Facilita relaciones y constraints; una futura separación de bases requerirá resolver consistencia distribuida. |
+| ADR-04 | Procesar notificaciones mediante eventos internos. | Disponibilidad y rendimiento. | La confirmación no queda bloqueada por el proveedor push, pero se requieren reintentos y monitoreo. |
+
+#### 4.3.1.7. Analysis of Current Design and Review Iteration Goal (Kanban Board)
+
+La primera iteración alcanza su objetivo porque define los elementos principales, sus responsabilidades, las interfaces iniciales y los diagramas necesarios para el flujo de autenticación, consulta y asistencia a conciertos. También relaciona cada decisión con los drivers arquitectónicos seleccionados.
+
+| Pendiente | Estado | Próximo paso |
+| --- | --- | --- |
+| Refinar el modelo entidad-relación por servicio | Por hacer | Detallar tablas, claves, índices y restricciones de PostgreSQL. |
+| Validar proveedor de mapas | Por hacer | Comparar costo, cobertura, límites y facilidad de integración. |
+| Definir contratos completos de la API | Por hacer | Documentar cuerpos de solicitud, respuestas y errores. |
+| Diseñar comunidades y publicaciones | Por hacer | Crear una vista específica para el Community Service. |
+| Definir observabilidad | Por hacer | Seleccionar logs, métricas, trazas y alertas. |
+
+La siguiente iteración deberá concentrarse en el modelo de datos, la integración geográfica y la comunicación entre servicios. Los resultados de esta revisión alimentan nuevamente el Architectural Design Backlog.
