@@ -237,11 +237,14 @@ La capacidad de reconocer responsabilidades éticas y profesionales en situacion
       <td>4.c.1 Reconoce responsabilidad ética y profesional en situaciones de ingeniería de software</td>
       <td>
         <strong>Acosta Elera, Abraam Bernabe</strong><br>
-        TB1: Participó en la consolidación del análisis de requisitos, la revisión de historias de usuario y la organización del informe. TP1: Colaboró en la revisión de criterios de aceptación y en la integración de evidencias de verificación del producto, procurando que los requisitos fueran trazables y comprensibles.<br><br>
+        TB1: Participó en la consolidación del análisis de requisitos, la revisión de historias de usuario y la organización del informe.<br>
+        TP1: Colaboró en la revisión de criterios de aceptación y en la integración de evidencias de verificación del producto, procurando que los requisitos fueran trazables y comprensibles.<br><br>
         <strong>Collantes Carrillo, Diego Mateo</strong><br>
-        TB1: Participó en el desarrollo del Capítulo IV y en la revisión de las historias de usuario, buscando que las decisiones arquitectónicas fueran claras y coherentes con las necesidades del producto. TP1: Colaboró en la revisión de la documentación técnica y en la consistencia entre requisitos, arquitectura y diseño.<br><br>
+        TB1: Participó en el desarrollo del Capítulo IV y en la revisión de las historias de usuario, buscando que las decisiones arquitectónicas fueran claras y coherentes con las necesidades del producto.<br>
+        TP1: Colaboró en la revisión de la documentación técnica y en la consistencia entre requisitos, arquitectura y diseño.<br><br>
         <strong>Lizarbe Alvarez, Ariana Nickole</strong><br>
-        TB1: Participó en la mejora de las historias de usuario y en la revisión de la experiencia de los usuarios finales. TP1: Desarrolló escenarios BDD en Gherkin para apoyar la verificación de historias de usuario y promover criterios de aceptación claros.
+        TB1: Participó en la mejora de las historias de usuario y en la revisión de la experiencia de los usuarios finales.<br>
+        TP1: Desarrolló escenarios BDD en Gherkin para apoyar la verificación de historias de usuario y promover criterios de aceptación claros.
       </td>
       <td>
         Hasta la entrega parcial, el equipo demostró responsabilidad profesional al organizar el trabajo, revisar los requisitos y relacionar las necesidades de fans y artistas con decisiones de diseño y verificación. La colaboración permitió mantener una base trazable para el desarrollo de GigMap.
@@ -251,11 +254,14 @@ La capacidad de reconocer responsabilidades éticas y profesionales en situacion
       <td>4.c.2 Emite juicios informados considerando el impacto de las soluciones de ingeniería de software en contextos globales, económicos, ambientales y sociales</td>
       <td>
         <strong>Acosta Elera, Abraam Bernabe</strong><br>
-        TB1: Analizó cómo GigMap puede mejorar el acceso a conciertos locales y la visibilidad de artistas emergentes. TP1: Participó en la revisión de las funcionalidades priorizadas considerando su valor para fans y artistas.<br><br>
+        TB1: Analizó cómo GigMap puede mejorar el acceso a conciertos locales y la visibilidad de artistas emergentes.<br>
+        TP1: Participó en la revisión de las funcionalidades priorizadas considerando su valor para fans y artistas.<br><br>
         <strong>Collantes Carrillo, Diego Mateo</strong><br>
-        TB1: Evaluó el impacto social y cultural de centralizar el descubrimiento de música en vivo. TP1: Contribuyó a relacionar atributos como seguridad, rendimiento y disponibilidad con la experiencia de los usuarios.<br><br>
+        TB1: Evaluó el impacto social y cultural de centralizar el descubrimiento de música en vivo.<br>
+        TP1: Contribuyó a relacionar atributos como seguridad, rendimiento y disponibilidad con la experiencia de los usuarios.<br><br>
         <strong>Lizarbe Alvarez, Ariana Nickole</strong><br>
-        TB1: Aportó una perspectiva empática sobre las dificultades de fans y artistas para encontrar y difundir eventos. TP1: Analizó cómo las pruebas y criterios de aceptación ayudan a reducir errores que afectarían la confianza de los usuarios.
+        TB1: Aportó una perspectiva empática sobre las dificultades de fans y artistas para encontrar y difundir eventos.<br>
+        TP1: Analizó cómo las pruebas y criterios de aceptación ayudan a reducir errores que afectarían la confianza de los usuarios.
       </td>
       <td>
         El equipo emitió juicios informados al considerar que GigMap no solo debe funcionar técnicamente, sino también proteger los datos de ubicación, facilitar el acceso cultural y generar valor para artistas independientes y comunidades locales.
