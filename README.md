@@ -111,7 +111,7 @@ Lizarbe Alvarez, Ariana Nickole (u202311704)
   - 4.2.4. Constraints<br>
   - 4.2.5. Architectural Concerns<br>
   - 4.3. ADD Iterations<br>
-  - 4.3.1. Iteration 1: Iteration 1<br>
+  - 4.3.1. Iteration 0: Initial Architecture<br>
   - 4.3.1.1. Architectural Design Backlog 1<br>
   - 4.3.1.2. Establish Iteration Goal by Selecting Drivers<br>
   - 4.3.1.3. Choose One or More Elements of the System to Refine<br>
@@ -3516,3 +3516,78 @@ Tácticas:
 ## 4.2. Architectural Drivers
 
 ### 4.2.1. Design Purpose
+
+El propósito del diseño arquitectónico de GigMap es definir una estructura que permita conectar a fans de la música con conciertos y artistas emergentes de forma segura, rápida y confiable. La arquitectura debe soportar el descubrimiento de eventos mediante geolocalización, la publicación de conciertos por parte de artistas, la interacción en comunidades y el envío de notificaciones personalizadas.
+
+El diseño busca equilibrar las necesidades funcionales del producto con sus atributos de calidad. En particular, debe proteger los datos personales y de ubicación, mantener tiempos de respuesta adecuados, permitir el crecimiento progresivo de usuarios y eventos, y conservar la consistencia de operaciones como la confirmación de asistencia. El alcance de esta arquitectura comprende la aplicación cliente, el API Gateway, los servicios de usuarios, conciertos, comunidades y notificaciones, sus integraciones externas y la persistencia de datos.
+
+### 4.2.2. Primary Functionality (Primary User Stories)
+
+Las siguientes historias de usuario se consideran funcionalidades primarias porque representan el flujo principal de valor de GigMap o generan decisiones arquitectónicas relevantes:
+
+| Historia | Funcionalidad principal | Relevancia arquitectónica |
+| --- | --- | --- |
+| US05 | Ver mapa con geolocalización | Requiere integrar una API de mapas, manejar permisos de ubicación y consultar eventos cercanos de forma eficiente. |
+| US02 | Publicar nuevo concierto | Requiere autenticación, autorización por rol, validación de datos y persistencia de información del evento. |
+| US08 | Iniciar sesión en la aplicación móvil | Requiere un mecanismo seguro de autenticación, emisión de tokens y control de acceso a recursos protegidos. |
+| US13 | Ver información detallada del concierto | Requiere recuperar información consistente del evento y exponerla mediante un contrato estable para los clientes. |
+| US17 | Confirmar o cancelar asistencia | Requiere evitar registros duplicados y mantener consistencia entre usuarios, conciertos y asistencias. |
+| US28 | Recibir notificaciones de conciertos cercanos | Requiere procesar la ubicación y las preferencias del usuario sin bloquear las operaciones principales de la aplicación. |
+| US04 | Crear comunidad | Requiere gestionar comunidades, membresías y permisos de publicación para usuarios autenticados. |
+
+Estas historias serán utilizadas como referencia para seleccionar los elementos que se refinarán durante la primera iteración ADD. Las demás historias podrán reutilizar los componentes y contratos definidos para estas funcionalidades primarias.
+
+### 4.2.3. Quality Attribute Scenarios
+
+Los atributos de calidad se expresan mediante escenarios verificables para que las decisiones arquitectónicas puedan evaluarse con medidas concretas.
+
+| Atributo | Fuente y estímulo | Respuesta esperada | Medida |
+| --- | --- | --- | --- |
+| Seguridad | Un usuario intenta eliminar un concierto que no le pertenece. | El sistema valida el token y el rol, rechaza la operación y registra el intento. | Respuesta `403 Forbidden` en menos de 1 segundo; ningún dato modificado. |
+| Rendimiento | Cientos de usuarios consultan conciertos cercanos simultáneamente. | El sistema devuelve resultados paginados sin bloquear otras operaciones. | El 95% de las consultas responde en menos de 2 segundos. |
+| Disponibilidad | El proveedor externo de notificaciones deja de responder. | La consulta de conciertos y perfiles continúa disponible; las notificaciones se reintentan o quedan pendientes. | Las funciones no dependientes del proveedor mantienen una disponibilidad mínima de 99%. |
+| Escalabilidad | Aumenta la cantidad de usuarios, eventos y publicaciones. | Los servicios con mayor demanda pueden escalar de manera independiente. | El sistema mantiene el tiempo de respuesta objetivo al duplicar la carga de consultas. |
+| Integridad | Un usuario intenta confirmar dos veces su asistencia al mismo concierto. | El sistema conserva una sola asistencia y rechaza la operación repetida. | Una asistencia por combinación `userId-concertId`; respuesta `409 Conflict` o código equivalente. |
+| Privacidad | Un usuario deniega el permiso de ubicación. | La aplicación continúa permitiendo búsqueda manual y no almacena la ubicación sin consentimiento. | No se persiste la ubicación denegada y el usuario recibe una alternativa funcional. |
+| Usabilidad | Un usuario utiliza GigMap por primera vez para buscar un concierto. | Puede encontrar un evento y consultar su detalle sin capacitación. | La tarea se completa en un máximo de 3 minutos y con hasta 5 pasos principales. |
+
+### 4.2.4. Constraints
+
+El diseño arquitectónico está condicionado por las siguientes restricciones del proyecto:
+
+- El backend se desarrollará con Java y Spring Boot.
+- La comunicación entre los clientes y el backend se realizará mediante una API REST versionada.
+- PostgreSQL será el sistema principal de persistencia relacional.
+- La solución debe incluir una aplicación móvil y una landing page como canales de interacción con el producto.
+- La autenticación debe utilizar contraseñas protegidas y tokens JWT para acceder a operaciones privadas.
+- La geolocalización y la visualización de mapas dependen de un proveedor externo y de los permisos del dispositivo.
+- El sistema debe respetar el consentimiento del usuario para el uso de datos de ubicación y proteger la información personal.
+- El desarrollo se realizará dentro del alcance, tiempo y recursos disponibles para el curso.
+- El código, la documentación y los cambios del equipo se gestionarán mediante repositorios y herramientas colaborativas del proyecto.
+- Las decisiones deben permitir pruebas automatizadas con las herramientas definidas por el equipo, como JUnit y Mockito.
+
+Estas restricciones deben registrarse antes de seleccionar componentes, porque limitan las alternativas tecnológicas y afectan el costo, la complejidad y la mantenibilidad de la solución.
+
+### 4.2.5. Architectural Concerns
+
+Las siguientes preocupaciones arquitectónicas representan asuntos que deben resolverse o detallarse durante la Iteración 0 y las iteraciones posteriores:
+
+| Preocupación | Riesgo para GigMap | Aspecto que debe resolverse |
+| --- | --- | --- |
+| Límites de los servicios | Una separación incorrecta puede producir servicios muy acoplados o difíciles de mantener. | Definir responsabilidades y propiedad de datos para usuarios, conciertos, comunidades y notificaciones. |
+| Consistencia de asistencias | Una falla o reintento puede crear asistencias duplicadas. | Usar validaciones, restricciones únicas y una estrategia clara para operaciones repetidas. |
+| Seguridad por roles | Un fan podría ejecutar operaciones reservadas para artistas u organizadores. | Centralizar autenticación y aplicar autorización también dentro de cada servicio protegido. |
+| Privacidad de ubicación | La ubicación puede revelar información sensible sobre los usuarios. | Solicitar consentimiento, minimizar la retención y evitar exponer coordenadas innecesarias. |
+| Dependencias externas | La caída o el cambio de una API de mapas o notificaciones puede afectar la experiencia. | Aplicar Adapter Pattern, timeouts, reintentos y respuestas alternativas. |
+| Consultas geográficas | Las búsquedas cercanas pueden volverse lentas al aumentar la cantidad de eventos. | Definir índices, paginación y una estrategia de consulta por ubicación. |
+| Comunicación entre servicios | Las llamadas síncronas pueden propagar fallos o aumentar la latencia. | Identificar qué operaciones requieren respuesta inmediata y cuáles pueden procesarse de forma asíncrona. |
+| Evolución de contratos | Cambios en los endpoints pueden romper la aplicación móvil o la landing page. | Versionar la API y documentar contratos de solicitud y respuesta. |
+| Observabilidad | Los errores distribuidos serían difíciles de diagnosticar. | Definir logs, métricas, correlación de solicitudes y alertas para los servicios críticos. |
+
+Estas preocupaciones no son todavía soluciones definitivas. Funcionan como entradas para la toma de decisiones de arquitectura: en la Iteración 0 se seleccionarán las más prioritarias, se refinarán los elementos involucrados y se documentarán las decisiones adoptadas.
+
+## 4.3. ADD Iterations
+
+Las iteraciones ADD permiten transformar los drivers arquitectónicos en una solución progresivamente más detallada. Para esta entrega se desarrollará una única primera iteración.
+
+### 4.3.1. Iteration 0: Initial Architecture
