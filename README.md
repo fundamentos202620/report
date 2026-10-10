@@ -4675,4 +4675,515 @@ Pasos para desplegar el backend en Render
 
 ## 5.3. Microservices Implementation
 
+### 5.3.1 Sprint 1
 
+#### 5.3.1.1 Sprint Backlog 1
+
+El Sprint 1 constituye la primera iteración de implementación de GigMap y tiene como objetivo principal materializar el producto en su versión mínima funcional, sentando las bases de la arquitectura de microservicios y entregando los flujos centrales que sostienen la experiencia de los fans y de los artistas: registro e inicio de sesión, exploración de conciertos, publicación de eventos, comunidades y navegación social.
+
+Para alcanzar este objetivo, el Sprint reúne el conjunto completo de User Stories priorizadas en el Product Backlog (71 Story Points), las cuales fueron descompuestas en Work-Items / Tasks de implementación concretos y asignadas a los integrantes del equipo según su especialidad (backend, landing page y aplicación móvil). Se incorporan, además, tasks que no dependen de una User Story particular y que responden a constraints generales del producto, tales como la definición de contratos entre servicios, el enrutamiento mediante API Gateway y la configuración del despliegue.
+
+El control del Sprint se realizó mediante un tablero Kanban en Trello, donde cada tarjeta corresponde a un Work-Item y se mueve entre las columnas To-do, In-Process, To-Review y Done.
+
+<!-- TODO: reemplazar la ruta y el placeholder de la URL con la captura real del board -->
+
+<p align="center">
+  <img src="assets/images/kanban/sprint-1-board.png" alt="Trello Board - Sprint 1" width="900">
+</p>
+
+**URL público del Board (Trello):** [https://trello.com/b/XXXXXXXX/gigmap-sprint-1](https://trello.com/b/XXXXXXXX/gigmap-sprint-1)
+
+A continuación se detalla la descomposición de las User Stories asignadas al Sprint en Work-Items / Tasks, incluyendo las tareas derivadas de la descomposición de cada historia y las tareas adicionales asociadas a constraints generales del producto.
+
+<table>
+  <thead>
+    <tr>
+      <th colspan="2">Sprint #</th>
+      <th colspan="6">Sprint 1</th>
+    </tr>
+    <tr>
+      <th colspan="2">User Story</th>
+      <th colspan="6">Work-Item / Task</th>
+    </tr>
+    <tr>
+      <th>Id</th>
+      <th>Title</th>
+      <th>Id</th>
+      <th>Title</th>
+      <th>Description</th>
+      <th>Estimation (Hours)</th>
+      <th>Assigned To</th>
+      <th>Status (To-do / In-Process / To-Review / Done)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td rowspan="2">US31</td>
+      <td rowspan="2">Ver beneficios para fans</td>
+      <td>T-01</td>
+      <td>Modelar secciones de beneficios para fans</td>
+      <td>Definir la estructura de contenido de la sección de beneficios orientada al segmento fan en la landing page.</td>
+      <td>4</td>
+      <td>Lizarbe Alvarez, Ariana Nickole</td>
+      <td>Done</td>
+    </tr>
+    <tr>
+      <td>T-02</td>
+      <td>Implementar UI responsiva de beneficios por segmento</td>
+      <td>Construir la vista responsiva de beneficios con diseño adaptado a escritorio y móvil.</td>
+      <td>6</td>
+      <td>Lizarbe Alvarez, Ariana Nickole</td>
+      <td>Done</td>
+    </tr>
+    <tr>
+      <td rowspan="2">US32</td>
+      <td rowspan="2">Ver beneficios para artista</td>
+      <td>T-03</td>
+      <td>Redactar contenido de beneficios para artistas</td>
+      <td>Elaborar el contenido que explica cómo GigMap ayuda a los artistas a promocionar sus eventos.</td>
+      <td>3</td>
+      <td>Lizarbe Alvarez, Ariana Nickole</td>
+      <td>Done</td>
+    </tr>
+    <tr>
+      <td>T-04</td>
+      <td>Implementar sección de beneficios para artistas</td>
+      <td>Maquetar la sección de beneficios del segmento artista con llamadas a la acción diferenciadas.</td>
+      <td>5</td>
+      <td>Lizarbe Alvarez, Ariana Nickole</td>
+      <td>Done</td>
+    </tr>
+    <tr>
+      <td rowspan="2">US33</td>
+      <td rowspan="2">Acceder a testimonios</td>
+      <td>T-05</td>
+      <td>Definir modelo de testimonios y datos semilla</td>
+      <td>Modelar la entidad de testimonio y cargar el conjunto inicial de reseñas de usuarios reales.</td>
+      <td>3</td>
+      <td>Acosta Elera, Abraam Bernabe</td>
+      <td>Done</td>
+    </tr>
+    <tr>
+      <td>T-06</td>
+      <td>Construir carrusel de testimonios</td>
+      <td>Implementar el carrusel de testimonios en la landing page con navegación y formato de cita.</td>
+      <td>5</td>
+      <td>Lizarbe Alvarez, Ariana Nickole</td>
+      <td>In-Process</td>
+    </tr>
+    <tr>
+      <td rowspan="3">US03</td>
+      <td rowspan="3">Personalizar perfil de artista</td>
+      <td>T-07</td>
+      <td>Endpoint de actualización de perfil de artista</td>
+      <td>Implementar la operación de actualización del perfil con nombre artístico y fotografía, validando el rol del usuario.</td>
+      <td>6</td>
+      <td>Acosta Elera, Abraam Bernabe</td>
+      <td>Done</td>
+    </tr>
+    <tr>
+      <td>T-08</td>
+      <td>Pantalla de edición de perfil</td>
+      <td>Construir la pantalla de edición de perfil en la aplicación móvil con formulario validado.</td>
+      <td>8</td>
+      <td>Collantes Carrillo, Diego Mateo</td>
+      <td>Done</td>
+    </tr>
+    <tr>
+      <td>T-09</td>
+      <td>Carga y compresión de imagen de perfil</td>
+      <td>Implementar la selección, compresión y subida de la imagen de perfil desde el dispositivo.</td>
+      <td>5</td>
+      <td>Collantes Carrillo, Diego Mateo</td>
+      <td>To-Review</td>
+    </tr>
+    <tr>
+      <td rowspan="2">US06</td>
+      <td rowspan="2">Buscar conciertos</td>
+      <td>T-10</td>
+      <td>Endpoint de búsqueda de conciertos por nombre</td>
+      <td>Exponer la consulta de conciertos por coincidencia de nombre con paginación y orden por fecha.</td>
+      <td>5</td>
+      <td>Acosta Elera, Abraam Bernabe</td>
+      <td>Done</td>
+    </tr>
+    <tr>
+      <td>T-11</td>
+      <td>Pantalla de búsqueda con debounce</td>
+      <td>Implementar la pantalla de búsqueda en la app móvil con debounce y estado de carga.</td>
+      <td>6</td>
+      <td>Collantes Carrillo, Diego Mateo</td>
+      <td>Done</td>
+    </tr>
+    <tr>
+      <td rowspan="2">US07</td>
+      <td rowspan="2">Buscar comunidades</td>
+      <td>T-12</td>
+      <td>Endpoint de búsqueda de comunidades por nombre</td>
+      <td>Implementar la consulta de comunidades temáticas por nombre con filtros de pertenencia.</td>
+      <td>5</td>
+      <td>Acosta Elera, Abraam Bernabe</td>
+      <td>Done</td>
+    </tr>
+    <tr>
+      <td>T-13</td>
+      <td>Pantalla de búsqueda de comunidades</td>
+      <td>Construir la pantalla de búsqueda de comunidades y su acceso al detalle de la comunidad.</td>
+      <td>5</td>
+      <td>Collantes Carrillo, Diego Mateo</td>
+      <td>Done</td>
+    </tr>
+    <tr>
+      <td rowspan="2">US18</td>
+      <td rowspan="2">Ver comunidades accedidas</td>
+      <td>T-14</td>
+      <td>Consulta de comunidades del usuario autenticado</td>
+      <td>Implementar el endpoint que devuelve las comunidades a las que el usuario autenticado se ha unido.</td>
+      <td>4</td>
+      <td>Acosta Elera, Abraam Bernabe</td>
+      <td>Done</td>
+    </tr>
+    <tr>
+      <td>T-15</td>
+      <td>Listado "Mis comunidades"</td>
+      <td>Construir el apartado de comunidades en la app móvil con el listado de comunidades accedidas.</td>
+      <td>4</td>
+      <td>Collantes Carrillo, Diego Mateo</td>
+      <td>To-Review</td>
+    </tr>
+    <tr>
+      <td rowspan="2">US19</td>
+      <td rowspan="2">Reaccionar a publicaciones en comunidades</td>
+      <td>T-16</td>
+      <td>Endpoint de reacción a publicaciones</td>
+      <td>Implementar la reacción a publicaciones de forma idempotente, permitiendo crear y eliminar la reacción.</td>
+      <td>5</td>
+      <td>Acosta Elera, Abraam Bernabe</td>
+      <td>Done</td>
+    </tr>
+    <tr>
+      <td>T-17</td>
+      <td>UI de reacciones y estado local</td>
+      <td>Construir el control de reacciones y la actualización optimista del estado local de la publicación.</td>
+      <td>5</td>
+      <td>Collantes Carrillo, Diego Mateo</td>
+      <td>To-Review</td>
+    </tr>
+    <tr>
+      <td rowspan="2">US20</td>
+      <td rowspan="2">Acceder a perfil de otros usuarios</td>
+      <td>T-18</td>
+      <td>Endpoint de consulta de perfil público</td>
+      <td>Exponer el perfil público de un usuario con sus datos visibles y sin exponer información sensible.</td>
+      <td>4</td>
+      <td>Acosta Elera, Abraam Bernabe</td>
+      <td>Done</td>
+    </tr>
+    <tr>
+      <td>T-19</td>
+      <td>Navegación a perfil de terceros</td>
+      <td>Implementar la navegación hacia el perfil de otros usuarios desde la comunidad y desde la lista de asistentes.</td>
+      <td>5</td>
+      <td>Collantes Carrillo, Diego Mateo</td>
+      <td>To-Review</td>
+    </tr>
+    <tr>
+      <td rowspan="2">US21</td>
+      <td rowspan="2">Ver publicaciones con like</td>
+      <td>T-20</td>
+      <td>Endpoint de publicaciones con like</td>
+      <td>Implementar la consulta de publicaciones a las que el usuario ha reaccionado, ordenadas por fecha.</td>
+      <td>4</td>
+      <td>Acosta Elera, Abraam Bernabe</td>
+      <td>To-Review</td>
+    </tr>
+    <tr>
+      <td>T-21</td>
+      <td>Sección "Me gusta" en el perfil</td>
+      <td>Construir la sección de publicaciones con like dentro del perfil del usuario.</td>
+      <td>4</td>
+      <td>Collantes Carrillo, Diego Mateo</td>
+      <td>To-do</td>
+    </tr>
+    <tr>
+      <td rowspan="2">US30</td>
+      <td rowspan="2">Ver información detallada del evento asociado</td>
+      <td>T-22</td>
+      <td>Modelo y endpoint de detalle de evento asociado</td>
+      <td>Modelar el evento asociado y exponer su detalle con fecha, lugar y datos del organizador.</td>
+      <td>6</td>
+      <td>Acosta Elera, Abraam Bernabe</td>
+      <td>In-Process</td>
+    </tr>
+    <tr>
+      <td>T-23</td>
+      <td>Pantalla de detalle de evento asociado</td>
+      <td>Construir la pantalla de detalle del evento asociado con información completa y navegación de retorno.</td>
+      <td>6</td>
+      <td>Collantes Carrillo, Diego Mateo</td>
+      <td>To-do</td>
+    </tr>
+    <tr>
+      <td rowspan="2">US01</td>
+      <td rowspan="2">Filtrar conciertos por género musical</td>
+      <td>T-24</td>
+      <td>Endpoint de filtrado por género musical</td>
+      <td>Implementar el filtro por género musical en el catálogo de conciertos con parámetros de consulta.</td>
+      <td>5</td>
+      <td>Acosta Elera, Abraam Bernabe</td>
+      <td>Done</td>
+    </tr>
+    <tr>
+      <td>T-25</td>
+      <td>Selector de género en la pantalla Explorar</td>
+      <td>Construir el selector de género musical integrado con la pantalla de exploración de conciertos.</td>
+      <td>4</td>
+      <td>Collantes Carrillo, Diego Mateo</td>
+      <td>Done</td>
+    </tr>
+    <tr>
+      <td rowspan="3">US02</td>
+      <td rowspan="3">Publicar nuevo concierto</td>
+      <td>T-26</td>
+      <td>Endpoint de creación de concierto</td>
+      <td>Implementar la creación de concierto con validaciones de fecha, lugar, precio y género.</td>
+      <td>8</td>
+      <td>Acosta Elera, Abraam Bernabe</td>
+      <td>In-Process</td>
+    </tr>
+    <tr>
+      <td>T-27</td>
+      <td>Formulario de publicación de concierto</td>
+      <td>Construir el formulario de publicación de concierto en la app móvil con validación de campos.</td>
+      <td>8</td>
+      <td>Collantes Carrillo, Diego Mateo</td>
+      <td>To-do</td>
+    </tr>
+    <tr>
+      <td>T-28</td>
+      <td>Carga de cartel e imagen del concierto</td>
+      <td>Implementar la carga de la imagen de cartel del concierto desde el dispositivo.</td>
+      <td>4</td>
+      <td>Collantes Carrillo, Diego Mateo</td>
+      <td>To-do</td>
+    </tr>
+    <tr>
+      <td rowspan="2">US04</td>
+      <td rowspan="2">Crear comunidad</td>
+      <td>T-29</td>
+      <td>Endpoint de creación de comunidad temática</td>
+      <td>Implementar la creación de una comunidad con nombre, temática, descripción y creador asociado.</td>
+      <td>6</td>
+      <td>Acosta Elera, Abraam Bernabe</td>
+      <td>Done</td>
+    </tr>
+    <tr>
+      <td>T-30</td>
+      <td>Formulario de creación de comunidad</td>
+      <td>Construir el formulario de creación de comunidad en la app móvil con validaciones.</td>
+      <td>6</td>
+      <td>Collantes Carrillo, Diego Mateo</td>
+      <td>To-Review</td>
+    </tr>
+    <tr>
+      <td rowspan="4">US05</td>
+      <td rowspan="4">Ver mapa con geolocalización</td>
+      <td>T-31</td>
+      <td>Integración de proveedor de mapas</td>
+      <td>Evaluar e integrar el proveedor de mapas junto con las credenciales de API necesarias.</td>
+      <td>6</td>
+      <td>Acosta Elera, Abraam Bernabe</td>
+      <td>In-Process</td>
+    </tr>
+    <tr>
+      <td>T-32</td>
+      <td>Endpoint de conciertos cercanos</td>
+      <td>Implementar la consulta de conciertos cercanos a partir de las coordenadas y el radio de búsqueda.</td>
+      <td>8</td>
+      <td>Acosta Elera, Abraam Bernabe</td>
+      <td>In-Process</td>
+    </tr>
+    <tr>
+      <td>T-33</td>
+      <td>Solicitud de permisos de ubicación</td>
+      <td>Implementar la solicitud de permisos de ubicación y el manejo de la denegación del permiso.</td>
+      <td>4</td>
+      <td>Collantes Carrillo, Diego Mateo</td>
+      <td>To-Review</td>
+    </tr>
+    <tr>
+      <td>T-34</td>
+      <td>Vista de mapa con marcadores</td>
+      <td>Construir la vista de mapa con la ubicación del fan, los marcadores de conciertos y la opción de ruta.</td>
+      <td>10</td>
+      <td>Collantes Carrillo, Diego Mateo</td>
+      <td>To-do</td>
+    </tr>
+    <tr>
+      <td rowspan="2">US08</td>
+      <td rowspan="2">Iniciar sesión en la app mobile</td>
+      <td>T-35</td>
+      <td>Autenticación JWT</td>
+      <td>Implementar la emisión y validación de tokens JWT, el control de acceso por rol y el manejo de sesión expirada.</td>
+      <td>8</td>
+      <td>Acosta Elera, Abraam Bernabe</td>
+      <td>Done</td>
+    </tr>
+    <tr>
+      <td>T-36</td>
+      <td>Pantalla de login con manejo de sesión</td>
+      <td>Construir la pantalla de inicio de sesión en la app móvil con persistencia de sesión y manejo de errores.</td>
+      <td>6</td>
+      <td>Collantes Carrillo, Diego Mateo</td>
+      <td>Done</td>
+    </tr>
+    <tr>
+      <td rowspan="2">US09</td>
+      <td rowspan="2">Registrarse como artista</td>
+      <td>T-37</td>
+      <td>Endpoint de registro con rol artista</td>
+      <td>Implementar el registro de un nuevo usuario con rol artista y los atributos propios del segmento.</td>
+      <td>5</td>
+      <td>Acosta Elera, Abraam Bernabe</td>
+      <td>Done</td>
+    </tr>
+    <tr>
+      <td>T-38</td>
+      <td>Formulario de registro de artista</td>
+      <td>Construir el formulario de registro de artista con datos de contacto y biografía.</td>
+      <td>5</td>
+      <td>Collantes Carrillo, Diego Mateo</td>
+      <td>Done</td>
+    </tr>
+    <tr>
+      <td rowspan="2">US10</td>
+      <td rowspan="2">Registrarse como fan</td>
+      <td>T-39</td>
+      <td>Endpoint de registro con rol fan</td>
+      <td>Implementar el registro de un nuevo usuario con rol fan y la asignación de sus intereses iniciales.</td>
+      <td>4</td>
+      <td>Acosta Elera, Abraam Bernabe</td>
+      <td>Done</td>
+    </tr>
+    <tr>
+      <td>T-40</td>
+      <td>Formulario de registro de fan y onboarding</td>
+      <td>Construir el formulario de registro de fan y el flujo de bienvenida hacia la aplicación.</td>
+      <td>4</td>
+      <td>Collantes Carrillo, Diego Mateo</td>
+      <td>Done</td>
+    </tr>
+    <tr>
+      <td rowspan="2">US13</td>
+      <td rowspan="2">Ver información detallada del concierto</td>
+      <td>T-41</td>
+      <td>Endpoint de detalle de concierto</td>
+      <td>Implementar la consulta de detalle del concierto con fecha, lugar, precio, género y opciones de compra de tickets.</td>
+      <td>6</td>
+      <td>Acosta Elera, Abraam Bernabe</td>
+      <td>Done</td>
+    </tr>
+    <tr>
+      <td>T-42</td>
+      <td>Pantalla de detalle del concierto</td>
+      <td>Construir la pantalla de detalle del concierto con la información completa y la acción de asistencia.</td>
+      <td>6</td>
+      <td>Collantes Carrillo, Diego Mateo</td>
+      <td>In-Process</td>
+    </tr>
+    <tr>
+      <td rowspan="2">US24</td>
+      <td rowspan="2">Ver eventos asociados</td>
+      <td>T-43</td>
+      <td>Relación concierto - evento asociado en el modelo</td>
+      <td>Modelar la relación entre un concierto y sus eventos asociados para consultas por tiempo y lugar.</td>
+      <td>5</td>
+      <td>Acosta Elera, Abraam Bernabe</td>
+      <td>To-Review</td>
+    </tr>
+    <tr>
+      <td>T-44</td>
+      <td>Sección "Eventos relacionados"</td>
+      <td>Construir el apartado de eventos relacionados dentro de la pantalla de detalle del concierto.</td>
+      <td>6</td>
+      <td>Collantes Carrillo, Diego Mateo</td>
+      <td>To-do</td>
+    </tr>
+    <tr>
+      <td rowspan="2">US34</td>
+      <td rowspan="2">Crear evento asociado</td>
+      <td>T-45</td>
+      <td>Endpoint de creación de evento asociado</td>
+      <td>Implementar la creación de un evento asociado a un concierto con validación de usuario autenticado.</td>
+      <td>6</td>
+      <td>Acosta Elera, Abraam Bernabe</td>
+      <td>To-do</td>
+    </tr>
+    <tr>
+      <td>T-46</td>
+      <td>Formulario de creación de evento asociado</td>
+      <td>Construir el formulario de creación de evento asociado al concierto con fecha, lugar y tipo de evento.</td>
+      <td>6</td>
+      <td>Collantes Carrillo, Diego Mateo</td>
+      <td>To-do</td>
+    </tr>
+    <tr>
+      <td rowspan="5">N/A</td>
+      <td rowspan="5">Tasks sin User Story asociada (constraints generales del producto)</td>
+      <td>T-47</td>
+      <td>Configuración del API Gateway</td>
+      <td>Configurar el API Gateway como entrada única de los clientes y el enrutamiento hacia cada microservicio.</td>
+      <td>6</td>
+      <td>Acosta Elera, Abraam Bernabe</td>
+      <td>In-Process</td>
+    </tr>
+    <tr>
+      <td>T-48</td>
+      <td>Definir contratos OpenAPI de los microservicios</td>
+      <td>Documentar los contratos de la API de cada servicio para dar cumplimiento a la Interface Segregation Principle.</td>
+      <td>5</td>
+      <td>Acosta Elera, Abraam Bernabe</td>
+      <td>To-Review</td>
+    </tr>
+    <tr>
+      <td>T-49</td>
+      <td>Configuración de base de datos y migraciones</td>
+      <td>Configurar el esquema de PostgreSQL, las migraciones y las variables de entorno del backend en Render.</td>
+      <td>5</td>
+      <td>Acosta Elera, Abraam Bernabe</td>
+      <td>To-do</td>
+    </tr>
+    <tr>
+      <td>T-50</td>
+      <td>Contenedorización y despliegue del backend</td>
+      <td>Crear el Dockerfile del API y ejecutar el despliegue del backend como Web Service en Render.</td>
+      <td>6</td>
+      <td>Acosta Elera, Abraam Bernabe</td>
+      <td>To-do</td>
+    </tr>
+    <tr>
+      <td>T-51</td>
+      <td>Pipeline de despliegue de la landing page</td>
+      <td>Configurar el repositorio y el servicio de Render para publicar la landing page en el Sprint.</td>
+      <td>4</td>
+      <td>Lizarbe Alvarez, Ariana Nickole</td>
+      <td>To-do</td>
+    </tr>
+  </tbody>
+</table>
+
+El Sprint 1 se compone de 21 User Stories (71 Story Points) y 51 Work-Items / Tasks que suman 275 horas estimadas de trabajo. La asignación de responsabilidades se realizó de acuerdo a la especialidad de cada integrante: Acosta Elera, Abraam Bernabe a cargo del backend y los microservicios; Collantes Carrillo, Diego Mateo a cargo de la aplicación móvil; y Lizarbe Alvarez, Ariana Nickole a cargo de la landing page.
+
+#### 5.3.1.2 Development Evidence for Sprint Review
+
+#### 5.3.1.3 Testing Suite Evidence for Sprint Review
+
+#### 5.3.1.4 Execution Evidence for Sprint Review
+
+#### 5.3.1.5 Microservices Documentation Evidence for Sprint Review
+
+#### 5.3.1.6 Software Deployment Evidence for Sprint Review
+
+#### 5.3.1.7 Team Collaboration Insights during Sprint
+
+#### 5.3.1.8 Kanban Board
