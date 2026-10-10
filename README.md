@@ -19,7 +19,7 @@ NRC: 9199
 <br><br>
 Docente: Daniel Enrique Mori Yzaguirre
 <br><br>
-<strong>Informe de AV2</strong>
+<strong>Informe de TP1</strong>
 <br><br>
 Startup: StayBits
 <br><br>
@@ -208,6 +208,15 @@ URL de repositorio del reporte del proyecto: `https://github.com/fundamentos2026
     - [5.2.3. Source Code Style Guide & Conventions](#523-source-code-style-guide--conventions)
     - [5.2.4. Software Deployment Configuration](#524-software-deployment-configuration)
   - [5.3. Microservices Implementation](#53-microservices-implementation)
+    - [5.3.1. Sprint 1](#531-sprint-1)
+      - [5.3.1.1. Sprint Backlog 1](#5311-sprint-backlog-1)
+      - [5.3.1.2. Development Evidence for Sprint Review](#5312-development-evidence-for-sprint-review)
+      - [5.3.1.3. Testing Suite Evidence for Sprint Review](#5313-testing-suite-evidence-for-sprint-review)
+      - [5.3.1.4. Execution Evidence for Sprint Review](#5314-execution-evidence-for-sprint-review)
+      - [5.3.1.5. Microservices Documentation Evidence for Sprint Review](#5315-microservices-documentation-evidence-for-sprint-review)
+      - [5.3.1.6. Software Deployment Evidence for Sprint Review](#5316-software-deployment-evidence-for-sprint-review)
+      - [5.3.1.7. Team Collaboration Insights during Sprint](#5317-team-collaboration-insights-during-sprint)
+      - [5.3.1.8. Kanban Board](#5318-kanban-board)
 
 
 ## **Student Outcome**
@@ -4685,13 +4694,11 @@ Para alcanzar este objetivo, el Sprint reúne el conjunto completo de User Stori
 
 El control del Sprint se realizó mediante un tablero Kanban en Trello, donde cada tarjeta corresponde a un Work-Item y se mueve entre las columnas To-do, In-Process, To-Review y Done.
 
-<!-- TODO: reemplazar la ruta y el placeholder de la URL con la captura real del board -->
-
 <p align="center">
   <img src="assets/images/kanban/sprint-1-board.png" alt="Trello Board - Sprint 1" width="900">
 </p>
 
-**URL público del Board (Trello):** [https://trello.com/b/XXXXXXXX/gigmap-sprint-1](https://trello.com/b/XXXXXXXX/gigmap-sprint-1)
+**URL público del Board (Trello):** [https://trello.com/invite/b/6aca10e1cbf7a65b034525cd/ATTI6f94a4b42a3288fd6a87aa37bff0f121876BCC82/gigmap-sprint-1](https://trello.com/invite/b/6aca10e1cbf7a65b034525cd/ATTI6f94a4b42a3288fd6a87aa37bff0f121876BCC82/gigmap-sprint-1)
 
 A continuación se detalla la descomposición de las User Stories asignadas al Sprint en Work-Items / Tasks, incluyendo las tareas derivadas de la descomposición de cada historia y las tareas adicionales asociadas a constraints generales del producto.
 
@@ -5176,14 +5183,3439 @@ El Sprint 1 se compone de 21 User Stories (71 Story Points) y 51 Work-Items / Ta
 
 #### 5.3.1.2 Development Evidence for Sprint Review
 
+Durante el Sprint 1 se materializó la versión mínima funcional de GigMap sobre el alcance de **Web Services**, que comprende el microservicio RESTful del backend y la aplicación móvil Android que lo consume. El equipo trabajó bajo un flujo basado en ramas: cada módulo o historia de usuario se desarrolló en una rama `feature/*` apartada a partir de `main`, y una vez revisada se integró a `main` mediante un merge commit, manteniendo siempre el criterio de "una rama por unidad de trabajo trazable".
+
+Los principales avances en implementación fueron los siguientes:
+
+- **Microservicio RESTful (gigmap-backend).** Se consolidó el contexto por *bounded context* siguiendo el estilo *package by feature* sobre Spring Boot y Spring Data JPA. El módulo de autenticación implementa la emisión y validación de tokens JWT con control de acceso por rol; los módulos de conciertos, comunidades, eventos relacionados, notificaciones, conexiones y analítica exponen sus propios controladores y recursos REST, respetando el *Interface Segregation Principle* al exponer únicamente las operaciones que cada módulo necesita. Se incorporó además el *kernel* compartido (auditoría JPA, estrategia de nombres de tablas en `snake_case` pluralizado, manejador global de excepciones) y la configuración de OpenAPI para la documentación de los contratos.
+- **Aplicación móvil (gigmap-mobile).** Se construyó el cliente Android sobre Jetpack Compose con una arquitectura MVVM: capa de datos con Retrofit y un gestor de tokens, 25 pantallas Compose y 11 View Models. Se implementaron los flujos de acceso (login, registro de artista y de fan con onboarding), exploración de conciertos con filtro por género, búsqueda con *debounce*, publicación de conciertos con carga de cartel, mapa con geolocalización, comunidades, hilos, reacciones, perfil de artista y eventos relacionados, además de las pantallas de notificaciones, conexiones y el asistente M1AU.
+- **Trazabilidad con el Sprint Backlog.** Cada rama nombra explícitamente las historias de usuario y los Work-Items del Sprint Backlog que cubre, y el cuerpo del mensaje de commit detalla las tareas técnicas (T-xx) desarrolladas, de modo que la evidencia de implementación pueda rastrearse desde el commit hasta la historia de usuario y la tarea del backlog.
+
+A continuación se presenta la tabla de commits de implementación de cada repositorio, ordenados por la secuencia en que se integraron a `main`.
+
+<table>
+  <thead>
+    <tr>
+      <th>Repository</th>
+      <th>Branch</th>
+      <th>Commit Id</th>
+      <th>Commit Message</th>
+      <th>Commit Message Body</th>
+      <th>Commited on (Date)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td rowspan="8">fundamentos202620/<br>gigmap-backend</td>
+      <td>feature/sprint1-api-foundation</td>
+      <td>85e562b</td>
+      <td>feat(api): bootstrap GigMap API microservice with Spring Boot and Maven</td>
+      <td>Build Maven (pom.xml) con Spring Boot, Spring Data JPA y springdoc; Maven Wrapper y Dockerfile; punto de entrada GigMapApiApplication; kernel compartido (AuditableAbstractAggregateRoot, JpaAuditingConfiguration, estrategia de nombres en snake_case pluralizado); GlobalExceptionHandler y OpenApiConfiguration.</td>
+      <td>10/10/2026</td>
+    </tr>
+    <tr>
+      <td>feature/us08-us09-us10-authentication-module</td>
+      <td>28bde9b</td>
+      <td>feat(us08): implement JWT authentication, registration and user profile endpoints</td>
+      <td>T-35: JwtService, JwtAuthenticationFilter y WebSecurityConfiguration con control de acceso por rol. T-37 / T-39: registro de artista y de fan con validación de rol e intereses iniciales. T-07: actualización de perfil. T-18 / T-20: perfil público, seguidores y publicaciones con like.</td>
+      <td>10/10/2026</td>
+    </tr>
+    <tr>
+      <td>feature/us01-us02-us06-us13-concerts-module</td>
+      <td>3f7bd0c</td>
+      <td>feat(us01): implement concert catalogue, genre filter, search and creation</td>
+      <td>T-24: filtro por género musical sobre el catálogo. T-10: búsqueda por nombre con paginación y orden por fecha. T-26: creación de concierto con validación de fecha, recinto, precio y género. T-41: detalle de concierto. ConcertReminderScheduler para los recordatorios.</td>
+      <td>10/10/2026</td>
+    </tr>
+    <tr>
+      <td>feature/us04-us07-us18-communities-module</td>
+      <td>407867e</td>
+      <td>feat(us04): implement thematic communities, forums and posts with reactions</td>
+      <td>T-29: creación de comunidad con nombre, temática, descripción y creador. T-12: búsqueda de comunidades por nombre. T-14: comunidades del usuario autenticado. T-16: reacciones idempotentes sobre publicaciones. ForumsController para los foros temáticos.</td>
+      <td>10/10/2026</td>
+    </tr>
+    <tr>
+      <td>feature/us24-us30-us34-related-events-module</td>
+      <td>aaaf42e</td>
+      <td>feat(us24): model the concert-to-related-event relation and its REST endpoints</td>
+      <td>T-43: agregado RelatedEvent con la relación concierto-evento asociado, consultable por tiempo y lugar. T-22: endpoint de detalle con fecha, lugar y organizador. T-45: creación de evento asociado con usuario autenticado y gestión de participantes.</td>
+      <td>10/10/2026</td>
+    </tr>
+    <tr>
+      <td>feature/notifications-module</td>
+      <td>f29cdd4</td>
+      <td>feat(notifications): implement device tokens and push notification delivery</td>
+      <td>Agregados DeviceToken, Notification y UserNotification con sus repositorios y servicios; adaptador de Firebase Cloud Messaging (FirebaseConfig, CloudMessagingServiceImpl) detrás del puerto CloudMessagingService; controladores de notificaciones y device tokens.</td>
+      <td>10/10/2026</td>
+    </tr>
+    <tr>
+      <td>feature/social-connections-module</td>
+      <td>72039a9</td>
+      <td>feat(connections): implement connection requests between fans and artists</td>
+      <td>Agregados Connection y ConnectionRequest con manejo del estado de la solicitud; ConnectionService para creación, aceptación y rechazo; ConnectionsController con los recursos REST correspondientes.</td>
+      <td>10/10/2026</td>
+    </tr>
+    <tr>
+      <td>feature/analytics-module</td>
+      <td>4f63523</td>
+      <td>feat(analytics): implement the analytics event capture endpoint</td>
+      <td>Agregado AnalyticsEvent tipado por AnalyticsEventType, su repositorio JPA y el AnalyticsController con la cadena de resources y assemblers que consume el cliente móvil.</td>
+      <td>10/10/2026</td>
+    </tr>
+    <tr>
+      <td rowspan="12">fundamentos202620/<br>gigmap-mobile</td>
+      <td>feature/sprint1-android-foundation</td>
+      <td>7a9a921</td>
+      <td>feat(android): bootstrap GigMap mobile app with Gradle, Compose and MVVM skeleton</td>
+      <td>Build Gradle multiarchivo con catálogo de versiones y Jetpack Compose; AndroidManifest con permisos de ubicación, cámara y notificaciones; tema Compose y recursos; MainActivity, BottomBar, TopBar y el grafo de navegación Navi; capa de datos con RetrofitClient, TokenManager y el contrato WebService.</td>
+      <td>10/10/2026</td>
+    </tr>
+    <tr>
+      <td>feature/us08-us09-us10-auth-ui</td>
+      <td>d1defa9</td>
+      <td>feat(us08): implement login, registration and onboarding screens</td>
+      <td>T-36: pantalla de login con persistencia de sesión mediante TokenManager y manejo de credenciales inválidas. T-38: formulario de registro de artista con datos de contacto y biografía. T-40: formulario de registro de fan y flujo de bienvenida.</td>
+      <td>10/10/2026</td>
+    </tr>
+    <tr>
+      <td>feature/us01-us06-us13-concert-ui</td>
+      <td>f7d15d6</td>
+      <td>feat(us01): implement concert listing, genre filter, search and detail screens</td>
+      <td>T-25: selector de género integrado en la pantalla Explorar. T-11: búsqueda con debounce y estado de carga. T-42: pantalla de detalle del concierto con la acción de asistencia. View Models de conciertos, plataformas y de venues.</td>
+      <td>10/10/2026</td>
+    </tr>
+    <tr>
+      <td>feature/us02-create-concert-ui</td>
+      <td>203749b</td>
+      <td>feat(us02): implement the concert publication form with poster upload</td>
+      <td>T-27: formulario de publicación de concierto con validación de nombre, fecha, género, descripción, recinto y capacidad. T-28: selección, compresión y subida de la imagen del cartel mediante CloudinaryService.</td>
+      <td>10/10/2026</td>
+    </tr>
+    <tr>
+      <td>feature/us05-map-geolocation</td>
+      <td>4131dda</td>
+      <td>feat(us05): implement the geolocated map of nearby concerts</td>
+      <td>T-31: integración de GoogleMapsService con las credenciales de google-services.json. T-32: consumo del endpoint de conciertos cercanos con coordenadas y radio. T-33: solicitud del permiso de ubicación y manejo de la denegación. T-34: mapa con ubicación, marcadores y opción de ruta.</td>
+      <td>10/10/2026</td>
+    </tr>
+    <tr>
+      <td>feature/us04-us07-us18-communities-ui</td>
+      <td>a641a13</td>
+      <td>feat(us04): implement community creation, forums and thread screens</td>
+      <td>T-30: formulario de creación de comunidad. T-13: pantalla de búsqueda de comunidades y acceso al detalle. T-15: listado de comunidades accedidas. Pantallas de comunidades, foros e hilos con sus View Models.</td>
+      <td>10/10/2026</td>
+    </tr>
+    <tr>
+      <td>feature/us19-us21-posts-reactions-ui</td>
+      <td>f6e38af</td>
+      <td>feat(us19): implement post creation and the reaction control with optimistic state</td>
+      <td>T-17: control de reacciones con actualización optimista del estado local y reversión cuando el endpoint rechaza la operación. Pantalla CreatePost para publicar dentro de un hilo de comunidad.</td>
+      <td>10/10/2026</td>
+    </tr>
+    <tr>
+      <td>feature/us24-us30-us34-related-events-ui</td>
+      <td>a728ba0</td>
+      <td>feat(us24): implement the related events section of a concert</td>
+      <td>T-44: sección de eventos relacionados dentro del detalle del concierto. T-46: formulario CreateRelatedEventDialog con fecha, lugar y tipo de evento. RelatedEventViewModel.</td>
+      <td>10/10/2026</td>
+    </tr>
+    <tr>
+      <td>feature/us03-us20-profile-ui</td>
+      <td>01fadc2</td>
+      <td>feat(us03): implement the artist profile editor and public profile screens</td>
+      <td>T-08: formulario de edición de perfil con campos validados. T-09: selección, compresión y subida de la imagen de perfil. T-19: navegación a perfiles de terceros desde la comunidad y desde la lista de asistentes. Pantallas de perfil y estadísticas de artista.</td>
+      <td>10/10/2026</td>
+    </tr>
+    <tr>
+      <td>feature/social-connections-ui</td>
+      <td>28e924e</td>
+      <td>feat(connections): implement the connections screen and its view model</td>
+      <td>ConnectionsScreen lista las conexiones entre fans y artistas junto con las solicitudes pendientes; ConnectionViewModel gestiona las acciones de solicitar, aceptar y rechazar.</td>
+      <td>10/10/2026</td>
+    </tr>
+    <tr>
+      <td>feature/notifications-and-m1au-assistant</td>
+      <td>a8c066b</td>
+      <td>feat(notifications): implement push notifications and the M1AU assistant chat</td>
+      <td>Pantalla NotificationsList y su View Model; FirebaseService para el registro del token del dispositivo; módulo M1AU con cliente de API, repositorio de chat, servicio, DTOs y la pantalla M1AUChatScreen.</td>
+      <td>10/10/2026</td>
+    </tr>
+    <tr>
+      <td>feature/home-experience</td>
+      <td>e3414f1</td>
+      <td>feat(home): implement the home feed composed of the Sprint 1 modules</td>
+      <td>Pantallas Home y HomeContent que agregan la lista de conciertos, las comunidades y las notificaciones accesibles desde la barra inferior.</td>
+      <td>10/10/2026</td>
+    </tr>
+  </tbody>
+</table>
+
 #### 5.3.1.3 Testing Suite Evidence for Sprint Review
+
+El Sprint 1 incorporó una estrategia de pruebas en tres niveles sobre las User Stories del Sprint: **Acceptance Tests** escritos bajo el enfoque BDD en archivos `.feature` con lenguaje Gherkin, **Integration Tests** sobre la capa REST del microservicio y **UI Tests** sobre las pantallas Compose de la aplicación móvil. Todos los casos se diseñaron a partir de los criterios de aceptación definidos en el Product Backlog, de modo que cada escenario verifica explícitamente un comportamiento esperado por el fan o por el artista.
+
+**Ruta del repositorio de Testing:** https://github.com/fundamentos202620/gigmap-acceptance-tests
+
+##### 5.3.1.3.1 Relación de tests diseñados
+
+<table>
+  <thead>
+    <tr>
+      <th>User Story</th>
+      <th>Título</th>
+      <th>Feature File (Acceptance / BDD)</th>
+      <th>Escenarios</th>
+      <th>Artefactos complementarios</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>US01</td>
+      <td>Filtrar conciertos por género musical</td>
+      <td>US01.feature</td>
+      <td>2</td>
+      <td>FilterConcertTest.kt (UI)</td>
+    </tr>
+    <tr>
+      <td>US02</td>
+      <td>Publicar nuevo concierto</td>
+      <td>US02.feature</td>
+      <td>2</td>
+      <td>create_concert.feature (backend), CreateConcertTest.kt, ConcertDetailViewTest.kt</td>
+    </tr>
+    <tr>
+      <td>US04</td>
+      <td>Crear comunidad</td>
+      <td>US04.feature</td>
+      <td>2</td>
+      <td>create_community.feature (backend), CreateCommunityTest.kt</td>
+    </tr>
+    <tr>
+      <td>US05</td>
+      <td>Ver mapa con geolocalización</td>
+      <td>US05.feature</td>
+      <td>2</td>
+      <td>ViewMapGeolocationTest.kt, LocationPermissionTest.kt</td>
+    </tr>
+    <tr>
+      <td>US06</td>
+      <td>Buscar conciertos</td>
+      <td>US06.feature</td>
+      <td>2</td>
+      <td>SearchConcertTest.kt</td>
+    </tr>
+    <tr>
+      <td>US07</td>
+      <td>Buscar comunidades</td>
+      <td>US07.feature</td>
+      <td>2</td>
+      <td>SearchCommunityTest.kt</td>
+    </tr>
+    <tr>
+      <td>US08</td>
+      <td>Iniciar sesión en la app mobile</td>
+      <td>US08.feature</td>
+      <td>2</td>
+      <td>login.feature (backend), AuthIntegrationTest.java, LoginTest.kt</td>
+    </tr>
+    <tr>
+      <td>US09</td>
+      <td>Registrarse como artista</td>
+      <td>US09.feature</td>
+      <td>2</td>
+      <td>register_user.feature (backend), AuthIntegrationTest.java, ArtistRegistrationTest.kt</td>
+    </tr>
+    <tr>
+      <td>US18</td>
+      <td>Ver comunidades accedidas</td>
+      <td>US18.feature</td>
+      <td>2</td>
+      <td>SearchJoinedCommunities.kt, CommunityIntegrationTest.java</td>
+    </tr>
+    <tr>
+      <td>US19</td>
+      <td>Reaccionar a publicaciones en comunidades</td>
+      <td>US19.feature</td>
+      <td>2</td>
+      <td>PostReactionTest.kt, ViewLikedPostsTest.kt, PostIntegrationTest.java</td>
+    </tr>
+    <tr>
+      <td colspan="2"><strong>Total Acceptance / BDD</strong></td>
+      <td><strong>10 archivos .feature</strong></td>
+      <td><strong>20</strong></td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td colspan="2"><strong>Integration Tests (backend)</strong></td>
+      <td>—</td>
+      <td>8 clases</td>
+      <td>AuthIntegrationTest, UserIntegrationTest, ConcertIntegrationTest, CommunityIntegrationTest, PostIntegrationTest, ConnectionIntegrationTest, NotificationIntegrationTest, RelatedEventIntegrationTest</td>
+    </tr>
+    <tr>
+      <td colspan="2"><strong>Unit / Web Tests (backend)</strong></td>
+      <td>4 archivos .feature en src/main/resources/features</td>
+      <td>18 clases / 15 escenarios</td>
+      <td>Command services, Query services, Controllers, Scheduler y entidades</td>
+    </tr>
+    <tr>
+      <td colspan="2"><strong>UI Tests (Android)</strong></td>
+      <td>—</td>
+      <td>21 clases</td>
+      <td>Pruebas de instrumentación sobre Jetpack Compose + 2 clases de test unitario</td>
+    </tr>
+  </tbody>
+</table>
+
+##### 5.3.1.3.2 Código de los archivos .feature (Acceptance Tests BDD)
+
+Los siguientes archivos `.feature` se encuentran en la raíz del repositorio `fundamentos202620/gigmap-acceptance-tests`. Cada archivo nombra la User Story que cubre en su línea `Feature:` y declara sus escenarios con la estructura Given / When / Then y tablas `Examples`.
+
+**US01.feature — US01: Filtrar conciertos por género musical**
+
+```gherkin
+Feature: US01 Filtrar conciertos por género musical
+Como fan
+quiero filtrar conciertos por género
+para ver solo los que me interesan.
+
+Scenario: Filtrar conciertos por género musical
+
+Given el <fan> desea buscar conciertos según sus gustos musicales.
+And se encuentra en la vista de <lista_conciertos>.
+When haga clic en el botón "Filtrar"
+And seleccione uno o más <generos> musicales
+And haga clic en el botón "Aplicar filtros"
+Then el sistema mostrará únicamente los conciertos relacionados con los <generos> seleccionados.
+
+Examples:
+| fan | lista_conciertos | generos |
+| Ariana Lizarbe | conciertos disponibles | K-pop, Pop |
+
+Scenario: Visualizar todos los conciertos sin filtros
+
+Given el <fan> desea ver todos los conciertos disponibles.
+And se encuentra en la vista de <lista_conciertos>.
+When haga clic en el botón "Limpiar filtros"
+Then el sistema mostrará nuevamente todos los conciertos disponibles.
+
+Examples:
+| fan | lista_conciertos |
+| Diego Ramos | conciertos disponibles |
+```
+
+**US02.feature — US02: Publicar nuevo concierto**
+
+```gherkin
+Feature: US02 Publicar nuevo concierto
+    Como artista
+    quiero crear un evento
+    para promocionar mi presentación.
+
+Scenario: Publicar un nuevo concierto exitosamente
+
+    Given el <artista> desea crear un nuevo concierto.
+    And se encuentra en la vista de <publicacion_concierto>.
+    When ingrese el <nombre> del concierto
+    And seleccione la <fecha>
+    And seleccione el <genero_musical>
+    And ingrese una <descripcion>
+    And cargue una <imagen>
+    And seleccione una <plataforma>
+    And seleccione un <recinto>
+    And ingrese la <capacidad>
+    And haga clic en el botón "Crear"
+    Then el sistema registrará el nuevo concierto correctamente.
+
+Examples:
+| artista | publicacion_concierto | nombre | fecha | genero_musical | descripcion | imagen | plataforma | recinto | capacidad |
+| ENHYPEN | formulario de concierto | BLOOD SAGA | 08/07/2026 | K-Pop | Concierto esperado | concierto.jpg | Tickermaster | Estadio San Marcos | 25000 |
+
+Scenario: Intentar publicar un concierto con campos incompletos
+
+    Given el <artista> desea crear un nuevo concierto.
+    And se encuentra en la vista de <publicacion_concierto>.
+    When deje uno o más campos obligatorios vacíos
+    And haga clic en el botón "Crear"
+    Then el sistema mostrará un mensaje indicando que debe completar todos los campos requeridos.
+
+Examples:
+| artista | publicacion_concierto | nombre | fecha | genero_musical | descripcion |
+| Ana Torres | formulario de concierto | Rock Night | "" | Rock | Evento musical en vivo |
+```
+
+**US04.feature — US04: Crear comunidad**
+
+```gherkin
+Feature: US04 Crear comunidad
+    Como usuario
+    quiero crear una comunidad temática
+    para reunir a otros usuarios en torno a intereses compartidos.
+
+Scenario: Crear una comunidad exitosamente
+
+    Given el <usuario> desea crear una nueva comunidad.
+    And se encuentra en la vista de <crear_comunidad>.
+    When ingrese el <nombre_comunidad>
+    And escriba una <descripcion>
+    And seleccione una <imagen>
+    And haga clic en el botón "Crear comunidad"
+    Then el sistema registrará la nueva comunidad correctamente.
+
+Examples:
+| usuario | crear_comunidad | nombre_comunidad | descripcion | imagen |
+| ENHYPEN | formulario de comunidad | ENGENE | ENHYPENs community | enha.jpg |
+
+Scenario: Cancelar creación de comunidad
+
+    Given el <usuario> desea crear una nueva comunidad.
+    And se encuentra en la vista de <crear_comunidad>.
+    When haga clic en el botón "Cancelar"
+    Then el sistema cancelará la creación de la comunidad y regresará a la pantalla principal.
+
+Examples:
+| usuario | crear_comunidad |
+| ENHYPEN | formulario de comunidad |
+```
+
+**US05.feature — US05: Ver mapa con geolocalización**
+
+```gherkin
+Feature: US05 Ver mapa con geolocalización
+    Como fan
+    quiero ver un mapa con mi ubicación y los conciertos cercanos marcados
+    para explorar visualmente las opciones disponibles.
+
+Scenario: Visualizar mapa con conciertos cercanos
+
+    Given el <fan> desea explorar conciertos cercanos.
+    And se encuentra en la vista de <mapa>.
+    When permita a la aplicación acceder a su ubicación
+    Then el sistema mostrará el mapa con la ubicación actual del usuario y los conciertos cercanos marcados.
+
+Examples:
+| fan | mapa |
+| Ariana Lizarbe | mapa de conciertos |
+
+Scenario: Denegar acceso a la ubicación
+
+    Given el <fan> desea explorar conciertos cercanos.
+    And se encuentra en la vista de <mapa>.
+    When deniegue el acceso a su ubicación
+    Then el sistema mostrará un mensaje indicando que se requiere acceso a la ubicación para visualizar conciertos cercanos.
+
+Examples:
+| fan | mapa |
+| Ariana Lizarbe | mapa de conciertos |
+```
+
+**US06.feature — US06: Buscar conciertos**
+
+```gherkin
+Feature: US06 Buscar conciertos
+    Como usuario
+    quiero buscar conciertos por nombre o artista
+    para encontrarlos fácilmente.
+
+Scenario: Buscar concierto por nombre
+
+    Given el <usuario> desea encontrar un concierto específico.
+    And se encuentra en la vista de <lista_conciertos>.
+    When ingrese el <nombre_concierto> en la barra de búsqueda
+    Then el sistema mostrará los conciertos relacionados con el nombre ingresado.
+
+Examples:
+| usuario | lista_conciertos | nombre_concierto |
+| Ariana Lizarbe | conciertos disponibles | Fine Line |
+
+Scenario: No encontrar resultados en la búsqueda
+
+    Given el <usuario> desea encontrar un concierto específico.
+    And se encuentra en la vista de <lista_conciertos>.
+    When ingrese un <nombre_concierto> inexistente en la barra de búsqueda
+    Then el sistema mostrará un mensaje indicando que no se encontraron conciertos relacionados.
+
+Examples:
+| usuario | lista_conciertos | nombre_concierto |
+| Diego Ramos | conciertos disponibles | Rock Universe 2050 |
+```
+
+**US07.feature — US07: Buscar comunidades**
+
+```gherkin
+Feature: US07 Buscar comunidades
+    Como usuario
+    quiero buscar comunidades por nombre
+    para unirme a las que me interesen.
+
+Scenario: Buscar comunidad por nombre
+
+    Given el <usuario> desea encontrar una comunidad específica.
+    And se encuentra en la vista de <lista_comunidades>.
+    When ingrese el <nombre_comunidad> en la barra de búsqueda
+    Then el sistema mostrará las comunidades relacionadas con el nombre ingresado.
+
+Examples:
+| usuario | lista_comunidades | nombre_comunidad |
+| Ariana Lizarbe | comunidades disponibles | ENGENE |
+
+Scenario: No encontrar resultados en la búsqueda de comunidades
+
+    Given el <usuario> desea encontrar una comunidad específica.
+    And se encuentra en la vista de <lista_comunidades>.
+    When ingrese un <nombre_comunidad> inexistente en la barra de búsqueda
+    Then el sistema mostrará un mensaje indicando que no se encontraron comunidades relacionadas.
+
+Examples:
+| usuario | lista_comunidades | nombre_comunidad |
+| Diego Ramos | comunidades disponibles | STAY |
+```
+
+**US08.feature — US08: Iniciar sesión en la app mobile**
+
+```gherkin
+Feature: US08 Iniciar sesión en la app mobile
+    Como usuario registrado
+    quiero iniciar sesión desde la aplicación móvil
+    para acceder a mi cuenta.
+
+Scenario: Iniciar sesión correctamente
+
+    Given el <usuario> desea acceder a su cuenta.
+    And se encuentra en la vista de <inicio_sesion>.
+    When ingrese su <username> y <contrasena>
+    And haga clic en el botón "Iniciar sesión"
+    Then el sistema permitirá el acceso a la cuenta correctamente.
+
+Examples:
+| usuario | inicio_sesion | username | contrasena |
+| Ariana Lizarbe | login mobile | arializarbe | Ariana123* |
+
+Scenario: Ingresar credenciales incorrectas
+
+    Given el <usuario> desea acceder a su cuenta.
+    And se encuentra en la vista de <inicio_sesion>.
+    When ingrese un <username> o <contrasena> incorrectos
+    And haga clic en el botón "Iniciar sesión"
+    Then el sistema mostrará un mensaje indicando que las credenciales son inválidas.
+
+Examples:
+| usuario | inicio_sesion | username | contrasena |
+| Diego Ramos | login mobile | diegoramos | 123456 |
+```
+
+**US09.feature — US09: Registrarse como artista**
+
+```gherkin
+Feature: US09 Registrarse como artista
+Como nuevo usuario
+quiero registrarme como artista
+para promocionar mis conciertos.
+
+Scenario: Registro exitoso como artista
+
+Given el <usuario> desea crear una cuenta como artista.
+And se encuentra en la vista de <registro>.
+When ingrese su <email>, <contrasena>, <username>
+And seleccione el tipo de usuario "Artista"
+And haga clic en el botón "Siguiente"
+Then el sistema registrará la cuenta de artista correctamente.
+
+Examples:
+| usuario | registro | email | contrasena | username |
+| ENHYPEN | formulario de registro | carlosvega@gmail.com | Carlos123* | carlosmusic |
+
+Scenario: Campos incompletos en el registro
+
+Given el <usuario> desea crear una cuenta como artista.
+And se encuentra en la vista de <registro>.
+When deje uno o más campos obligatorios vacíos
+And haga clic en el botón "Siguiente"
+Then el sistema mostrará un mensaje indicando que debe completar todos los campos requeridos.
+
+Examples:
+| usuario | registro |
+| ENHYPEN | formulario de registro |
+```
+
+**US18.feature — US18: Ver comunidades accedidas**
+
+```gherkin
+Feature: US18 Ver comunidades accedidas
+    Como usuario
+    quiero visualizar en el apartado "Comunidades" las comunidades a las que me he unido
+    para acceder fácilmente a ellas.
+
+Scenario: Visualizar comunidades unidas
+
+    Given el <usuario> ha ingresado a distintas comunidades.
+    And se encuentra en la vista de <configuracion_usuario>.
+    When haga clic en la pestaña "Comunidades"
+    Then el sistema mostrará la lista de comunidades a las que el usuario se ha unido.
+
+Examples:
+| usuario | configuracion_usuario |
+| Ariana Lizarbe | perfil de usuario |
+
+Scenario: No tener comunidades unidas
+
+    Given el <usuario> no se ha unido a ninguna comunidad.
+    And se encuentra en la vista de <configuracion_usuario>.
+    When haga clic en la pestaña "Comunidades"
+    Then el sistema mostrará un mensaje indicando que el usuario aún no pertenece a ninguna comunidad.
+
+Examples:
+| usuario | configuracion_usuario |
+| Diego Ramos | perfil de usuario |
+```
+
+**US19.feature — US19: Reaccionar a publicaciones en comunidades**
+
+```gherkin
+Feature: US19 Reaccionar a publicaciones en comunidades
+    Como usuario
+    quiero poder reaccionar a publicaciones dentro de las comunidades
+    para interactuar con otros miembros.
+
+Scenario: Dar like a una publicación
+
+    Given el <usuario> se encuentra dentro de una <comunidad>.
+    And visualiza una <publicacion>.
+    When haga clic en el botón "Like"
+    Then el sistema registrará la reacción en la publicación correctamente.
+
+Examples:
+| usuario | comunidad | publicacion |
+| Ariana Lizarbe | ENGENE | Nuevo comeback de ENHYPEN |
+
+Scenario: Quitar reacción de una publicación
+
+    Given el <usuario> ya reaccionó a una <publicacion>.
+    And se encuentra dentro de una <comunidad>.
+    When haga clic nuevamente en el botón "Like"
+    Then el sistema eliminará la reacción registrada de la publicación.
+
+Examples:
+| usuario | comunidad | publicacion |
+| Diego Ramos | Rock Lovers | Festival de rock en Lima |
+```
+
+##### 5.3.1.3.3 Commits relacionados con Testing
+
+<table>
+  <thead>
+    <tr>
+      <th>Repository</th>
+      <th>Branch</th>
+      <th>Commit Id</th>
+      <th>Commit Message</th>
+      <th>Commit Message Body</th>
+      <th>Commited on (Date)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td rowspan="4">fundamentos202620/<br>gigmap-acceptance-tests</td>
+      <td>test/acceptance-auth-features</td>
+      <td>3aa68da</td>
+      <td>test(acceptance): add Gherkin specs for US08 and US09</td>
+      <td>US08.feature con los escenarios de inicio de sesión correcto y de credenciales incorrectas. US09.feature con los escenarios de registro exitoso como artista y de campos incompletos. Cada escenario declara placeholders &lt;...&gt; y tablas Examples con los datos de prueba.</td>
+      <td>10/10/2026</td>
+    </tr>
+    <tr>
+      <td>test/acceptance-concert-features</td>
+      <td>c33af42</td>
+      <td>test(acceptance): add Gherkin specs for US01, US02 and US06</td>
+      <td>US01.feature (filtrado por género y limpieza de filtros). US02.feature (publicación exitosa y validación de campos incompletos). US06.feature (búsqueda por nombre y búsqueda sin resultados).</td>
+      <td>10/10/2026</td>
+    </tr>
+    <tr>
+      <td>test/acceptance-map-feature</td>
+      <td>2b79ca1</td>
+      <td>test(acceptance): add Gherkin spec for US05</td>
+      <td>US05.feature con los escenarios de visualización del mapa con conciertos cercanos y de denegación del permiso de ubicación.</td>
+      <td>10/10/2026</td>
+    </tr>
+    <tr>
+      <td>test/acceptance-community-features</td>
+      <td>edd3b41</td>
+      <td>test(acceptance): add Gherkin specs for US04, US07, US18 and US19</td>
+      <td>US04.feature (creación y cancelación de comunidad). US07.feature (búsqueda con y sin resultados). US18.feature (comunidades unidas y usuario sin comunidades). US19.feature (alta y baja de reacción sobre una publicación).</td>
+      <td>10/10/2026</td>
+    </tr>
+    <tr>
+      <td rowspan="3">fundamentos202620/<br>gigmap-backend</td>
+      <td>test/core-integration-suite</td>
+      <td>724ce86</td>
+      <td>test(api): add core integration tests for the Web Services of Sprint 1</td>
+      <td>AuthIntegrationTest, UserIntegrationTest, ConcertIntegrationTest, CommunityIntegrationTest, PostIntegrationTest, ConnectionIntegrationTest, NotificationIntegrationTest y RelatedEventIntegrationTest verifican los endpoints que respaldan US01-US24 contra el contexto de aplicación cableado.</td>
+      <td>10/10/2026</td>
+    </tr>
+    <tr>
+      <td>test/backend-unit-and-web-suites</td>
+      <td>69e5e01</td>
+      <td>test(api): add unit tests for command services, query services and web resources</td>
+      <td>Pruebas de los command y query services de authentication, concerts, communities, posts, connections, notifications y relatedevents; más UsersControllerTest, VenueResourceTest, ConcertReminderSchedulerTest y VenueTest.</td>
+      <td>10/10/2026</td>
+    </tr>
+    <tr>
+      <td>test/bdd-feature-specs</td>
+      <td>c4c19c1</td>
+      <td>test(api): add Gherkin feature specs for authentication, concerts and communities</td>
+      <td>login.feature (US08), register_user.feature (US09, US10), create_concert.feature (US02) y create_community.feature (US04). Estas especificaciones complementan a los .feature de Acceptance mantenidos en gigmap-acceptance-tests.</td>
+      <td>10/10/2026</td>
+    </tr>
+    <tr>
+      <td rowspan="2">fundamentos202620/<br>gigmap-mobile</td>
+      <td>test/android-ui-acceptance-suite</td>
+      <td>4a4c6da</td>
+      <td>test(android): add Compose UI acceptance tests for the Sprint 1 user stories</td>
+      <td>LoginTest, FanRegistrationTest, ArtistRegistrationTest, PersonalizeArtistProfile, FilterConcertTest, SearchConcertTest, ViewConcertDetailsTest, ConcertDetailViewTest, CreateConcertTest, CreateCommunityTest, SearchCommunityTest, SearchJoinedCommunities, PostReactionTest, ViewLikedPostsTest, AccessOtherUserProfileTest, ViewAssociatedEventsTest, CreateRelatedEventTest, UploadImageInCommunityPostTest, ViewMapGeolocationTest y LocationPermissionTest.</td>
+      <td>10/10/2026</td>
+    </tr>
+    <tr>
+      <td>test/android-unit-suite</td>
+      <td>5a4f705</td>
+      <td>test(android): add unit tests for the connections view model</td>
+      <td>ConnectionUnitTest verifica el mapeo de la lista de conexiones y el manejo del estado de las solicitudes; ExampleUnitTest mantiene la comprobación de instrumentación por defecto.</td>
+      <td>10/10/2026</td>
+    </tr>
+  </tbody>
+</table>
 
 #### 5.3.1.4 Execution Evidence for Sprint Review
 
+Esta sección presenta la evidencia de ejecución de los Web Services entregados en el Sprint 1. Su propósito es demostrar que las operaciones construidas no solo se encuentran implementadas en el código fuente, sino que además responden correctamente cuando son invocadas sobre un entorno real, devolviendo los códigos de estado, las cabeceras y los cuerpos de respuesta esperados.
+
+##### Entorno de ejecución
+
+La evidencia fue levantada sobre la API REST de GigMap, desplegada como *Web Service* en Render y accesible públicamente, y fue capturada desde el cliente Postman. La colección de Postman se generó automáticamente a partir de la especificación OpenAPI publicada por la propia API, lo que garantiza que las peticiones documentadas corresponden exactamente al contrato vigente del servicio.
+
+<div align="center">
+<table>
+  <thead>
+    <tr>
+      <th>Elemento</th>
+      <th>Detalle</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Cliente de pruebas</td>
+      <td>Postman (colección <code>GigMap-API-V1</code> + environment <code>GigMap Sprint 1</code>)</td>
+    </tr>
+    <tr>
+      <td>Base URL del servicio</td>
+      <td><code>https://gigmap-api.onrender.com</code> (despliegue) / <code>http://localhost:8080</code> (local)</td>
+    </tr>
+    <tr>
+      <td>Especificación OpenAPI</td>
+      <td><code>{{baseUrl}}/v3/api-docs</code> y <code>{{baseUrl}}/swagger-ui.html</code></td>
+    </tr>
+    <tr>
+      <td>Prefijo de los servicios</td>
+      <td><code>/api/v1</code></td>
+    </tr>
+    <tr>
+      <td>Autenticación</td>
+      <td>JWT stateless (Bearer). Solo <code>/api/v1/auth/**</code> es público; el resto exige <code>Authorization: Bearer &lt;token&gt;</code></td>
+    </tr>
+    <tr>
+      <td>Variables de entorno</td>
+      <td><code>baseUrl</code>, <code>fanToken</code>, <code>artistToken</code>, <code>fanId</code>, <code>artistId</code>, <code>concertId</code>, <code>communityId</code>, <code>postId</code></td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+El flujo de ejecución empieza inevitablemente por la emisión de credenciales, ya que el token JWT obtenido en el registro o en el inicio de sesión es el que habilita el resto de operaciones protegidas. Por esa razón, el script de la colección guarda automáticamente el campo `token` de la respuesta en la variable de entorno correspondiente y lo reutiliza en las peticiones siguientes.
+
+##### Resumen de lo alcanzado en el Sprint
+
+En el Sprint 1 se logró materializar la versión mínima funcional del backend de GigMap, habilitando los flujos centrales del producto para ambos segmentos objetivo. En concreto, se puso en operación el servicio de autenticación con registro diferenciado por rol (`FAN` y `ARTIST`) e inicio de sesión con emisión de JWT; el catálogo de conciertos con creación, consulta, filtrado por género musical y detalle; el registro de asistencia a conciertos; la gestión de comunidades con creación, unirse y consulta de las comunidades a las que el usuario accede; la interacción social mediante publicaciones y reacciones idempotentes; y la gestión de eventos asociados a un concierto, que completa el modelo de eventos de la plataforma. Adicionalmente, se habilitaron los servicios de perfil de usuario, seguimiento entre fans y artistas, notificaciones push y analítica de eventos, que aunque no son objeto de las historias del Sprint, son dependencias de los flujos anteriores.
+
+De los 51 Work-Items definidos en el Sprint Backlog, los correspondientes a la capa de servicios del backend (T-05 y T-07 a T-45, más T-48) son los que sustentan esta evidencia. El detalle de las operaciones ejecutadas se presenta a continuación, junto con la historia de usuario y la tarea del Sprint a la que cada una responde, de modo que la evidencia de ejecución pueda trazarse hasta el elemento del backlog que la originó.
+
+##### Operaciones principales ejecutadas sobre los Web Services
+
+<div align="center">
+<table>
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Operación</th>
+      <th>Método y endpoint</th>
+      <th>US / Task</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>Registrar usuario fan</td>
+      <td><code>POST /api/v1/auth/register</code></td>
+      <td>US10 / T-39</td>
+      <td>201 Created</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Registrar usuario artista</td>
+      <td><code>POST /api/v1/auth/register</code> (rol <code>ARTIST</code>)</td>
+      <td>US09 / T-37</td>
+      <td>201 Created</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Iniciar sesión y obtener token</td>
+      <td><code>POST /api/v1/auth/login</code></td>
+      <td>US08 / T-35</td>
+      <td>200 OK</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>Actualizar perfil de artista</td>
+      <td><code>PUT /api/v1/users/{userId}</code></td>
+      <td>US03 / T-07</td>
+      <td>200 OK</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>Publicar concierto</td>
+      <td><code>POST /api/v1/concerts</code></td>
+      <td>US02 / T-26</td>
+      <td>201 Created</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td>Listar catálogo de conciertos</td>
+      <td><code>GET /api/v1/concerts</code></td>
+      <td>US06 / T-10</td>
+      <td>200 OK</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td>Filtrar conciertos por género musical</td>
+      <td><code>GET /api/v1/concerts/genre/{genre}</code></td>
+      <td>US01 / T-24</td>
+      <td>200 OK</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td>Consultar detalle del concierto</td>
+      <td><code>GET /api/v1/concerts/{concertId}</code></td>
+      <td>US13 / T-41</td>
+      <td>200 OK</td>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td>Registrar asistencia al concierto</td>
+      <td><code>POST /api/v1/concerts/attendees</code></td>
+      <td>US13 / T-41</td>
+      <td>200 OK</td>
+    </tr>
+    <tr>
+      <td>10</td>
+      <td>Crear comunidad temática</td>
+      <td><code>POST /api/v1/communities</code></td>
+      <td>US04 / T-29</td>
+      <td>201 Created</td>
+    </tr>
+    <tr>
+      <td>11</td>
+      <td>Unirse a una comunidad</td>
+      <td><code>POST /api/v1/communities/{communityId}/join</code></td>
+      <td>US04 / T-29</td>
+      <td>200 OK</td>
+    </tr>
+    <tr>
+      <td>12</td>
+      <td>Listar comunidades accedidas</td>
+      <td><code>GET /api/v1/communities/joined/{userId}</code></td>
+      <td>US18 / T-14</td>
+      <td>200 OK</td>
+    </tr>
+    <tr>
+      <td>13</td>
+      <td>Publicar en una comunidad</td>
+      <td><code>POST /api/v1/posts</code></td>
+      <td>US19 / T-16</td>
+      <td>201 Created</td>
+    </tr>
+    <tr>
+      <td>14</td>
+      <td>Reaccionar a una publicación</td>
+      <td><code>POST /api/v1/posts/{postId}/like</code></td>
+      <td>US19 / T-16</td>
+      <td>200 OK</td>
+    </tr>
+    <tr>
+      <td>15</td>
+      <td>Consultar publicaciones con like</td>
+      <td><code>GET /api/v1/posts/liked_by/{userId}</code></td>
+      <td>US21 / T-20</td>
+      <td>200 OK</td>
+    </tr>
+    <tr>
+      <td>16</td>
+      <td>Crear evento asociado a un concierto</td>
+      <td><code>POST /api/v1/related-events</code></td>
+      <td>US34 / T-45</td>
+      <td>201 Created</td>
+    </tr>
+    <tr>
+      <td>17</td>
+      <td>Consultar eventos asociados del concierto</td>
+      <td><code>GET /api/v1/related-events/concert/{concertId}</code></td>
+      <td>US24 / T-43</td>
+      <td>200 OK</td>
+    </tr>
+    <tr>
+      <td>18</td>
+      <td>Acceso sin credenciales a servicio protegido</td>
+      <td><code>GET /api/v1/concerts</code> sin header <code>Authorization</code></td>
+      <td>T-35</td>
+      <td>403 Forbidden</td>
+    </tr>
+    <tr>
+      <td>19</td>
+      <td>Validación de datos al publicar concierto</td>
+      <td><code>POST /api/v1/concerts</code> con venue fuera de rango</td>
+      <td>T-26</td>
+      <td>400 Bad Request</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
 #### 5.3.1.5 Microservices Documentation Evidence for Sprint Review
+
+Durante el Sprint 1, el microservicio `gigmap-backend` se documentó de extremo a extremo con el estándar **OpenAPI 3**, lo que permite que el contrato de la API REST sea legible por máquinas y por personas, y que pueda consumirse automáticamente por la aplicación móvil, por la colección de Postman y por cualquier cliente futuro sin necesidad de consultar el código fuente. El logro central de esta sección es que **el 100 % de los endpoints expuestos por el microservicio se encuentra documentado**: no existen operaciones publicadas en el contrato que no estén implementadas, ni operaciones implementadas que queden fuera de la especificación.
+
+La documentación se resolvió con un enfoque *convention over configuration* basado en **springdoc-openapi** (`springdoc-openapi-starter-webmvc-ui` 2.8.8 sobre Spring Boot 3.5.6), que genera la especificación a partir de las anotaciones de OpenAPI 3 (`@Tag`, `@Operation`, `@ApiResponses`, `@Schema`) colocadas directamente sobre los controladores y los *resources* de cada módulo. Este enfoque garantiza que el contrato-documentado y el contrato-real no puedan divergir: cualquier cambio en la firma de un endpoint reescribe la especificación en la siguiente compilación, sin mantenimiento manual.
+
+Adicionalmente, se incorporó el componente `OpenApiConfiguration`, que define los metadatos del documento (título, descripción, versión, licencia Apache 2.0) y el esquema de seguridad `bearerAuth` (HTTP Bearer / JWT), de modo que la interfaz de Swagger UI permita ejecutar las peticiones protegidas directamente desde el navegador con el token obtenido en `/api/v1/auth/login`.
+
+Como resultado del Sprint 1 en materia de documentación se resumen los siguientes logros:
+- **12 *tags* de negocio** (Authentication, Users, Artists, Concerts, Communities, Posts, Forums, Related Events, Connections, Notifications, Device Tokens, Analytics) publicados en la interfaz interactiva, uno por cada controlador REST del microservicio.
+- **68 operaciones REST** documentadas, con verbo HTTP, sintaxis de llamada, parámetros, cuerpo de petición, cuerpos de respuesta de ejemplo y catálogo de códigos de estado.
+- **41 modelos de datos** (`record`s `Resource` de entrada y salida) proyectados como *schemas* en el contrato, con descripciones y ejemplos de valor por campo declarados mediante `@Schema`.
+- **1 esquema de seguridad JWT** declarado globalmente y referenciado por las operaciones protegidas.
+- **Especificación consumible por tooling**: el documento `OpenAPI` se publica en formato JSON y es importable directamente como colección de Postman, como cliente generado o como contrato de pruebas.
+
+**Ruta del repositorio de Web Services:** https://github.com/fundamentos202620/gigmap-backend
+
+##### 5.3.1.5.1 Infraestructura de documentación y publicación de la especificación
+
+<div align="center">
+<table>
+  <thead>
+    <tr>
+      <th>Elemento</th>
+      <th>Detalle</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Especificación OpenAPI 3 (JSON)</td>
+      <td><code>https://gigmap-api.onrender.com/v3/api-docs</code> (desplegado)<br><code>http://localhost:8080/v3/api-docs</code> (local)</td>
+    </tr>
+    <tr>
+      <td>Swagger UI (interfaz interactiva)</td>
+      <td><code>https://gigmap-api.onrender.com/swagger-ui.html</code><br><code>http://localhost:8080/swagger-ui.html</code></td>
+    </tr>
+    <tr>
+      <td>Librería generadora</td>
+      <td><code>org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.8</code></td>
+    </tr>
+    <tr>
+      <td>Versión del documento</td>
+      <td>OpenAPI <code>3.0.1</code> — título <code>GigMap-API-V1</code>, licencia Apache 2.0</td>
+    </tr>
+    <tr>
+      <td>Configuración central</td>
+      <td><code>shared/infrastructure/documentation/openapi/configuration/OpenApiConfiguration.java</code></td>
+    </tr>
+    <tr>
+      <td>Esquema de seguridad</td>
+      <td><code>bearerAuth</code> — tipo <code>http</code>, esquema <code>bearer</code>, formato <code>JWT</code>, aplicado globalmente</td>
+    </tr>
+    <tr>
+      <td>Rutas públicas (sin token)</td>
+      <td><code>/api/v1/auth/**</code>, <code>/swagger-ui/**</code>, <code>/v3/api-docs/**</code>, <code>/swagger-ui.html</code></td>
+    </tr>
+    <tr>
+      <td>Prefijo de las operaciones</td>
+      <td><code>/api/v1</code></td>
+    </tr>
+    <tr>
+      <td>Formato de respuesta</td>
+      <td><code>application/json</code> en todas las operaciones (<code>produces</code> a nivel de controlador)</td>
+    </tr>
+    <tr>
+      <td>Verbos utilizados</td>
+      <td><code>GET</code>, <code>POST</code>, <code>PUT</code>, <code>DELETE</code></td>
+    </tr>
+    <tr>
+      <td>Verbo <code>PATCH</code></td>
+      <td>No se documenta ninguna operación <code>PATCH</code> en el Sprint 1: toda actualización se modela como <code>PUT</code> con reemplazo del recurso completo, lo que evita estados parciales inconsistentes en el dominio</td>
+    </tr>
+    <tr>
+      <td>Manejo de errores documentado</td>
+      <td><code>GlobalExceptionHandler</code> normaliza <code>IllegalArgumentException</code> y JSON malformado a <code>400</code>, y cualquier otra excepción a <code>500</code>, con la envoltura <code>{timestamp, status, error, message, path}</code></td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+##### 5.3.1.5.2 Relación de Endpoints documentados
+
+La siguiente tabla relaciona las **68 operaciones** publicadas en la especificación OpenAPI con las acciones implementadas en el Sprint 1. Cada fila indica el verbo HTTP, la sintaxis completa de llamada —incluyendo los parámetros de ruta, de consulta y de cuerpo—, la historia de usuario y la tarea del Sprint Backlog que la origina, y los enlaces a la documentación desplegada.
+
+<div align="center">
+<table>
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Módulo (Tag OpenAPI)</th>
+      <th>Verbo HTTP</th>
+      <th>Sintaxis de llamada del endpoint</th>
+      <th>Parámetros documentados</th>
+      <th>US / Task</th>
+      <th>Documentación desplegada</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td colspan="7" align="center"><strong>Authentication</strong> — <code>/api/v1/auth</code> (público)</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td rowspan="2">Authentication</td>
+      <td><code>POST</code></td>
+      <td><code>/api/v1/auth/register</code></td>
+      <td>Body: <code>email</code>, <code>username</code>, <code>password</code>, <code>role</code></td>
+      <td>US09, US10 / T-37, T-39</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td><code>POST</code></td>
+      <td><code>/api/v1/auth/login</code></td>
+      <td>Body: <code>emailOrUsername</code>, <code>password</code></td>
+      <td>US08 / T-35</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td colspan="7" align="center"><strong>Users</strong> — <code>/api/v1/users</code></td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td rowspan="8">Users</td>
+      <td><code>GET</code></td>
+      <td><code>/api/v1/users</code></td>
+      <td>Query opcional: <code>communityId</code></td>
+      <td>US10 / T-39</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td><code>GET</code></td>
+      <td><code>/api/v1/users/{userId}</code></td>
+      <td>Path: <code>userId</code></td>
+      <td>US20 / T-18</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td><code>GET</code></td>
+      <td><code>/api/v1/users/{userId}/details</code></td>
+      <td>Path: <code>userId</code></td>
+      <td>US20 / T-18</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td><code>PUT</code></td>
+      <td><code>/api/v1/users/{userId}</code></td>
+      <td>Path: <code>userId</code>; Body: 12 campos de perfil</td>
+      <td>US03 / T-07</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td><code>PUT</code></td>
+      <td><code>/api/v1/users/{userId}/follow/{artistId}</code></td>
+      <td>Path: <code>userId</code>, <code>artistId</code></td>
+      <td>US20 / T-18</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td><code>PUT</code></td>
+      <td><code>/api/v1/users/{userId}/unfollow/{artistId}</code></td>
+      <td>Path: <code>userId</code>, <code>artistId</code></td>
+      <td>US20 / T-18</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td><code>GET</code></td>
+      <td><code>/api/v1/users/{userId}/following/{artistId}</code></td>
+      <td>Path: <code>userId</code>, <code>artistId</code></td>
+      <td>US20 / T-18</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td>10</td>
+      <td><code>GET</code></td>
+      <td><code>/api/v1/users/{userId}/following</code></td>
+      <td>Path: <code>userId</code></td>
+      <td>US20 / T-18</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td colspan="7" align="center"><strong>Artists</strong> — <code>/api/v1/artists</code></td>
+    </tr>
+    <tr>
+      <td>11</td>
+      <td>Artists</td>
+      <td><code>GET</code></td>
+      <td><code>/api/v1/artists/{artistId}/stats</code></td>
+      <td>Path: <code>artistId</code></td>
+      <td>US03 / T-07</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td colspan="7" align="center"><strong>Concerts</strong> — <code>/api/v1/concerts</code></td>
+    </tr>
+    <tr>
+      <td>12</td>
+      <td rowspan="11">Concerts</td>
+      <td><code>POST</code></td>
+      <td><code>/api/v1/concerts</code></td>
+      <td>Body: <code>title</code>, <code>description</code>, <code>imageUrl</code>, <code>date</code>, <code>venue</code>, <code>genre</code>, <code>status</code>, <code>platform</code>, <code>userId</code></td>
+      <td>US02 / T-26</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td>13</td>
+      <td><code>GET</code></td>
+      <td><code>/api/v1/concerts</code></td>
+      <td>Sin parámetros</td>
+      <td>US06 / T-10</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td>14</td>
+      <td><code>GET</code></td>
+      <td><code>/api/v1/concerts/{concertId}</code></td>
+      <td>Path: <code>concertId</code></td>
+      <td>US13 / T-41</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td>15</td>
+      <td><code>PUT</code></td>
+      <td><code>/api/v1/concerts/{concertId}</code></td>
+      <td>Path: <code>concertId</code>; Body: <code>id</code>, <code>title</code>, <code>description</code>, <code>imageUrl</code>, <code>date</code>, <code>venue</code>, <code>status</code></td>
+      <td>US02 / T-26</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td>16</td>
+      <td><code>DELETE</code></td>
+      <td><code>/api/v1/concerts/{concertId}</code></td>
+      <td>Path: <code>concertId</code></td>
+      <td>US02 / T-26</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td>17</td>
+      <td><code>GET</code></td>
+      <td><code>/api/v1/concerts/genre/{genre}</code></td>
+      <td>Path: <code>genre</code> (22 valores del enum <code>Genre</code>)</td>
+      <td>US01 / T-24</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td>18</td>
+      <td><code>GET</code></td>
+      <td><code>/api/v1/concerts/artist/{artistId}</code></td>
+      <td>Path: <code>artistId</code></td>
+      <td>US02 / T-26</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td>19</td>
+      <td><code>POST</code></td>
+      <td><code>/api/v1/concerts/attendees</code></td>
+      <td>Body: <code>concertId</code>, <code>userId</code></td>
+      <td>US13 / T-41</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td>20</td>
+      <td><code>DELETE</code></td>
+      <td><code>/api/v1/concerts/attendees</code></td>
+      <td>Body: <code>concertId</code>, <code>userId</code></td>
+      <td>US13 / T-41</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td>21</td>
+      <td><code>GET</code></td>
+      <td><code>/api/v1/concerts/{id}/attendees</code></td>
+      <td>Path: <code>id</code></td>
+      <td>US13 / T-41</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td>22</td>
+      <td><code>GET</code></td>
+      <td><code>/api/v1/concerts/attended/{userId}</code></td>
+      <td>Path: <code>userId</code></td>
+      <td>US13 / T-41</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td colspan="7" align="center"><strong>Communities</strong> — <code>/api/v1/communities</code></td>
+    </tr>
+    <tr>
+      <td>23</td>
+      <td rowspan="8">Communities</td>
+      <td><code>POST</code></td>
+      <td><code>/api/v1/communities</code></td>
+      <td>Body: <code>name</code>, <code>description</code>, <code>image</code>, <code>genre</code></td>
+      <td>US04 / T-29</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td>24</td>
+      <td><code>GET</code></td>
+      <td><code>/api/v1/communities</code></td>
+      <td>Sin parámetros</td>
+      <td>US07 / T-12</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td>25</td>
+      <td><code>GET</code></td>
+      <td>/api/v1/communities/{communityId}</code></td>
+      <td>Path: <code>communityId</code></td>
+      <td>US07 / T-12</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td>26</td>
+      <td><code>PUT</code></td>
+      <td><code>/api/v1/communities/{id}</code></td>
+      <td>Path: <code>id</code>; Body: <code>name</code>, <code>image</code>, <code>description</code>, <code>genre</code></td>
+      <td>US04 / T-29</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td>27</td>
+      <td><code>DELETE</code></td>
+      <td><code>/api/v1/communities/{id}</code></td>
+      <td>Path: <code>id</code></td>
+      <td>US04 / T-29</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td>28</td>
+      <td><code>POST</code></td>
+      <td><code>/api/v1/communities/{communityId}/join</code></td>
+      <td>Path: <code>communityId</code>; Query: <code>userId</code></td>
+      <td>US04 / T-29</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td>29</td>
+      <td><code>DELETE</code></td>
+      <td><code>/api/v1/communities/{communityId}/leave</code></td>
+      <td>Path: <code>communityId</code>; Query: <code>userId</code></td>
+      <td>US04 / T-29</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td>30</td>
+      <td><code>GET</code></td>
+      <td><code>/api/v1/communities/joined/{userId}</code></td>
+      <td>Path: <code>userId</code></td>
+      <td>US18 / T-14</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td colspan="7" align="center"><strong>Posts</strong> — <code>/api/v1/posts</code></td>
+    </tr>
+    <tr>
+      <td>31</td>
+      <td rowspan="8">Posts</td>
+      <td><code>POST</code></td>
+      <td><code>/api/v1/posts</code></td>
+      <td>Body: <code>content</code>, <code>imageUrl</code>, <code>communityId</code>, <code>userId</code></td>
+      <td>US19 / T-16</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td>32</td>
+      <td><code>PUT</code></td>
+      <td><code>/api/v1/posts/{id}</code></td>
+      <td>Path: <code>id</code>; Body: <code>content</code>, <code>imageUrl</code></td>
+      <td>US19 / T-16</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td>33</td>
+      <td><code>DELETE</code></td>
+      <td><code>/api/v1/posts/{id}</code></td>
+      <td>Path: <code>id</code></td>
+      <td>US19 / T-16</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td>34</td>
+      <td><code>GET</code></td>
+      <td><code>/api/v1/posts</code></td>
+      <td>Query opcional: <code>communityId</code></td>
+      <td>US19 / T-16</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td>35</td>
+      <td><code>GET</code></td>
+      <td><code>/api/v1/posts/{postId}</code></td>
+      <td>Path: <code>postId</code></td>
+      <td>US19 / T-16</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td>36</td>
+      <td><code>POST</code></td>
+      <td><code>/api/v1/posts/{postId}/like</code></td>
+      <td>Path: <code>postId</code>; Query: <code>userId</code></td>
+      <td>US19 / T-16</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td>37</td>
+      <td><code>DELETE</code></td>
+      <td><code>/api/v1/posts/{postId}/unlike</code></td>
+      <td>Path: <code>postId</code>; Query: <code>userId</code></td>
+      <td>US19 / T-16</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td>38</td>
+      <td><code>GET</code></td>
+      <td><code>/api/v1/posts/liked_by/{userId}</code></td>
+      <td>Path: <code>userId</code></td>
+      <td>US21 / T-20</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td colspan="7" align="center"><strong>Forums</strong> — <code>/api/v1/forums</code></td>
+    </tr>
+    <tr>
+      <td>39</td>
+      <td rowspan="12">Forums</td>
+      <td><code>GET</code></td>
+      <td><code>/api/v1/forums</code></td>
+      <td>Sin parámetros</td>
+      <td>US04 / T-29</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td>40</td>
+      <td><code>GET</code></td>
+      <td><code>/api/v1/forums/{forumId}</code></td>
+      <td>Path: <code>forumId</code></td>
+      <td>US04 / T-29</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td>41</td>
+      <td><code>GET</code></td>
+      <td><code>/api/v1/forums/{forumId}/threads</code></td>
+      <td>Path: <code>forumId</code></td>
+      <td>US04 / T-29</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td>42</td>
+      <td><code>GET</code></td>
+      <td><code>/api/v1/forums/threads/{threadId}</code></td>
+      <td>Path: <code>threadId</code></td>
+      <td>US04 / T-29</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td>43</td>
+      <td><code>POST</code></td>
+      <td><code>/api/v1/forums/{forumId}/threads</code></td>
+      <td>Path: <code>forumId</code>; Body: <code>title</code>, <code>content</code>, <code>imageUrl</code>, <code>communityId</code>, <code>userId</code></td>
+      <td>US04 / T-29</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td>44</td>
+      <td><code>POST</code></td>
+      <td><code>/api/v1/forums/threads/{threadId}/comments</code></td>
+      <td>Path: <code>threadId</code>; Body: <code>threadId</code>, <code>userId</code>, <code>content</code></td>
+      <td>US04 / T-29</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td>45</td>
+      <td><code>POST</code></td>
+      <td><code>/api/v1/forums/threads/{threadId}/reactions</code></td>
+      <td>Path: <code>threadId</code>; Body: <code>threadId</code>, <code>commentId</code>, <code>userId</code>, <code>emoji</code></td>
+      <td>US19 / T-16</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td>46</td>
+      <td><code>DELETE</code></td>
+      <td><code>/api/v1/forums/threads/{threadId}/reactions/{reactionId}</code></td>
+      <td>Path: <code>threadId</code>, <code>reactionId</code></td>
+      <td>US19 / T-16</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td>47</td>
+      <td><code>POST</code></td>
+      <td><code>/api/v1/forums/threads/{threadId}/reports</code></td>
+      <td>Path: <code>threadId</code>; Body: <code>threadId</code>, <code>commentId</code>, <code>reporterId</code>, <code>reason</code></td>
+      <td>US04 / T-29</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td>48</td>
+      <td><code>POST</code></td>
+      <td><code>/api/v1/forums/comments/{commentId}/reactions</code></td>
+      <td>Path: <code>commentId</code>; Body: <code>threadId</code>, <code>commentId</code>, <code>userId</code>, <code>emoji</code></td>
+      <td>US19 / T-16</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td>49</td>
+      <td><code>DELETE</code></td>
+      <td><code>/api/v1/forums/comments/{commentId}/reactions/{reactionId}</code></td>
+      <td>Path: <code>commentId</code>, <code>reactionId</code></td>
+      <td>US19 / T-16</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td>50</td>
+      <td><code>POST</code></td>
+      <td><code>/api/v1/forums/comments/{commentId}/reports</code></td>
+      <td>Path: <code>commentId</code>; Body: <code>threadId</code>, <code>commentId</code>, <code>reporterId</code>, <code>reason</code></td>
+      <td>US04 / T-29</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td colspan="7" align="center"><strong>Related Events</strong> — <code>/api/v1/related-events</code></td>
+    </tr>
+    <tr>
+      <td>51</td>
+      <td rowspan="7">Related Events</td>
+      <td><code>POST</code></td>
+      <td><code>/api/v1/related-events</code></td>
+      <td>Body: <code>concertId</code>, <code>titulo</code>, <code>datehour</code>, <code>descripcion</code>, <code>tipo</code>, <code>venue</code>, <code>status</code>, <code>organizadorId</code></td>
+      <td>US34 / T-45</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td>52</td>
+      <td><code>GET</code></td>
+      <td><code>/api/v1/related-events/{relatedEventId}</code></td>
+      <td>Path: <code>relatedEventId</code></td>
+      <td>US30 / T-22</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td>53</td>
+      <td><code>GET</code></td>
+      <td><code>/api/v1/related-events/concert/{concertId}</code></td>
+      <td>Path: <code>concertId</code></td>
+      <td>US24 / T-43</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td>54</td>
+      <td><code>PUT</code></td>
+      <td><code>/api/v1/related-events/{relatedEventId}</code></td>
+      <td>Path: <code>relatedEventId</code>; Body: <code>id</code>, <code>titulo</code>, <code>datehour</code>, <code>descripcion</code>, <code>venue</code>, <code>status</code></td>
+      <td>US30 / T-22</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td>55</td>
+      <td><code>DELETE</code></td>
+      <td><code>/api/v1/related-events/{relatedEventId}</code></td>
+      <td>Path: <code>relatedEventId</code></td>
+      <td>US30 / T-22</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td>56</td>
+      <td><code>POST</code></td>
+      <td><code>/api/v1/related-events/participants</code></td>
+      <td>Body: <code>relatedEventId</code>, <code>userId</code></td>
+      <td>US34 / T-45</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td>57</td>
+      <td><code>DELETE</code></td>
+      <td><code>/api/v1/related-events/participants</code></td>
+      <td>Body: <code>relatedEventId</code>, <code>userId</code></td>
+      <td>US34 / T-45</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td colspan="7" align="center"><strong>Connections</strong> — <code>/api/v1/connections</code></td>
+    </tr>
+    <tr>
+      <td>58</td>
+      <td rowspan="7">Connections</td>
+      <td><code>POST</code></td>
+      <td><code>/api/v1/connections/requests</code></td>
+      <td>Query: <code>requesterId</code>; Body: <code>targetId</code></td>
+      <td>Soporte / T-48</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td>59</td>
+      <td><code>GET</code></td>
+      <td><code>/api/v1/connections/requests/incoming</code></td>
+      <td>Query: <code>userId</code></td>
+      <td>Soporte / T-48</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td>60</td>
+      <td><code>GET</code></td>
+      <td><code>/api/v1/connections/requests/outgoing</code></td>
+      <td>Query: <code>userId</code></td>
+      <td>Soporte / T-48</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td>61</td>
+      <td><code>PUT</code></td>
+      <td><code>/api/v1/connections/requests/{requestId}/accept</code></td>
+      <td>Path: <code>requestId</code>; Query: <code>userId</code></td>
+      <td>Soporte / T-48</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td>62</td>
+      <td><code>DELETE</code></td>
+      <td><code>/api/v1/connections/requests/{requestId}/reject</code></td>
+      <td>Path: <code>requestId</code></td>
+      <td>Soporte / T-48</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td>63</td>
+      <td><code>GET</code></td>
+      <td><code>/api/v1/connections</code></td>
+      <td>Query: <code>userId</code></td>
+      <td>Soporte / T-48</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td>64</td>
+      <td><code>GET</code></td>
+      <td><code>/api/v1/connections/check</code></td>
+      <td>Query: <code>userId1</code>, <code>userId2</code></td>
+      <td>Soporte / T-48</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td colspan="7" align="center"><strong>Notifications / Device Tokens</strong> — <code>/api/v1/notifications</code>, <code>/api/v1/device_tokens</code></td>
+    </tr>
+    <tr>
+      <td>65</td>
+      <td>Notifications</td>
+      <td><code>POST</code></td>
+      <td><code>/api/v1/notifications</code></td>
+      <td>Query: <code>token</code>, <code>title</code>, <code>body</code></td>
+      <td>Soporte / T-48</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td>66</td>
+      <td>Notifications</td>
+      <td><code>GET</code></td>
+      <td><code>/api/v1/notifications/user/{userId}</code></td>
+      <td>Path: <code>userId</code></td>
+      <td>Soporte / T-48</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td>67</td>
+      <td>Device Tokens</td>
+      <td><code>POST</code></td>
+      <td><code>/api/v1/device_tokens</code></td>
+      <td>Body: <code>userId</code>, <code>token</code></td>
+      <td>Soporte / T-48</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+    <tr>
+      <td colspan="7" align="center"><strong>Analytics</strong> — <code>/api/v1/analytics</code></td>
+    </tr>
+    <tr>
+      <td>68</td>
+      <td>Analytics</td>
+      <td><code>POST</code></td>
+      <td><code>/api/v1/analytics/events</code></td>
+      <td>Body: <code>eventType</code>, <code>userId</code>, <code>metadata</code></td>
+      <td>Soporte / T-48</td>
+      <td><a href="https://gigmap-api.onrender.com/swagger-ui.html">Swagger UI</a> · <a href="https://gigmap-api.onrender.com/v3/api-docs">Spec</a></td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+##### 5.3.1.5.3 Especificación de las acciones soportadas
+
+A continuación se detalla, para cada módulo, la especificación completa de las acciones soportadas: verbo HTTP, sintaxis de llamada, especificación de parámetros, ejemplo de petición con datos de muestra, ejemplo de respuesta y explicación del *response*.
+
+**A. Authentication — `/api/v1/auth`**
+
+<div align="center">
+<table>
+  <thead>
+    <tr><th>Verbo</th><th>Sintaxis de llamada</th><th>Parámetros</th><th>Respuestas documentadas</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>POST</code></td>
+      <td><code>/api/v1/auth/register</code></td>
+      <td>Body (<code>@NotBlank</code>, <code>@Email</code>, <code>@Size(min=3,max=50)</code>, <code>@Size(min=6)</code>, <code>@NotNull</code>): <code>email</code>, <code>username</code>, <code>password</code>, <code>role</code> ∈ {<code>FAN</code>, <code>ARTIST</code>}</td>
+      <td><code>201</code> <code>AuthResponse</code> · <code>400</code> email o username duplicado</td>
+    </tr>
+    <tr>
+      <td><code>POST</code></td>
+      <td><code>/api/v1/auth/login</code></td>
+      <td>Body (<code>@NotBlank</code>): <code>emailOrUsername</code> (admite correo o nombre de usuario), <code>password</code></td>
+      <td><code>200</code> <code>AuthResponse</code> con <code>token</code> JWT · <code>401</code> credenciales inválidas</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+*Ejemplo de petición* (`POST /api/v1/auth/register`, datos de muestra de un fan):
+
+```json
+{
+  "email": "valeria.torres@upc.edu.pe",
+  "username": "valeriat",
+  "password": "GigMap2026",
+  "role": "FAN"
+}
+```
+
+*Ejemplo de respuesta* (`201 Created`):
+
+```json
+{
+  "id": 1042,
+  "email": "valeria.torres@upc.edu.pe",
+  "username": "valeriat",
+  "name": "",
+  "role": "FAN",
+  "token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMDQyIiwiZW1haWwiOiJ2YWxlcmlhIn0.q9Zk1s...",
+  "message": "User registered successfully"
+}
+```
+
+*Explicación del response*: el registro devuelve `201 Created` porque la operación **crea** un recurso y devuelve su representación ya persistida con el identificador asignado por la base de datos. El cuerpo mezcla dos responsabilidades: la identidad pública del usuario (`id`, `email`, `username`, `name`, `role`) y el `token` JWT emitido de inmediato, lo que elimina la necesidad de un `login` inmediato tras registrarse y reduce un paso en el flujo de *onboarding* de la aplicación móvil. El campo `password` **nunca** se devuelve: se almacena cifrado con BCrypt. La contraseña se valida con `@Size(min = 6)` y el `username` con `@Size(min = 3, max = 50)`; el campo `name` se devuelve como cadena vacía cuando el usuario aún no lo ha registrado, para mantener el tipo del dato estable frente a los clientes móviles.
+
+*Ejemplo de petición* (`POST /api/v1/auth/login`):
+
+```json
+{
+  "emailOrUsername": "valeriat",
+  "password": "GigMap2026"
+}
+```
+
+*Ejemplo de respuesta* (`200 OK`):
+
+```json
+{
+  "id": 1042,
+  "email": "valeria.torres@upc.edu.pe",
+  "username": "valeriat",
+  "name": "",
+  "role": "FAN",
+  "token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMDQyIiwiZW1haWwiOiJ2YWxlcmlhIn0.q9Zk1s...",
+  "message": "Login successful"
+}
+```
+
+*Explicación del response*: el login devuelve `200 OK` —y no `201`— porque no crea recursos. La respuesta es idéntica en estructura a la del registro, lo que permite al cliente móvil tratar ambas respuestas con un único modelo de datos y un único manejador de sesión. El campo `emailOrUsername` es el mecanismo que reduce la fricción de acceso: el usuario puede escribir su correo o su alias sin que la interfaz tenga que ofrecer dos campos. Cuando el usuario no existe **o** la contraseña no coincide, la respuesta es deliberadamente idéntica (`401` con `{"error": "Invalid credentials"}`) para no revelar qué correos están registrados.
+
+**B. Users — `/api/v1/users`**
+
+<div align="center">
+<table>
+  <thead>
+    <tr><th>Verbo</th><th>Sintaxis de llamada</th><th>Parámetros</th><th>Respuestas documentadas</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>GET</code></td><td><code>/api/v1/users</code></td><td>Query opcional: <code>communityId</code> (Long). Sin valor, devuelve todos los usuarios</td><td><code>200</code> <code>List&lt;UserResource&gt;</code> · <code>401</code> no autenticado</td></tr>
+    <tr><td><code>GET</code></td><td><code>/api/v1/users/{userId}</code></td><td>Path: <code>userId</code> (Long, obligatorio)</td><td><code>200</code> <code>UserResource</code> · <code>404</code> usuario no encontrado</td></tr>
+    <tr><td><code>GET</code></td><td><code>/api/v1/users/{userId}/details</code></td><td>Path: <code>userId</code> (Long, obligatorio)</td><td><code>200</code> <code>UserDetailsResource</code> · <code>404</code> usuario no encontrado</td></tr>
+    <tr><td><code>PUT</code></td><td><code>/api/v1/users/{userId}</code></td><td>Path: <code>userId</code>; Body: <code>email</code>, <code>username</code>, <code>name</code>, <code>role</code>, <code>imagenUrl</code>, <code>descripcion</code>, <code>bannerUrl</code>, <code>generoMusical</code>, <code>sitioWeb</code>, <code>spotifyUrl</code>, <code>instagramUrl</code>, <code>youtubeUrl</code></td><td><code>200</code> <code>UserResource</code> actualizado · <code>404</code> usuario no encontrado</td></tr>
+    <tr><td><code>PUT</code></td><td><code>/api/v1/users/{userId}/follow/{artistId}</code></td><td>Path: <code>userId</code>, <code>artistId</code></td><td><code>200</code> sin cuerpo · <code>400</code> fan o artista no encontrado</td></tr>
+    <tr><td><code>PUT</code></td><td><code>/api/v1/users/{userId}/unfollow/{artistId}</code></td><td>Path: <code>userId</code>, <code>artistId</code></td><td><code>200</code> sin cuerpo · <code>400</code> fan o artista no encontrado</td></tr>
+    <tr><td><code>GET</code></td><td><code>/api/v1/users/{userId}/following/{artistId}</code></td><td>Path: <code>userId</code>, <code>artistId</code></td><td><code>200</code> <code>Boolean</code></td></tr>
+    <tr><td><code>GET</code></td><td><code>/api/v1/users/{userId}/following</code></td><td>Path: <code>userId</code></td><td><code>200</code> <code>List&lt;UserResource&gt;</code></td></tr>
+  </tbody>
+</table>
+</div>
+
+*Ejemplo de petición* (`PUT /api/v1/users/1043`, datos de muestra de una artista emergente):
+
+```json
+{
+  "name": "Valeria Torres",
+  "role": "ARTIST",
+  "imagenUrl": "https://res.cloudinary.com/gigmap/image/upload/valeria.jpg",
+  "descripcion": "Cantautora pop alternativegiada desde Lima.",
+  "bannerUrl": "https://res.cloudinary.com/gigmap/image/upload/valeria-banner.jpg",
+  "generoMusical": "ALTERNATIVE",
+  "sitioWeb": "https://valeriatorres.pe",
+  "spotifyUrl": "https://open.spotify.com/artist/valeriatorres",
+  "instagramUrl": "https://instagram.com/valeriatorres",
+  "youtubeUrl": "https://youtube.com/@valeriatorres"
+}
+```
+
+*Ejemplo de respuesta* (`200 OK`):
+
+```json
+{
+  "id": 1043,
+  "email": "vale.arte@upc.edu.pe",
+  "username": "valearte",
+  "name": "Valeria Torres",
+  "role": "ARTIST",
+  "image": "https://res.cloudinary.com/gigmap/image/upload/valeria.jpg",
+  "bannerUrl": "https://res.cloudinary.com/gigmap/image/upload/valeria-banner.jpg",
+  "generoMusical": "ALTERNATIVE",
+  "sitioWeb": "https://valeriatorres.pe",
+  "spotifyUrl": "https://open.spotify.com/artist/valeriatorres",
+  "instagramUrl": "https://instagram.com/valeriatorres",
+  "youtubeUrl": "https://youtube.com/@valeriatorres"
+}
+```
+
+*Explicación del response*: la actualización de perfil devuelve `200 OK` con la representación **ya normalizada** del recurso (el campo de entrada `imagenUrl` se devuelve como `image`), de modo que el cliente móvil pueda pintarla sin Translation. Esto aplica el patrón *Assembler*: `UpdateUserResource` (entrada) y `UserResource` (salida) son tipos distintos y la conversión se delega en `UpdateUserCommandFromResourceAssembler` y `UserResourceFromEntityAssembler`. Las operaciones de seguimiento usan `PUT` —y no `POST`— porque siguen la semántica **idempotente**: repetir la misma llamada no produce un efecto distinto del primero, lo que hace seguro que la app reintente tras una pérdida de conectividad. Estas operaciones devuelven `200` con cuerpo vacío porque no hay nada que comunicar: el estado resultante es «el usuario ahora sigue al artista», consultable después vía `GET /api/v1/users/{userId}/following/{artistId}`.
+
+*Ejemplo de petición* (`GET /api/v1/users/1042/following/1043`) → `200 OK` → `true`.
+
+*Explicación del response*: el booleano se usa en la interfaz móvil para pintar el botón *Seguir* / *Siguiendo* sin mantener estado local divergente del servidor. La operación `GET /api/v1/users/{userId}/details` devuelve, en cambio, un `UserDetailsResource` con el campo `descripcion`, que el perfil público `UserResource` no expone.
+
+**C. Artists — `/api/v1/artists`**
+
+<div align="center">
+<table>
+  <thead>
+    <tr><th>Verbo</th><th>Sintaxis de llamada</th><th>Parámetros</th><th>Respuestas documentadas</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>GET</code></td><td><code>/api/v1/artists/{artistId}/stats</code></td><td>Path: <code>artistId</code> (Long). El usuario autenticado se obtiene del token JWT</td><td><code>200</code> <code>ArtistStatsResource</code> · <code>400</code> id inválido · <code>401</code> no autenticado · <code>403</code> el artista no es el propietario</td></tr>
+  </tbody>
+</table>
+</div>
+
+*Ejemplo de petición* (`GET /api/v1/artists/1043/stats` con `Authorization: Bearer <token de 1043>`):
+
+*Ejemplo de respuesta* (`200 OK`):
+
+```json
+{
+  "artistId": 1043,
+  "weeks": [
+    {
+      "weekStart": "2026-09-21",
+      "weekEnd": "2026-09-27",
+      "newFollowers": 37,
+      "profileViews": 412,
+      "externalLinkClicks": { "spotify": 96, "instagram": 21, "youtube": 14 }
+    }
+  ],
+  "hasHistoricalData": true,
+  "message": "4 weeks of visibility data available"
+}
+```
+
+*Explicación del response*: `weeks` es un arreglo de até 4 elementos —el módulo calcula métricas semanales de visibilidad— y cada elemento descompone el alcance en `newFollowers`, `profileViews` y el desglose de clics por plataforma externa. El campo `hasHistoricalData` distingue explícitamente «no hay datos» de «hay cero actividad», evitando que el panel del artista muestre ceros engañosos durante sus primeras semanas. `403 Forbidden` es la respuesta característica de esta operación: las estadísticas son privadas y el controlador compara el `artistId` de la ruta con el sujeto del token JWT; un fan que intente ver las estadísticas de otro artista obtiene `403` aunque tenga un token válido.
+
+**D. Concerts — `/api/v1/concerts`**
+
+<div align="center">
+<table>
+  <thead>
+    <tr><th>Verbo</th><th>Sintaxis de llamada</th><th>Parámetros</th><th>Respuestas documentadas</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>POST</code></td><td><code>/api/v1/concerts</code></td><td>Body: <code>title</code>, <code>description</code>, <code>imageUrl</code>, <code>date</code> (ISO-8601, futura), <code>venue</code>, <code>genre</code>, <code>status</code>, <code>platform</code>, <code>userId</code></td><td><code>201</code> <code>ConcertResource</code> · <code>400</code> datos inválidos o rol no <code>ARTIST</code></td></tr>
+    <tr><td><code>GET</code></td><td><code>/api/v1/concerts</code></td><td>Sin parámetros</td><td><code>200</code> <code>List&lt;ConcertResource&gt;</code> · <code>404</code> catálogo vacío</td></tr>
+    <tr><td><code>GET</code></td><td><code>/api/v1/concerts/{concertId}</code></td><td>Path: <code>concertId</code></td><td><code>200</code> <code>ConcertResource</code> · <code>404</code> concierto inexistente</td></tr>
+    <tr><td><code>PUT</code></td><td><code>/api/v1/concerts/{concertId}</code></td><td>Path: <code>concertId</code>; Body: <code>id</code>, <code>title</code>, <code>description</code>, <code>imageUrl</code>, <code>date</code>, <code>venue</code>, <code>status</code></td><td><code>200</code> <code>ConcertResource</code> · <code>404</code> concierto inexistente</td></tr>
+    <tr><td><code>DELETE</code></td><td><code>/api/v1/concerts/{concertId}</code></td><td>Path: <code>concertId</code></td><td><code>200</code> <code>"Concert with given id successfully deleted"</code> · <code>404</code> concierto inexistente</td></tr>
+    <tr><td><code>GET</code></td><td><code>/api/v1/concerts/genre/{genre}</code></td><td>Path: <code>genre</code>: uno de los 22 valores del enum <code>Genre</code> (<code>ROCK</code>, <code>POP</code>, <code>ELECTRONICA</code>, <code>JAZZ</code>, <code>INDIE</code>, <code>METAL</code>, <code>HIP_HOP</code>, <code>LATIN</code>, <code>OTHER</code>, …). Se normaliza a mayúsculas</td><td><code>200</code> <code>List&lt;ConcertResource&gt;</code> · <code>404</code> sin resultados · <code>400</code> género inválido</td></tr>
+    <tr><td><code>GET</code></td><td><code>/api/v1/concerts/artist/{artistId}</code></td><td>Path: <code>artistId</code></td><td><code>200</code> <code>List&lt;ConcertResource&gt;</code> · <code>404</code> sin resultados</td></tr>
+    <tr><td><code>POST</code></td><td><code>/api/v1/concerts/attendees</code></td><td>Body: <code>concertId</code>, <code>userId</code></td><td><code>200</code> <code>ConcertResource</code> con el asistente agregado · <code>404</code> concierto o usuario inexistente</td></tr>
+    <tr><td><code>DELETE</code></td><td><code>/api/v1/concerts/attendees</code></td><td>Body: <code>concertId</code>, <code>userId</code></td><td><code>200</code> <code>ConcertResource</code> con el asistente retirado · <code>404</code> concierto o usuario inexistente</td></tr>
+    <tr><td><code>GET</code></td><td><code>/api/v1/concerts/{id}/attendees</code></td><td>Path: <code>id</code></td><td><code>200</code> <code>List&lt;UserResource&gt;</code> · <code>404</code> concierto inexistente</td></tr>
+    <tr><td><code>GET</code></td><td><code>/api/v1/concerts/attended/{userId}</code></td><td>Path: <code>userId</code></td><td><code>200</code> <code>List&lt;ConcertResource&gt;</code> · <code>404</code> sin conciertos asistidos</td></tr>
+  </tbody>
+</table>
+</div>
+
+*Ejemplo de petición* (`POST /api/v1/concerts`, datos de muestra):
+
+```json
+{
+  "title": "Nocturno en el Parque",
+  "description": "Show acústico con la bandaemergente Nocturno y apertura de DJ.",
+  "imageUrl": "https://res.cloudinary.com/gigmap/image/upload/nocturno.jpg",
+  "date": "2026-11-20T20:00:00",
+  "venue": {
+    "name": "Parque de la Exposición",
+    "address": "Av. Jesús María Gregory 300, Lima",
+    "latitude": -12.0714,
+    "longitude": -77.0708,
+    "capacity": 25000
+  },
+  "genre": "ALTERNATIVE",
+  "status": "SOLD_OUT",
+  "platform": {
+    "platformName": "Ticketmaster",
+    "platformImage": "https://res.cloudinary.com/gigmap/image/upload/tm.png"
+  },
+  "userId": 1043
+}
+```
+
+*Ejemplo de respuesta* (`201 Created`):
+
+```json
+{
+  "id": 312,
+  "name": "Nocturno en el Parque",
+  "date": "2026-11-20T20:00:00",
+  "status": "SOLD_OUT",
+  "description": "Show acústico con la banda emergente Nocturno y apertura de DJ.",
+  "image": "https://res.cloudinary.com/gigmap/image/upload/nocturno.jpg",
+  "genre": "ALTERNATIVE",
+  "platform": {
+    "platformName": "Ticketmaster",
+    "platformImage": "https://res.cloudinary.com/gigmap/image/upload/tm.png"
+  },
+  "venue": {
+    "name": "Parque de la Exposición",
+    "address": "Av. Jesús María Gregory 300, Lima",
+    "latitude": -12.0714,
+    "longitude": -77.0708,
+    "capacity": 25000
+  },
+  "attendees": [],
+  "artist": {
+    "id": 1043,
+    "email": "vale.arte@upc.edu.pe",
+    "username": "valearte",
+    "name": "Valeria Torres",
+    "role": "ARTIST",
+    "image": "https://res.cloudinary.com/gigmap/image/upload/valeria.jpg",
+    "bannerUrl": null,
+    "generoMusical": "ALTERNATIVE",
+    "sitioWeb": "https://valeriatorres.pe",
+    "spotifyUrl": null,
+    "instagramUrl": null,
+    "youtubeUrl": null
+  }
+}
+```
+
+*Explicación del response*: la respuesta `201` agrega en un solo objeto todo lo que la pantalla de detalle necesita, evitando la consulta en cascada `concierto → recinto → plataforma → artista`. El anidamiento de `venue` y `platform` se materializa por el patrón *Assembler* (`ConcertResourceFromEntityAssembler`), que evita exponer la entidad JPA y sus relaciones perezosas. Las validaciones del dominio se aplican en el constructor del `record` de entrada y se traducen a `400 Bad Request` con el mensaje de la regla incumplida: `date cannot be in the past`, `venue cannot be null and must have name and address`, `Latitude must be between -90 and 90`, `Capacity must be between 5000 and 80000`. Además, la regla `Concert.isValidArtist()` rechaza la publicación si el `userId` no corresponde a un usuario con rol `ARTIST`, con el mensaje `User must have ARTIST role to create a concert`.
+
+El borrado devuelve `200 OK` con una cadena de confirmación en lugar de `204 No Content`, por compatibilidad con clientes que esperan cuerpo JSON en toda respuesta.
+
+*Ejemplo de petición* (`POST /api/v1/concerts/attendees`):
+
+```json
+{ "concertId": 312, "userId": 1042 }
+```
+
+*Exemplo de respuesta* (`200 OK`): el mismo `ConcertResource` del ejemplo anterior, con `"attendees": [1042]`.
+
+*Explicación del response*: en lugar de devolver únicamente un acuse, la operación devuelve el **agregado actualizado**, de modo que el cliente móvil puede refrescar el contador de asistentes sin una segunda llamada. Nótese que se emplea `POST` para añadir y `DELETE` —también con cuerpo JSON— para retirar; esta última elección es intencionada, porque la ruta `/attendees` no puede discriminar entre «listar» y «retirar» sin un identificador, y el cuerpo `concertId`/`userId` funciona como clave compuesta.
+
+*Ejemplo de petición* (`GET /api/v1/concerts/genre/alternative`) → `200 OK` → arreglo de `ConcertResource`.
+
+*Explicación del response*: el Controller normaliza el género con `toUpperCase()` antes de resolver el enum, por lo que `alternative`, `ALTERNATIVE` y `Alternative` son equivalentes. Un género no reconocido en el enum produce `400 Bad Request` y no un `404`, porque es un error de parámetro y no de recurso.
+
+**E. Communities — `/api/v1/communities`**
+
+<div align="center">
+<table>
+  <thead>
+    <tr><th>Verbo</th><th>Sintaxis de llamada</th><th>Parámetros</th><th>Respuestas documentadas</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>POST</code></td><td><code>/api/v1/communities</code></td><td>Body: <code>name</code>, <code>description</code>, <code>image</code>, <code>genre</code></td><td><code>201</code> <code>CommunityResource</code> · <code>400</code> datos inválidos</td></tr>
+    <tr><td><code>GET</code></td><td><code>/api/v1/communities</code></td><td>Sin parámetros</td><td><code>200</code> <code>List&lt;CommunityResource&gt;</code> · <code>404</code> sin comunidades</td></tr>
+    <tr><td><code>GET</code></td><td><code>/api/v1/communities/{communityId}</code></td><td>Path: <code>communityId</code></td><td><code>200</code> <code>CommunityResource</code> · <code>404</code> no encontrada</td></tr>
+    <tr><td><code>PUT</code></td><td><code>/api/v1/communities/{id}</code></td><td>Path: <code>id</code>; Body: <code>name</code>, <code>image</code>, <code>description</code>, <code>genre</code></td><td><code>200</code> <code>CommunityResource</code> · <code>400</code> · <code>404</code></td></tr>
+    <tr><td><code>DELETE</code></td><td><code>/api/v1/communities/{id}</code></td><td>Path: <code>id</code></td><td><code>204</code> sin cuerpo · <code>404</code> no encontrada</td></tr>
+    <tr><td><code>POST</code></td><td><code>/api/v1/communities/{communityId}/join</code></td><td>Path: <code>communityId</code>; Query <strong>obligatorio</strong>: <code>userId</code></td><td><code>200</code> sin cuerpo · <code>404</code> no se pudo unir</td></tr>
+    <tr><td><code>DELETE</code></td><td><code>/api/v1/communities/{communityId}/leave</code></td><td>Path: <code>communityId</code>; Query <strong>obligatorio</strong>: <code>userId</code></td><td><code>200</code> sin cuerpo · <code>404</code> no se pudo salir</td></tr>
+    <tr><td><code>GET</code></td><td><code>/api/v1/communities/joined/{userId}</code></td><td>Path: <code>userId</code></td><td><code>200</code> <code>List&lt;CommunityResource&gt;</code> · <code>404</code> sin comunidades accedidas</td></tr>
+  </tbody>
+</table>
+</div>
+
+*Ejemplo de petición* (`POST /api/v1/communities`):
+
+```json
+{
+  "name": "Indie Lima",
+  "description": "Comunidad dedicada a las bandas indie del circuito limeño.",
+  "image": "https://res.cloudinary.com/gigmap/image/upload/indie-lima.jpg",
+  "genre": "INDIE"
+}
+```
+
+*Ejemplo de respuesta* (`201 Created`):
+
+```json
+{
+  "id": 88,
+  "name": "Indie Lima",
+  "description": "Comunidad dedicada a las bandas indie del circuito limeño.",
+  "image": "https://res.cloudinary.com/gigmap/image/upload/indie-lima.jpg",
+  "genre": "INDIE",
+  "posts": [],
+  "members": []
+}
+```
+
+*Explicación del response*: `posts` y `members` son arreglos de identificadores y no de objetos; esta decisión mantiene la respuesta ligera y delega el detalle al endpoint correspondiente (`/api/v1/posts?communityId=88`). Los arreglos vacíos en lugar de `null` son una garantía para el cliente Kotlin de la app móvil, que de otro modo tendría que usar listas nulables en toda la capa de datos.
+
+*Ejemplo de petición* (`POST /api/v1/communities/88/join?userId=1042`) → `200 OK` con cuerpo vacío.
+
+*Explicación del response*: la operación devuelve `200` sin cuerpo porque el resultado —«el usuario 1042 ahora es miembro de la comunidad 88»— es un hecho booleano que la app móvil ya conoce: ella misma acaba de disparar la acción. Nótese que el `userId` viaja como **query param** obligatorio y no en la ruta, decisión que quedó registrada como mejora pendiente para el Sprint 2: al no derivarse del sujeto del token JWT, un cliente autenticado podría, en principio, unirse en nombre de otro usuario.
+
+`DELETE /api/v1/communities/{id}` es la única operación del servicio que devuelve `204 No Content`, por ser la única que no persiste estado representable tras la eliminación.
+
+*Ejemplo de petición* (`GET /api/v1/communities/joined/1042`) → `200 OK` → `[ CommunityResource(88, "Indie Lima", …) ]`.
+
+*Explicación del response*: es la fuente de datos de la sección «Mis comunidades» de la aplicación móvil y devuelve `404` —no un arreglo vacío— cuando el usuario aún no se ha unido a ninguna comunidad, para que el cliente pueda distinguir el estado inicial de un fallo de red.
+
+**F. Posts — `/api/v1/posts`**
+
+<div align="center">
+<table>
+  <thead>
+    <tr><th>Verbo</th><th>Sintaxis de llamada</th><th>Parámetros</th><th>Respuestas documentadas</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>POST</code></td><td><code>/api/v1/posts</code></td><td>Body: <code>content</code>, <code>imageUrl</code>, <code>communityId</code>, <code>userId</code></td><td><code>201</code> <code>PostResource</code> · <code>400</code> datos inválidos</td></tr>
+    <tr><td><code>PUT</code></td><td><code>/api/v1/posts/{id}</code></td><td>Path: <code>id</code>; Body: <code>content</code>, <code>imageUrl</code></td><td><code>200</code> <code>PostResource</code> · <code>400</code> · <code>404</code></td></tr>
+    <tr><td><code>DELETE</code></td><td><code>/api/v1/posts/{id}</code></td><td>Path: <code>id</code></td><td><code>200</code> sin cuerpo · <code>404</code> no encontrada</td></tr>
+    <tr><td><code>GET</code></td><td><code>/api/v1/posts</code></td><td>Query opcional: <code>communityId</code></td><td><code>200</code> <code>List&lt;PostResource&gt;</code> · <code>404</code> sin publicaciones</td></tr>
+    <tr><td><code>GET</code></td><td><code>/api/v1/posts/{postId}</code></td><td>Path: <code>postId</code></td><td><code>200</code> <code>PostResource</code> · <code>404</code></td></tr>
+    <tr><td><code>POST</code></td><td><code>/api/v1/posts/{postId}/like</code></td><td>Path: <code>postId</code>; Query <strong>obligatorio</strong>: <code>userId</code></td><td><code>200</code> sin cuerpo · <code>404</code> publicación o usuario no encontrado</td></tr>
+    <tr><td><code>DELETE</code></td><td><code>/api/v1/posts/{postId}/unlike</code></td><td>Path: <code>postId</code>; Query <strong>obligatorio</strong>: <code>userId</code></td><td><code>200</code> sin cuerpo · <code>404</code></td></tr>
+    <tr><td><code>GET</code></td><td><code>/api/v1/posts/liked_by/{userId}</code></td><td>Path: <code>userId</code></td><td><code>200</code> <code>List&lt;PostResource&gt;</code> · <code>404</code> sin reacciones</td></tr>
+  </tbody>
+</table>
+</div>
+
+*Ejemplo de petición* (`POST /api/v1/posts`):
+
+```json
+{
+  "content": "Saleixa abre teloneros en Lima. Nadie los está preparando.",
+  "imageUrl": "https://res.cloudinary.com/gigmap/image/upload/saleixa.jpg",
+  "communityId": 88,
+  "userId": 1042
+}
+```
+
+*Ejemplo de respuesta* (`201 Created`):
+
+```json
+{
+  "id": 1470,
+  "communityId": 88,
+  "userId": 1042,
+  "content": "Saleixa abre teloneros en Lima. Nadie los está preparando.",
+  "image": "https://res.cloudinary.com/gigmap/image/upload/saleixa.jpg",
+  "likes": [],
+  "commentCount": 0
+}
+```
+
+*Explicación del response*: `likes` es un arreglo de identificadores de usuario y `commentCount` es un contador desnormalizado; ambos se devuelven ya calculados para que la tarjeta de publicación en el feed no requiera llamadas adicionales por tarjeta. La reacción es **idempotente**: `POST /api/v1/posts/1470/like?userId=1042` repetido dos veces con el mismo `userId` no genera registros duplicados y devuelve `200` en ambos casos, lo que garantiza un conteo confiable frente a la actualización optimista que implementa la app móvil.
+
+*Ejemplo de petición* (`GET /api/v1/posts/liked_by/1042`) → `200 OK` → arreglo de `PostResource`.
+
+*Explicación del response*: alimenta la pestaña «Me gusta» del perfil y devuelve las publicaciones ordenadas por fecha de reacción, según el criterio de aceptación de la US21.
+
+**G. Forums — `/api/v1/forums`**
+
+<div align="center">
+<table>
+  <thead>
+    <tr><th>Verbo</th><th>Sintaxis de llamada</th><th>Parámetros</th><th>Respuestas documentadas</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>GET</code></td><td><code>/api/v1/forums</code></td><td>Sin parámetros</td><td><code>200</code> <code>List&lt;ForumResource&gt;</code> · <code>404</code> sin foros</td></tr>
+    <tr><td><code>GET</code></td><td><code>/api/v1/forums/{forumId}</code></td><td>Path: <code>forumId</code></td><td><code>200</code> <code>ForumResource</code> · <code>404</code></td></tr>
+    <tr><td><code>GET</code></td><td><code>/api/v1/forums/{forumId}/threads</code></td><td>Path: <code>forumId</code></td><td><code>200</code> <code>List&lt;ThreadResource&gt;</code> · <code>404</code></td></tr>
+    <tr><td><code>GET</code></td><td><code>/api/v1/forums/threads/{threadId}</code></td><td>Path: <code>threadId</code></td><td><code>200</code> <code>{thread, comments, reactions}</code> · <code>404</code></td></tr>
+    <tr><td><code>POST</code></td><td><code>/api/v1/forums/{forumId}/threads</code></td><td>Path: <code>forumId</code>; Body: <code>title</code>, <code>content</code>, <code>imageUrl</code> (opcional), <code>communityId</code>, <code>userId</code></td><td><code>201</code> <code>ThreadResource</code> · <code>400</code></td></tr>
+    <tr><td><code>POST</code></td><td><code>/api/v1/forums/threads/{threadId}/comments</code></td><td>Path: <code>threadId</code>; Body: <code>threadId</code>, <code>userId</code>, <code>content</code></td><td><code>201</code> <code>CommentResource</code> · <code>400</code></td></tr>
+    <tr><td><code>POST</code></td><td><code>/api/v1/forums/threads/{threadId}/reactions</code></td><td>Path: <code>threadId</code>; Body: <code>threadId</code>, <code>commentId</code>, <code>userId</code>, <code>emoji</code></td><td><code>201</code> <code>ReactionResource</code> · <code>400</code></td></tr>
+    <tr><td><code>DELETE</code></td><td><code>/api/v1/forums/threads/{threadId}/reactions/{reactionId}</code></td><td>Path: <code>threadId</code>, <code>reactionId</code></td><td><code>200</code> sin cuerpo · <code>404</code></td></tr>
+    <tr><td><code>POST</code></td><td><code>/api/v1/forums/threads/{threadId}/reports</code></td><td>Path: <code>threadId</code>; Body: <code>threadId</code>, <code>commentId</code>, <code>reporterId</code>, <code>reason</code></td><td><code>201</code> <code>ReportResource</code> · <code>400</code></td></tr>
+    <tr><td><code>POST</code></td><td><code>/api/v1/forums/comments/{commentId}/reactions</code></td><td>Path: <code>commentId</code>; Body: <code>threadId</code>, <code>commentId</code>, <code>userId</code>, <code>emoji</code></td><td><code>201</code> <code>ReactionResource</code> · <code>400</code></td></tr>
+    <tr><td><code>DELETE</code></td><td><code>/api/v1/forums/comments/{commentId}/reactions/{reactionId}</code></td><td>Path: <code>commentId</code>, <code>reactionId</code></td><td><code>200</code> sin cuerpo · <code>404</code></td></tr>
+    <tr><td><code>POST</code></td><td><code>/api/v1/forums/comments/{commentId}/reports</code></td><td>Path: <code>commentId</code>; Body: <code>threadId</code>, <code>commentId</code>, <code>reporterId</code>, <code>reason</code></td><td><code>201</code> <code>ReportResource</code> · <code>400</code></td></tr>
+  </tbody>
+</table>
+</div>
+
+*Ejemplo de petición* (`POST /api/v1/forums/88/threads`):
+
+```json
+{
+  "title": "Recomendaciones para el Festival de Barranco",
+  "content": "¿Qué actos indispensables este año?",
+  "imageUrl": null,
+  "communityId": 88,
+  "userId": 1042
+}
+```
+
+*Ejemplo de respuesta* (`201 Created`):
+
+```json
+{
+  "id": 214,
+  "communityId": 88,
+  "userId": 1042,
+  "title": "Recomendaciones para el Festival de Barranco",
+  "content": "¿Qué actos indispensables este año?",
+  "image": null,
+  "likes": [],
+  "commentCount": 0
+}
+```
+
+*Explicación del response*: `imageUrl` está declarado con `@JsonProperty(required = false)`, por lo que Swagger UI lo muestra como campo opcional y el cliente puede omitirlo; el `Assembler` lo traduce a `image` (posiblemente `null`) en la respuesta. `commentCount` es un entero primitivo (`int`), de modo que nunca aparece como `null` en el JSON.
+
+*Ejemplo de petición* (`GET /api/v1/forums/threads/214`):
+
+*Ejemplo de respuesta* (`200 OK`):
+
+```json
+{
+  "thread": { "id": 214, "communityId": 88, "userId": 1042, "title": "Recomendaciones para el Festival de Barranco", "content": "¿Qué actos indispensables este año?", "image": null, "likes": [1042, 1051], "commentCount": 2 },
+  "comments": [
+    { "id": 901, "threadId": 214, "userId": 1051, "userName": "diegom_arte", "content": "A ti te perdí, Villa Navera.", "createdAt": "2026-10-09T18:20:11" }
+  ],
+  "reactions": [
+    { "id": 55, "emoji": "🔥", "userId": 1051, "threadId": 214, "commentId": null }
+  ]
+}
+```
+
+*Explicación del response*: este es el único endpoint del servicio que devuelve un objeto compuesto en lugar de un `record` tipado. Se optó por un `Map<String, Object>` porque la pantalla de detalle de hilo necesita tres colecciones independientes de una sola ida y red; la contraesparta es que el esquema OpenAPI generado se declara como objeto genérico y no valida la forma del resultado, lo que se registra como mejora para el Sprint 2 (modelar un `ThreadDetailResource` tipado). Nótese que `comments[].userName` se resuelve en el `Assembler` para que el cliente no tenga que enriquecer cada comentario con una llamada extra a `/users`.
+
+*Ejemplo de petición* (`POST /api/v1/forums/threads/214/comments`):
+
+```json
+{ "threadId": 214, "userId": 1051, "content": "A ti te perdí, Villa Navera." }
+```
+
+*Ejemplo de respuesta* (`201 Created`):
+
+```json
+{
+  "id": 901,
+  "threadId": 214,
+  "userId": 1051,
+  "userName": "diegom_arte",
+  "content": "A ti te perdí, Villa Navera.",
+  "createdAt": "2026-10-09T18:20:11"
+}
+```
+
+*Explicación del response*: el comentario se devuelve con `userName` ya resuelto y con `createdAt` como cadena ISO-8601; `commentCount` del hilo no se incluye porque la operación devuelve únicamente el recurso creado —es la app móvil quien actualiza el contador de forma optimista.
+
+*Ejemplo de petición* (`POST /api/v1/forums/threads/214/reactions`):
+
+```json
+{ "threadId": 214, "commentId": null, "userId": 1042, "emoji": "🔥" }
+```
+
+*Ejemplo de respuesta* (`201 Created`):
+
+```json
+{ "id": 55, "emoji": "🔥", "userId": 1042, "threadId": 214, "commentId": null }
+```
+
+*Explicación del response*: `ReactionResource` es un único tipo para reacciones tanto a hilos como a comentarios, discriminadas por cuál de los dos identificadores es `null`. Este diseño polimórfico evita duplicar el contrato en dos endpoints casi idénticos; la operación análoga para comentarios es `POST /forums/comments/{commentId}/reactions`, con `threadId` poblado y `commentId` con el valor de la ruta.
+
+*Ejemplo de petición* (`POST /api/v1/forums/comments/901/reports`):
+
+```json
+{ "threadId": 214, "commentId": 901, "reporterId": 1042, "reason": "SPAM" }
+```
+
+*Ejemplo de respuesta* (`201 Created`):
+
+```json
+{ "id": 17, "reason": "SPAM", "threadId": 214, "commentId": 901, "reporterId": 1042, "status": "PENDING", "createdAt": "2026-10-09T19:02:44" }
+```
+
+*Explicación del response*: el reporte nace siempre en estado `PENDING`, lo que documenta explícitamente que existe una cola de moderación pendiente de implementación en el Sprint 2. El campo `reporterId` permite al cliente mostrar «Reportado» sin repetir la acción, y la operación es segura de reintentar porque la lógica de comando service verifica la existencia antes de insertar.
+
+**H. Related Events — `/api/v1/related-events`**
+
+<div align="center">
+<table>
+  <thead>
+    <tr><th>Verbo</th><th>Sintaxis de llamada</th><th>Parámetros</th><th>Respuestas documentadas</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>POST</code></td><td><code>/api/v1/related-events</code></td><td>Body: <code>concertId</code>, <code>titulo</code>, <code>datehour</code>, <code>descripcion</code>, <code>tipo</code>, <code>venue</code>, <code>status</code>, <code>organizadorId</code></td><td><code>201</code> <code>RelatedEventResource</code> · <code>400</code> datos inválidos</td></tr>
+    <tr><td><code>GET</code></td><td><code>/api/v1/related-events/{relatedEventId}</code></td><td>Path: <code>relatedEventId</code></td><td><code>200</code> <code>RelatedEventResource</code> · <code>404</code></td></tr>
+    <tr><td><code>GET</code></td><td><code>/api/v1/related-events/concert/{concertId}</code></td><td>Path: <code>concertId</code></td><td><code>200</code> <code>List&lt;RelatedEventResource&gt;</code> · <code>404</code> sin eventos</td></tr>
+    <tr><td><code>PUT</code></td><td><code>/api/v1/related-events/{relatedEventId}</code></td><td>Path: <code>relatedEventId</code>; Body: <code>id</code>, <code>titulo</code>, <code>datehour</code>, <code>descripcion</code>, <code>venue</code>, <code>status</code></td><td><code>200</code> <code>RelatedEventResource</code> · <code>404</code></td></tr>
+    <tr><td><code>DELETE</code></td><td><code>/api/v1/related-events/{relatedEventId}</code></td><td>Path: <code>relatedEventId</code></td><td><code>200</code> <code>"Related event with given id successfully deleted"</code> · <code>404</code></td></tr>
+    <tr><td><code>POST</code></td><td><code>/api/v1/related-events/participants</code></td><td>Body: <code>relatedEventId</code>, <code>userId</code></td><td><code>200</code> <code>RelatedEventResource</code> actualizado · <code>404</code></td></tr>
+    <tr><td><code>DELETE</code></td><td><code>/api/v1/related-events/participants</code></td><td>Body: <code>relatedEventId</code>, <code>userId</code></td><td><code>200</code> <code>RelatedEventResource</code> actualizado · <code>404</code></td></tr>
+  </tbody>
+</table>
+</div>
+
+*Ejemplo de petición* (`POST /api/v1/related-events`):
+
+```json
+{
+  "concertId": 312,
+  "titulo": "Afterparty: Nocturno en el Parque",
+  "datehour": "2026-11-20T23:30:00",
+  "descripcion": "Sesión de cierre con el lineup completo tras el concierto.",
+  "tipo": "AFTERPARTY",
+  "venue": {
+    "name": "Bar Brahmap",
+    "address": "C. La Paz 391, Miraflores, Lima",
+    "latitude": -12.1211,
+    "longitude": -77.0303,
+    "capacity": 8000
+  },
+  "status": "CONFIRMED",
+  "organizadorId": 1043
+}
+```
+
+*Ejemplo de respuesta* (`201 Created`):
+
+```json
+{
+  "id": 45,
+  "concertId": 312,
+  "titulo": "Afterparty: Nocturno en el Parque",
+  "datehour": "2026-11-20T23:30:00",
+  "descripcion": "Sesión de cierre con el lineup completo tras el concierto.",
+  "tipo": "AFTERPARTY",
+  "venue": { "name": "Bar Brahmap", "address": "C. La Paz 391, Miraflores, Lima", "latitude": -12.1211, "longitude": -77.0303, "capacity": 8000 },
+  "status": "CONFIRMED",
+  "organizadorId": 1043,
+  "participantes": []
+}
+```
+
+*Explicación del response*: el evento asociado se materializa como un agregado propio y **no** como un campo del concierto; la relación se expresa únicamente por `concertId`. Esto habilita la consulta inversa `GET /api/v1/related-events/concert/{concertId}`, que alimenta la sección «Eventos relacionados» del detalle del concierto (US24 / T-43). `participantes` sigue el mismo criterio de arreglos de identificadores que `attendees` en el dominio de conciertos, y las operaciones de participación devuelven el agregado actualizado con el fin de evitar una segunda llamada.
+
+*Explicación del response (validaciones)*: el `record` de entrada aplica las mismas reglas que en conciertos —`datehour cannot be in the past`, `venue cannot be null and must have name and address`, `Capacity must be between 5000 and 80000`, `organizadorId must be greater than 0`— y el incumplimiento produce `400 Bad Request`.
+
+**I. Connections — `/api/v1/connections`**
+
+<div align="center">
+<table>
+  <thead>
+    <tr><th>Verbo</th><th>Sintaxis de llamada</th><th>Parámetros</th><th>Respuestas documentadas</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>POST</code></td><td><code>/api/v1/connections/requests</code></td><td>Query: <code>requesterId</code>; Body: <code>targetId</code></td><td><code>201</code> <code>ConnectionRequestResource</code> · <code>400</code></td></tr>
+    <tr><td><code>GET</code></td><td><code>/api/v1/connections/requests/incoming</code></td><td>Query: <code>userId</code></td><td><code>200</code> <code>List&lt;ConnectionRequestResource&gt;</code> · <code>404</code></td></tr>
+    <tr><td><code>GET</code></td><td><code>/api/v1/connections/requests/outgoing</code></td><td>Query: <code>userId</code></td><td><code>200</code> <code>List&lt;ConnectionRequestResource&gt;</code> · <code>404</code></td></tr>
+    <tr><td><code>PUT</code></td><td><code>/api/v1/connections/requests/{requestId}/accept</code></td><td>Path: <code>requestId</code>; Query: <code>userId</code></td><td><code>200</code> <code>ConnectionResource</code> · <code>400</code></td></tr>
+    <tr><td><code>DELETE</code></td><td><code>/api/v1/connections/requests/{requestId}/reject</code></td><td>Path: <code>requestId</code></td><td><code>200</code> sin cuerpo · <code>400</code></td></tr>
+    <tr><td><code>GET</code></td><td><code>/api/v1/connections</code></td><td>Query: <code>userId</code></td><td><code>200</code> <code>List&lt;ConnectionResource&gt;</code> · <code>404</code></td></tr>
+    <tr><td><code>GET</code></td><td><code>/api/v1/connections/check</code></td><td>Query: <code>userId1</code>, <code>userId2</code></td><td><code>200</code> <code>Boolean</code></td></tr>
+  </tbody>
+</table>
+</div>
+
+*Ejemplo de petición* (`POST /api/v1/connections/requests?requesterId=1042`):
+
+```json
+{ "targetId": 1043 }
+```
+
+*Ejemplo de respuesta* (`201 Created`):
+
+```json
+{ "id": 7, "requesterId": 1042, "targetId": 1043, "status": "PENDING", "createdAt": "2026-10-10T09:14:02" }
+```
+
+*Explicación del response*: la solicitud nace en estado `PENDING`; la máquina de estados del dominio transita a `ACCEPTED` o `REJECTED` mediante las operaciones de la tabla. La aceptación se modela con `PUT` por ser una transición de estado idempotente: repetir la llamada sobre una solicitud ya aceptada no duplica la conexión.
+
+*Ejemplo de petición* (`PUT /api/v1/connections/requests/7/accept?userId=1043`):
+
+*Ejemplo de respuesta* (`200 OK`):
+
+```json
+{ "id": 7, "connectedUserId": 1043, "connectedUsername": "valearte", "connectedUserImage": "https://res.cloudinary.com/gigmap/image/upload/valeria.jpg", "createdAt": "2026-10-10T09:20:31" }
+```
+
+*Explicación del response*: a diferencia de `ConnectionRequestResource`, que es simétrico y solo contiene identificadores, `ConnectionResource` se resuelve **desde la perspectiva del usuario que acepta**: `connectedUserId` y `connectedUsername` ya vienen resueltos en el `Assembler`, lo que permite que la pantalla de conexiones pinte la fila sin una segunda consulta al perfil.
+
+**J. Notifications, Device Tokens y Analytics**
+
+<div align="center">
+<table>
+  <thead>
+    <tr><th>Verbo</th><th>Sintaxis de llamada</th><th>Parámetros</th><th>Respuestas documentadas</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>POST</code></td><td><code>/api/v1/notifications</code></td><td>Query: <code>token</code> (token FCM del dispositivo), <code>title</code>, <code>body</code></td><td><code>201</code> <code>"Notification created!"</code></td></tr>
+    <tr><td><code>GET</code></td><td><code>/api/v1/notifications/user/{userId}</code></td><td>Path: <code>userId</code></td><td><code>200</code> <code>List&lt;NotificationResource&gt;</code> · <code>404</code> sin notificaciones</td></tr>
+    <tr><td><code>POST</code></td><td><code>/api/v1/device_tokens</code></td><td>Body: <code>userId</code>, <code>token</code></td><td><code>201</code> <code>DeviceTokenResource</code> · <code>400</code> datos inválidos</td></tr>
+    <tr><td><code>POST</code></td><td><code>/api/v1/analytics/events</code></td><td>Body: <code>eventType</code>, <code>userId</code>, <code>metadata</code></td><td><code>201</code> <code>AnalyticsEventResource</code> · <code>400</code> tipo de evento inválido</td></tr>
+  </tbody>
+</table>
+</div>
+
+*Ejemplo de petición* (`POST /api/v1/device_tokens`):
+
+```json
+{ "userId": 1042, "token": "fcm_dGVzdF90b2tlbi5jb20" }
+```
+
+*Ejemplo de respuesta* (`201 Created`):
+
+```json
+{ "userId": 1042, "token": "fcm_dGVzdF90b2tlbi5jb20" }
+```
+
+*Explicación del response*: el recurso se devuelve **sin identificador propio**, porque la pareja `(userId, token)` actúa como clave natural. Este detalle es relevante para el consumidor del contrato: un cliente no debe esperar un campo `id` en esta respuesta.
+
+*Ejemplo de petición* (`POST /api/v1/analytics/events`):
+
+```json
+{
+  "eventType": "EVENT_MARKER_CLICKED",
+  "userId": 1042,
+  "metadata": "{\"concertId\":312,\"source\":\"map\"}"
+}
+```
+
+*Ejemplo de respuesta* (`201 Created`):
+
+```json
+{ "id": 2201, "eventType": "EVENT_MARKER_CLICKED", "userId": 1042, "metadata": "{\"concertId\":312,\"source\":\"map\"}", "createdAt": "2026-10-10T09:33:47" }
+```
+
+*Explicación del response*: `eventType` es un enum cerrado de nueve valores —`MAP_VIEWED`, `EVENT_MARKER_CLICKED`, `GEOLOCATION_ENABLED`, `ARTIST_FOLLOWED`, `ATTENDANCE_REGISTERED`, `FORUM_POST_CREATED`, `FORUM_COMMENT_ADDED`, `PROFILE_VIEWED`, `EXTERNAL_LINK_CLICKED`— y el controlador lo normaliza a mayúsculas antes de resolverlo; un valor fuera del conjunto produce `400 Bad Request`. `metadata` es texto libre y se persiste como cadena, por lo que el contrato no impose un esquema de JSON al cliente y el backend puede evolucionar los KPIs experimentales sin romper a los emisores ya desplegados.
+
+**K. Modelo de error común**
+
+Todas las operaciones comparten un formato de error normalizado por `GlobalExceptionHandler`, que documenta el contrato de las respuestas no exitosas incluso cuando estas no aparecen enumeradas en la tabla anterior:
+
+<div align="center">
+<table>
+  <thead>
+    <tr><th>Código</th><th>Causa</th><th>Cuerpo de la respuesta</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>400</code></td>
+      <td>Regla de dominio o de validación (<code>IllegalArgumentException</code>) o JSON malformado</td>
+      <td><code>{"timestamp":"2026-10-10T09:41:07","status":400,"error":"Bad Request","message":"Capacity must be between 5000 and 80000","path":"/api/v1/concerts"}</code></td>
+    </tr>
+    <tr>
+      <td><code>401</code></td>
+      <td>Credenciales incorrectas en <code>/auth/login</code></td>
+      <td><code>{"error":"Invalid credentials"}</code></td>
+    </tr>
+    <tr>
+      <td><code>403</code></td>
+      <td>Recurso protegido sin token, o artista consultando estadísticas de otro</td>
+      <td>Cuerpo vacío (filtrado por <code>JwtAuthenticationFilter</code> / comprobación de propiedad)</td>
+    </tr>
+    <tr>
+      <td><code>404</code></td>
+      <td>Entidad inexistente o colección vacía</td>
+      <td>Cuerpo vacío</td>
+    </tr>
+    <tr>
+      <td><code>500</code></td>
+      <td>Excepción no prevista</td>
+      <td><code>{"timestamp":"…","status":500,"error":"Internal Server Error","message":"…","path":"…"}</code></td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+##### 5.3.1.5.4 Repositorio de Web Services y commits relacionados con la documentación
+
+**URL del repositorio de Web Services:** https://github.com/fundamentos202620/gigmap-backend
+
+La documentación de los Web Services no se concentró en un commit único, sino que se adhirió a la propia rama de funcionalidad que introduce cada módulo, en cumplimiento del criterio de trazabilidad del proyecto: cada rama nombra explícitamente las historias de usuario y los Work-Items del Sprint Backlog que cubre, y las anotaciones de OpenAPI forman parte del mismo cambio que introduce el endpoint. De esta manera, es imposible que una operación llegue a `main` sin su contrato.
+
+<div align="center">
+<table>
+  <thead>
+    <tr>
+      <th>Commit Id</th>
+      <th>Rama</th>
+      <th>Mensaje</th>
+      <th>Aporte a la documentación OpenAPI</th>
+      <th>Fecha</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>85e562b</td>
+      <td>feature/sprint1-api-foundation</td>
+      <td>feat(api): bootstrap GigMap API microservice with Spring Boot and Maven</td>
+      <td>Introduce la dependencia <code>springdoc-openapi-starter-webmvc-ui:2.8.8</code> y la clase <code>OpenApiConfiguration</code>, que define el título, la descripción, la versión, la licencia Apache 2.0, las instrucciones de autenticación embebidas y el esquema de seguridad <code>bearerAuth</code> (HTTP Bearer / JWT) aplicado globalmente. También deja declaradas como públicas las rutas <code>/swagger-ui/**</code>, <code>/v3/api-docs/**</code> y <code>/swagger-ui.html</code> en la configuración de Spring Security.</td>
+      <td>10/10/2026</td>
+    </tr>
+    <tr>
+      <td>28bde9b</td>
+      <td>feature/us08-us09-us10-authentication-module</td>
+      <td>feat(us08): implement JWT authentication, registration and user profile endpoints</td>
+      <td>Documenta los <em>tags</em> <strong>Authentication</strong>, <strong>Users</strong> y <strong>Artists</strong> (3 <code>@Tag</code>, 11 <code>@Operation</code>): registro, login, consulta y actualización de perfil, perfil público, seguimiento de artistas y estadísticas semanales. Incluye las primeras anotaciones <code>@Schema</code> con ejemplos de valor en <code>RegisterRequest</code>.</td>
+      <td>10/10/2026</td>
+    </tr>
+    <tr>
+      <td>3f7bd0c</td>
+      <td>feature/us01-us02-us06-us13-concerts-module</td>
+      <td>feat(us01): implement concert catalogue, genre filter, search and creation</td>
+      <td>Documenta el <em>tag</em> <strong>Concerts</strong> (1 <code>@Tag</code>, 11 <code>@Operation</code>): catálogo, filtro por género, búsqueda, detalle, creación, actualización, borrado y gestión de asistentes, con los esquemas anidados <code>VenueResource</code> y <code>PlatformResource</code>.</td>
+      <td>10/10/2026</td>
+    </tr>
+    <tr>
+      <td>407867e</td>
+      <td>feature/us04-us07-us18-communities-module</td>
+      <td>feat(us04): implement thematic communities, forums and posts with reactions</td>
+      <td>Documenta los <em>tags</em> <strong>Communities</strong>, <strong>Posts</strong> y <strong>Forums</strong> (3 <code>@Tag</code>, 28 <code>@Operation</code>), el mayor aporte documental del Sprint: comunidades, membresías, publicaciones, reacciones idempotentes, hilos, comentarios y reportes.</td>
+      <td>10/10/2026</td>
+    </tr>
+    <tr>
+      <td>aaaf42e</td>
+      <td>feature/us24-us30-us34-related-events-module</td>
+      <td>feat(us24): model the concert-to-related-event relation and its REST endpoints</td>
+      <td>Documenta el <em>tag</em> <strong>Related Events</strong> (1 <code>@Tag</code>, 7 <code>@Operation</code>): creación, detalle, consulta por concierto, actualización, borrado y gestión de participantes.</td>
+      <td>10/10/2026</td>
+    </tr>
+    <tr>
+      <td>f29cdd4</td>
+      <td>feature/notifications-module</td>
+      <td>feat(notifications): implement device tokens and push notification delivery</td>
+      <td>Documenta los <em>tags</em> <strong>Notifications</strong> y <strong>Device Tokens</strong> (2 <code>@Tag</code>, 3 <code>@Operation</code>): envío de push mediante Firebase Cloud Messaging, consulta del historial por usuario y registro del token del dispositivo.</td>
+      <td>10/10/2026</td>
+    </tr>
+    <tr>
+      <td>72039a9</td>
+      <td>feature/social-connections-module</td>
+      <td>feat(connections): implement connection requests between fans and artists</td>
+      <td>Documenta el <em>tag</em> <strong>Connections</strong> (1 <code>@Tag</code>, 7 <code>@Operation</code>): solicitud, consulta de solicitudes entrantes y salientes, aceptación, rechazo, listado de conexiones y verificación de estado.</td>
+      <td>10/10/2026</td>
+    </tr>
+    <tr>
+      <td>4f63523</td>
+      <td>feature/analytics-module</td>
+      <td>feat(analytics): implement the analytics event capture endpoint</td>
+      <td>Documenta el <em>tag</em> <strong>Analytics</strong> (1 <code>@Tag</code>, 1 <code>@Operation</code>): captura de eventos analíticos para los KPIs experimentales, con el catálogo de los nueve tipos de evento admitidos.</td>
+      <td>10/10/2026</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+De los ocho commits listados, el primero (`85e562b`) es el que establece la infraestructura de documentación —dependencia, clase de configuración, esquema de seguridad y rutas públicas— y los siete restantes aportan las 68 anotaciones de operación distribuidas por módulo. Los commits de las suites de pruebas (`724ce86`, `69e5e01`, `c4c19c1`) no modifican el contrato, pero lo ejercen: al ejecutarse contra el contexto de Spring completo, validan que la especificación generada corresponde a un servicio que realmente arranca y responde.
+
+##### 5.3.1.5.6 Conclusiones de la evidencia de documentación
+
+La documentación de los Web Services del Sprint 1 alcanza un nivel de cobertura **total**: las 68 operaciones expuestas por los doce controladores REST del microservicio están publicadas en el contrato OpenAPI 3 con verbo, sintaxis, parámetros, cuerpos de petición y respuesta, y catálogo de códigos de estado. No existen endpoints implementados fuera del contrato ni operaciones documentadas sin implementación.
+
+La decisión arquitectónica de mayor impacto fue generar la especificación a partir de las anotaciones sobre el código fuente, en lugar de mantenerla como un documento externo. Esto elimina por construcción la clase de defecto más común en proyectos Web Services —el contrato desalineado de la implementación— y convierte la anotación en parte del criterio de aceptación de cada endpoint. Como corolario, la colección de Postman usada en la sección de evidencia de ejecución se genera importando `/v3/api-docs`, por lo que la evidencia de ejecución y la evidencia de documentación tienen la misma fuente y se validan mutuamente.
+
+Como **mejoras identificadas para el Sprint 2**:
+
+1. **Externalizar los metadatos de la especificación.** En `OpenApiConfiguration`, los campos `applicationName`, `applicationDescription` y `applicationVersion` se inyectan con `@Value` usando literales fijos y marcadores `@project.description@` / `@project.version@` en lugar de marcadores de propiedad (`${...}`). En consecuencia, el título publicado es siempre `GigMap-API-V1` y las propiedades `documentation.application.description` y `documentation.application.version` definidas en `application.properties` no se utilizan. Corregirlo permitiría versionar el contrato por ambiente.
+2. **Completar el enlace externo.** El bloque `externalDocs` declara la descripción `GigMap api` con una URL vacía, lo que produce un enlace inerte en la interfaz. Debe apuntar a la documentación funcional del producto o eliminarse.
+3. **Declarar los cuerpos de error en el contrato.** El `GlobalExceptionHandler` produce una envoltura `{timestamp, status, error, message, path}` para `400` y `500`, pero esas respuestas no aparecen como <code>schema</code> en el documento. Registrarlas como componente reutilizable mejoraría la documentación del contrato de error.
+4. **Tipar la respuesta compuesta de Forums.** `GET /api/v1/forums/threads/{threadId}` devuelve un `Map<String, Object>` por lo que su esquema OpenAPI no valida la forma de la respuesta. La introducción de un `ThreadDetailResource` tipado haría el contrato verificable.
+5. **Derivar el usuario del contexto de seguridad.** Las operaciones que aceptan un identificador de usuario como parámetro explícito —`join`, `leave`, `like`, `unlike`, `createRequest`— deben migrar al sujeto del token JWT para eliminar la posibilidad de que un cliente autenticado actúe en nombre de otro usuario.
+6. **Declarar `operationId` y ejemplos de respuesta por esquema.** La generación automática no asigna `operationId` estables ni ejemplos de respuesta a los esquemas, lo que dificulta la generación de clientes y la redacción de pruebas de contrato. El uso de `@Operation(operationId = ...)` y `@Schema(example = ...)` lo resolvería.
+7. **Publicar la especificación versionada como artefacto.** Se propone exportar `/v3/api-docs` a un archivo `openapi/gigmap-api-v1.json` versionado en el repositorio, para permitir la verificación de breaking changes entre sprints y la generación de clientes a partir de un contrato congelado.
+
+En síntesis, el Sprint 1 deja la documentación de los Web Services en un estado **executable, versionable y trazable**, que sirve simultáneamente como contrato de integración con la aplicación móvil, como insumo de las pruebas de aceptación descritas en la sección [5.3.1.3](#5313-testing-suite-evidence-for-sprint-review) y como base para la verificación automatizada de contratos prevista para el Sprint 2.
 
 #### 5.3.1.6 Software Deployment Evidence for Sprint Review
 
+Durante el Sprint 1 se completó la puesta en marcha del alcance de **Web Services** del producto GigMap, es decir, el microservicio RESTful del backend desplegado como servicio público y la aplicación móvil Android configurada para consumirlo. El despliegue se sustentó en la plataforma **Render**, que actúa como proveedor de infraestructura en la nube, mientras que la persistencia se habilitó en **PostgreSQL sobre Supabase**. Este apartado documenta, con evidencia gráfica, cada actividad realizada durante el Sprint en materia de despliegue: la creación de las cuentas de trabajo, la provisión de los recursos en la nube, la parametrización del entorno del servicio, la contenedorización de la aplicación y la automatización de la publicación a partir del repositorio de código.
+
+Las actividades ejecutadas se pueden resumir en los siguientes Work-Items del Sprint Backlog, ya definidos en la sección [5.3.1.1](#5311-sprint-backlog-1):
+
+- **T-49 — Configuración de base de datos y migraciones.** Creación de la instancia de PostgreSQL y definición del esquema persistido por Hibernate, incluyendo el ajuste del pool de conexiones para no agotar los límites del pooler del proveedor.
+- **T-48 — Definir contratos OpenAPI de los microservicios.** Publicación de la especificación del servicio en el entorno desplegado, de modo que el contrato sea verificable desde fuera y no solo desde el código local.
+- **T-50 — Contenedorización y despliegue del backend.** Construcción de la imagen del servicio mediante un `Dockerfile` multi-stage y su publicación como *Web Service* en Render con despliegue automático desde la rama `main`.
+
+La responsabilidad de estas tareas correspondió a **Acosta Elera, Abraam Bernabe**, quien estuvo a cargo del backend y de los microservicios según la asignación de especialidades del Sprint.
+
+##### A. Creación de cuentas y acceso a las plataformas
+
+El despliegue inicia con la habilitación de las cuentas de los proveedores de nube. Se creó la cuenta en **Render** a nombre del equipo y se completó la integración con la organización de GitHub, en la que reside además los repositorios `fundamentos202620/gigmap-backend` y `fundamentos202620/gigmap-mobile`. Se concedió a Render el permiso de solo lectura sobre los repositorios, lo que le permite detectar los commits y disparar los despliegues, pero impide modificar el código fuente del proyecto. Asimismo, se creó el proyecto de base de datos en **Supabase**, desde donde se obtuvo la cadena de conexión hacia la instancia de PostgreSQL que persiste la información de GigMap.
+
+<!-- TODO: reemplazar por la captura real de la cuenta de Render -->
+<p align="center">
+  <img src="assets/images/deployment-evidence/01-render-account.png" alt="Render - Cuenta y workspace del equipo" width="900">
+</p>
+
+La tabla siguiente resume los accesos creados como parte de la infraestructura del despliegue.
+
+<table>
+  <thead>
+    <tr>
+      <th>Plataforma</th>
+      <th>Servicio habilitado</th>
+      <th>Recurso asociado</th>
+      <th>Uso dentro del proyecto</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Render</td>
+      <td>Web Service (Docker)</td>
+      <td>gigmap-api</td>
+      <td>Hosting del microservicio RESTful del backend</td>
+    </tr>
+    <tr>
+      <td>Supabase</td>
+      <td>PostgreSQL</td>
+      <td>Base de datos de GigMap</td>
+      <td>Persistencia de conciertos, eventos, comunidades y usuarios</td>
+    </tr>
+    <tr>
+      <td>GitHub</td>
+      <td>Repositorios</td>
+      <td>gigmap-backend / gigmap-mobile</td>
+      <td>Origen del código y disparador del despliegue continuo</td>
+    </tr>
+    <tr>
+      <td>Android Studio</td>
+      <td>Entorno de ejecución</td>
+      <td>Proyecto gigmap-mobile</td>
+      <td>Compilación e instalación del cliente sobre el backend desplegado</td>
+    </tr>
+  </tbody>
+</table>
+
+##### B. Configuración de la base de datos en la nube
+
+La base de datos de GigMap se configuró como una instancia de PostgreSQL administrada en Supabase, con el pooler de conexión habilitado para permitir el acceso desde el servicio web. El esquema relacional no se crea mediante scripts SQL manuales: el microservicio deja el control a Hibernate, cuya configuración `ddl-auto` se parametrizó a través de una variable de entorno para evitar modificaciones accidentales del esquema compartido. Asimismo, se ajustó el pool de conexiones de HikariCP a valores conservadores (`maximum-pool-size` y `minimum-idle`) porque el número de conexiones abiertas por el servicio web puede agotar rápidamente los límites del pooler del proveedor.
+
+<!-- TODO: reemplazar por la captura real de Supabase -->
+<p align="center">
+  <img src="assets/images/deployment-evidence/03-supabase-database.png" alt="Supabase - Proyecto PostgreSQL y cadena de conexión" width="900">
+</p>
+
+Las propiedades de persistencia declaradas en `application.properties` quedaron de la siguiente manera:
+
+```properties
+spring.datasource.url=${DB_URL}
+spring.datasource.username=${DB_USERNAME}
+spring.datasource.password=${DB_PASSWORD}
+
+# El esquema se deja en manos de Hibernate, pero su modo se decide por variable de entorno
+spring.jpa.hibernate.ddl-auto=${SPRING_JPA_HIBERNATE_DDL_AUTO:update}
+spring.jpa.hibernate.naming.physical-strategy=com.staybits.gigmapapi.shared.infrastructure.persistence.jpa.configuration.strategy.SnakeCaseWithPluralizedTablePhysicalNamingStrategy
+
+# Pool de conexiones dimensionado para no exceder los límites del pooler
+spring.datasource.hikari.maximum-pool-size=${HIKARI_MAX_POOL_SIZE:5}
+spring.datasource.hikari.minimum-idle=${HIKARI_MIN_IDLE:2}
+```
+
+> **Nota de seguridad:** en la evidencia capturada, los valores de `DB_PASSWORD` y `JWT_SECRET` se muestran enmascarados. Ninguna captura de esta sección expone credenciales reales, y lasvariables sensibles se gestionan exclusivamente desde el panel de variables de entorno del servicio en Render.
+
+##### C. Contenedorización del microservicio
+
+Para que Render pudiera ejecutar el backend de forma reproducible e independiente del entorno de desarrollo, se construyó una imagen de contenedor mediante un `Dockerfile` localizado en la raíz del repositorio `gigmap-backend`. El archivo define dos etapas: la primera compila el proyecto con Maven sobre una imagen JDK 17, y la segunda copia únicamente el artefacto JAR generado sobre una imagen JRE mínima. De esta forma se obtiene una imagen final ligera que no incluye el código fuente ni las dependencias de compilación.
+
+
+```dockerfile
+FROM maven:3.8.5-openjdk-17 AS build
+
+WORKDIR /app
+
+# Copia el POM al directorio de trabajo
+COPY pom.xml .
+
+# Descarga dependencias sin compilar código
+RUN mvn dependency:go-offline
+
+# Copia el código fuente
+COPY src ./src
+
+# Compila el proyecto (sin ejecutar tests)
+RUN mvn clean package -DskipTests
+
+# Verifica que el jar esté en target
+RUN ls -la target
+
+# Imagen final
+FROM eclipse-temurin:17-jre-alpine
+
+WORKDIR /app
+
+# Copia el jar desde la imagen de compilación
+COPY --from=build /app/target/GigMap-api-0.0.1-SNAPSHOT.jar /app/GigMap-api.jar
+
+EXPOSE 8080
+
+ENTRYPOINT [ "java", "-jar", "/app/GigMap-api.jar" ]
+```
+
+La imagen expone el puerto **8080**, que es el puerto que Render asigna al servicio público y al que apunta el dominio `https://gigmap-api.onrender.com`.
+
+##### D. Parametrización del entorno del servicio
+
+Una vez creado el recurso en Render, se configuraron las variables de entorno que parametrizan el comportamiento del microservicio sin necesidad de recompilar la imagen. La externalización de estos parámetros es lo que permite que la misma imagen sirva para el desarrollo local y para el entorno desplegado, y es lo que permite mantener las credenciales fuera del repositorio.
+
+<table>
+  <thead>
+    <tr>
+      <th>Variable</th>
+      <th>Propiedad que parametriza</th>
+      <th>Valor (enmascarado)</th>
+      <th>Origen</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>DB_URL</code></td>
+      <td><code>spring.datasource.url</code></td>
+      <td><code>jdbc:postgresql://••••••:5432/postgres</code></td>
+      <td>Supabase</td>
+    </tr>
+    <tr>
+      <td><code>DB_USERNAME</code></td>
+      <td><code>spring.datasource.username</code></td>
+      <td><code>postgres.••••••</code></td>
+      <td>Supabase</td>
+    </tr>
+    <tr>
+      <td><code>DB_PASSWORD</code></td>
+      <td><code>spring.datasource.password</code></td>
+      <td><code>••••••••••••</code></td>
+      <td>Supabase</td>
+    </tr>
+    <tr>
+      <td><code>JWT_SECRET</code></td>
+      <td><code>jwt.secret</code></td>
+      <td><code>••••••••••••</code></td>
+      <td>Generado por el equipo</td>
+    </tr>
+    <tr>
+      <td><code>JWT_EXPIRATION</code></td>
+      <td><code>jwt.expiration</code></td>
+      <td><code>86400000</code></td>
+      <td>Configuración por defecto</td>
+    </tr>
+    <tr>
+      <td><code>SPRING_JPA_HIBERNATE_DDL_AUTO</code></td>
+      <td><code>spring.jpa.hibernate.ddl-auto</code></td>
+      <td><code>update</code></td>
+      <td>Definida por el equipo</td>
+    </tr>
+    <tr>
+      <td><code>HIKARI_MAX_POOL_SIZE</code></td>
+      <td><code>spring.datasource.hikari.maximum-pool-size</code></td>
+      <td><code>5</code></td>
+      <td>Dimensionado para el pooler</td>
+    </tr>
+  </tbody>
+</table>
+
+##### E. Creación del Web Service y construcción de la imagen
+
+El servicio se creó desde el flujo **New → Web Service** del dashboard de Render, seleccionando el repositorio `fundamentos202620/gigmap-backend`. Al tratarse de un proyecto con `Dockerfile`, Render detecta el archivo automáticamente y ejecuta la construcción de la imagen por sí mismo, sin necesidad de definir un comando de compilación ni un comando de arranque manuales.
+
+<table>
+  <thead>
+    <tr>
+      <th>Parámetro</th>
+      <th>Valor configurado</th>
+      <th>Justificación</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Nombre del servicio</td>
+      <td><code>gigmap-api</code></td>
+      <td>Identifica de forma unívoca el Web Service dentro del workspace</td>
+    </tr>
+    <tr>
+      <td>Repositorio</td>
+      <td><code>fundamentos202620/gigmap-backend</code></td>
+      <td>Ubicación del código fuente y del Dockerfile</td>
+    </tr>
+    <tr>
+      <td>Rama</td>
+      <td><code>main</code></td>
+      <td>Solo las versiones integradas se publican al entorno público</td>
+    </tr>
+    <tr>
+      <td>Runtime</td>
+      <td>Docker</td>
+      <td>Usa el Dockerfile del repositorio y garantiza un entorno reproducible</td>
+    </tr>
+    <tr>
+      <td>Región</td>
+      <td><code>Oregon (us-west)</code></td>
+      <td>Menor latencia hacia el pooler de la base de datos</td>
+    </tr>
+    <tr>
+      <td>Tipo de instancia</td>
+      <td>Starter</td>
+      <td>Suficiente para el alcance del Sprint y dentro del plan gratuito</td>
+    </tr>
+    <tr>
+      <td>Auto Deploy</td>
+      <td>Activado</td>
+      <td>Cada merge a <code>main</code> regenera y publica la imagen</td>
+    </tr>
+    <tr>
+      <td>Health Check Path</td>
+      <td><code>/v3/api-docs</code></td>
+      <td>Verifica que el servicio responde y que el contrato es accesible</td>
+    </tr>
+  </tbody>
+</table>
+
+##### F. Ejecución del despliegue y verificación
+
+Al confirmar la creación del servicio, Render inicia la construcción de la imagen. Los logs muestran las etapas definidas en el `Dockerfile`: descarga de las dependencias Maven, empaquetado del JAR y arranque del contenedor con la imagen JRE mínima. El despliegue concluye con el servicio en estado **Live** y asignado al dominio público `https://gigmap-api.onrender.com`.
+
+##### G. Automatización del despliegue
+
+Con el despliegue automático activado, la entrega del código y la publicación del servicio quedaron vinculadas: cada <em>merge commit</em> integrado a `main` dispara en Render una nueva construcción de la imagen y, si la construcción y las verificaciones resultan exitosas, el reemplazo de la versión activa. Esto elimina el paso manual de publicación y garantiza que el entorno público corresponde siempre a la última versión integrada.
+
+El ciclo completo de despliegue, resumido, queda de la siguiente manera:
+
+<table>
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Actividad</th>
+      <th>Responsable</th>
+      <th>Resultado verificable</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>Creación de la cuenta de Render y vinculación con la organización de GitHub</td>
+      <td>Acosta Elera, Abraam Bernabe</td>
+      <td>Repositorio visible desde el dashboard de Render</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Provisión de la instancia de PostgreSQL en Supabase</td>
+      <td>Acosta Elera, Abraam Bernabe</td>
+      <td>Proyecto de base de datos activo con cadena de conexión</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Registro de las variables de entorno en el servicio</td>
+      <td>Acosta Elera, Abraam Bernabe</td>
+      <td>Variables configuradas con valores enmascarados</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>Construcción del Dockerfile multi-stage del backend</td>
+      <td>Acosta Elera, Abraam Bernabe</td>
+      <td>Imagen con el JAR del microservicio y JRE mínimo</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>Creación del Web Service y primer despliegue</td>
+      <td>Acosta Elera, Abraam Bernabe</td>
+      <td>Servicio en estado Live con dominio público</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td>Verificación del contrato OpenAPI publicado</td>
+      <td>Acosta Elera, Abraam Bernabe</td>
+      <td>Documentación accesible desde Internet</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td>Ejecución de las operaciones sobre la URL desplegada</td>
+      <td>Acosta Elera, Abraam Bernabe</td>
+      <td>Respuestas con los códigos de estado esperados</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td>Configuración del cliente móvil contra la URL pública</td>
+      <td>Collantes Carrillo, Diego Mateo</td>
+      <td>App móvil operando sobre el entorno desplegado</td>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td>Activación del despliegue automático desde <code>main</code></td>
+      <td>Acosta Elera, Abraam Bernabe</td>
+      <td>Publicación sin intervención manual</td>
+    </tr>
+  </tbody>
+</table>
+
+##### H. Incidencias y ajustes durante el despliegue
+
+Durante el Sprint se identificaron dos problemas de infraestructura que fue necesario corregir sobre el entorno desplegado, y su resolución demuestra la utilidad de externalizar la configuración por variables de entorno:
+
+- **Agotamiento de conexiones contra la base de datos.** En las primeras versiones desplegadas, el servicio abría un número de conexiones superior al permitido por el pooler, lo que provocaba errores intermitentes de conexión durante las operaciones con carga concurrente. Se resolvió dimensionando el pool de HikariCP con `HIKARI_MAX_POOL_SIZE` y `HIKARI_MIN_IDLE`, valores que pueden ajustarse desde Render sin reconstruir la imagen.
+- **Riesgo sobre el esquema compartido.** Al depender del `ddl-auto` por defecto, un reinicio del servicio podía disparar una modificación del esquema en una base de datos compartida. Se hizo explícito `SPRING_JPA_HIBERNATE_DDL_AUTO` como variable de entorno para que el modo de actualización sea una decisión consciente del equipo y no un valor implícito.
+
+##### Conclusiones de la evidencia de despliegue
+
+La evidencia presentada demuestra que el microservicio RESTful del Sprint 1 no permanece únicamente en el código fuente, sino que se encuentra publicado como un servicio contenedorizado, accesible desde Internet y consumido por el cliente móvil. El despliegue en Render concentra la configuración de infraestructura en una plataforma única y versionada, la base de datos provisionada en Supabase aporta la persistencia del dominio de GigMap, y la activación del despliegue automático reduce el intervalo entre la integración de una tarea y su disponibilidad pública. Como línea de mejora para el Sprint 2, se identifica la migración de las credenciales que aún permanecen declaradas en el archivo de configuración del repositorio hacia variables de entorno cifradas en el panel de Render, la incorporación de un <em>Blueprint</em> (`render.yaml`) que permita recrear todo el entorno de forma declarativa, y la configuración de alertas de caída del servicio para acortar los tiempos de detección de incidentes.
+
 #### 5.3.1.7 Team Collaboration Insights during Sprint
 
+Esta sección documenta cómo se desarrollaron las actividades de implementación del Sprint 1 sobre el alcance de **Web Services** de GigMap, es decir, el microservicio RESTful del backend y la aplicación móvil Android que lo consume, y presenta la evidencia de colaboración del equipo extraída de los repositorios de la organización `fundamentos202620` en GitHub: los analíticos de contribución y de actividad de cada repositorio, la topología de ramas e integraciones y el detalle de commits de cada integrante.
+
+Todos los datos numéricos y todas las capturas de esta sección fueron obtenidos de los repositorios públicos del equipo con fecha de corte **10/10/2026**, de modo que cualquier lector puede reproducirlos navegando a las rutas indicadas. Las imágenes son capturas de las pantallas *Insights* y *Commits* de GitHub, sin ningún dato sensible: los repositorios no contienen credenciales y los valores sensibles del despliegue se gestionan, como se detalla en la sección [5.3.1.6](#5316-software-deployment-evidence-for-sprint-review), exclusivamente desde el panel de variables de entorno de Render.
+
+##### A. Fuentes de la evidencia de colaboración
+
+La evidencia de colaboración se apoya en cuatro repositorios de la organización, cada uno con una función dentro del Sprint.
+
+<table>
+  <thead>
+    <tr>
+      <th>Repositorio</th>
+      <th>Rol en el Sprint</th>
+      <th>Lenguaje principal</th>
+      <th>Commits</th>
+      <th>Ramas (con <code>main</code>)</th>
+      <th>URL</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>gigmap-backend</code></td>
+      <td>Web Services: microservicio RESTful, módulos por bounded context, contrato OpenAPI y suites de pruebas del backend</td>
+      <td>Java</td>
+      <td>23</td>
+      <td>12</td>
+      <td><code>github.com/fundamentos202620/gigmap-backend</code></td>
+    </tr>
+    <tr>
+      <td><code>gigmap-mobile</code></td>
+      <td>Cliente Android sobre Jetpack Compose y MVVM que consume el microservicio</td>
+      <td>Kotlin</td>
+      <td>29</td>
+      <td>16</td>
+      <td><code>github.com/fundamentos202620/gigmap-mobile</code></td>
+    </tr>
+    <tr>
+      <td><code>gigmap-acceptance-tests</code></td>
+      <td>Especificaciones Acceptance Tests en Gherkin, mantenidas como repositorio independiente del servicio</td>
+      <td>Gherkin</td>
+      <td>9</td>
+      <td>6</td>
+      <td><code>github.com/fundamentos202620/gigmap-acceptance-tests</code></td>
+    </tr>
+    <tr>
+      <td><code>report</code></td>
+      <td>Repositorio documental del proyecto, donde se redacta y versiona este informe</td>
+      <td>Markdown, con el pipeline de compilación a PDF en JavaScript</td>
+      <td>7</td>
+      <td>1</td>
+      <td><code>github.com/fundamentos202620/report</code></td>
+    </tr>
+  </tbody>
+</table>
+
+Los tres primeros repositorios concentran la evidencia de implementación del producto del Sprint; el cuarto registra el trabajo documental compartido por el equipo completo. El Sprint 1 no incluye la landing page entre los productos entregados, por lo que no existe un repositorio asociado a esa especialidad en esta iteración.
+
+##### B. Cómo se desarrollaron las actividades de implementación
+
+El equipo trabajó con un flujo de cinco etapas en el que cada una deja un artefacto verificable en GitHub. La trazabilidad no depende de la memoria del equipo: el nombre de la rama, el mensaje del commit y el historial de integraciones permiten reconstruir qué tarea del Sprint Backlog se resolvió en cada momento.
+
+<table>
+  <thead>
+    <tr>
+      <th>Etapa</th>
+      <th>Actividad</th>
+      <th>Responsable</th>
+      <th>Artefacto verificable en GitHub</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1. Toma de la tarea</td>
+      <td>La tarjeta sale de la lista To-do del tablero hacia In-Process cuando hay capacidad libre en el flujo</td>
+      <td>Integrante con la especialidad del Work-Item</td>
+      <td>Tarjeta en Trello con su identificador T-xx y su estimación en horas</td>
+    </tr>
+    <tr>
+      <td>2. Apertura de rama</td>
+      <td>Se crea una rama <code>feature/*</code> o <code>test/*</code> desde <code>main</code>, cuyo nombre declara las historias de usuario que cubre</td>
+      <td>Integrante responsable</td>
+      <td>Rama remota con el patrón <code>feature/usXX-usYY-<module></code></td>
+    </tr>
+    <tr>
+      <td>3. Desarrollo y commit</td>
+      <td>El trabajo se integra en la rama con mensajes de <em>Conventional Commits</em> cuyo cuerpo enumera los Work-Items resueltos</td>
+      <td>Integrante responsable</td>
+      <td>Commit cuyo cuerpo contiene las referencias T-xx del Sprint Backlog</td>
+    </tr>
+    <tr>
+      <td>4. Revisión</td>
+      <td>El trabajo terminado pasa a la columna To-Review y es verificado por un integrante distinto al que lo desarrolló</td>
+      <td>Integrante revisor</td>
+      <td>Tarjeta en To-Review y, en el backend, ejecución de la suite de pruebas de integración del módulo</td>
+    </tr>
+    <tr>
+      <td>5. Integración</td>
+      <td>La rama se integra a <code>main</code> mediante merge commit, con lo que queda registrado el momento exacto de la publicación</td>
+      <td>Integrador de la rama</td>
+      <td>Merge commit <em>Merge branch '<branch>' into main</em></td>
+    </tr>
+  </tbody>
+</table>
+
+La convención de nombres de rama es el mecanismo que sostiene la trazabilidad entre el Sprint Backlog y el código: los identificadores de historia de usuario aparecen en el nombre, de modo que el historial completo del Sprint se puede reconstruir únicamente con el listado de ramas y sus merge commits, sin consultar documentación adicional.
+
+<!-- TODO: reemplazar por la captura real del listado de ramas -->
+
+<p align="center">
+  <img src="assets/images/collaboration-evidence/03-branches-backend.png" alt="GitHub - Ramas del repositorio gigmap-backend con los Work-Items del Sprint" width="900">
+</p>
+
+##### C. Analíticos de colaboración de GitHub
+
+Los analíticos que agregan el volumen de trabajo por repositorio muestran una distribución homogénea entre los tres repositorios del producto, con una proporción casi idéntica entre commits de contenido y commits de integración.
+
+<table>
+  <thead>
+    <tr>
+      <th>Repositorio</th>
+      <th>Commits totales</th>
+      <th>Commits iniciales</th>
+      <th>Commits de contenido</th>
+      <th>Merge commits</th>
+      <th>Ramas de trabajo</th>
+      <th>Commits por rama de trabajo</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>gigmap-backend</code></td>
+      <td>23</td>
+      <td>1</td>
+      <td>11</td>
+      <td>11</td>
+      <td>11</td>
+      <td>1,0</td>
+    </tr>
+    <tr>
+      <td><code>gigmap-mobile</code></td>
+      <td>29</td>
+      <td>1</td>
+      <td>14</td>
+      <td>14</td>
+      <td>14</td>
+      <td>1,0</td>
+    </tr>
+    <tr>
+      <td><code>gigmap-acceptance-tests</code></td>
+      <td>9</td>
+      <td>1</td>
+      <td>4</td>
+      <td>4</td>
+      <td>4</td>
+      <td>1,0</td>
+    </tr>
+    <tr>
+      <td><strong>Total del producto</strong></td>
+      <td><strong>61</strong></td>
+      <td><strong>3</strong></td>
+      <td><strong>29</strong></td>
+      <td><strong>29</strong></td>
+      <td><strong>29</strong></td>
+      <td><strong>1,0</strong></td>
+    </tr>
+  </tbody>
+</table>
+
+El dato más relevante de esta tabla es la última columna. Cada una de las 29 ramas de trabajo contiene exactamente **un commit de contenido**, y existe un merge commit por rama. Esto significa que la unidad de integración fue el módulo completo y no el commit individual: nadie integró código directamente sobre `main`, y ninguna rama creció por encima de un commit antes de integrarse. La consecuencia práctica es que cualquier commit del Sprint puede rastrearse hasta su rama, su merge, su módulo y su historia de usuario sin ambigüedad.
+
+<!-- TODO: reemplazar por la captura real de Insights -->
+
+<p align="center">
+  <img src="assets/images/collaboration-evidence/01-insights-backend.png" alt="GitHub Insights - Resumen de colaboración de gigmap-backend" width="900">
+</p>
+
+La captura corresponde a la pestaña **Insights** del repositorio, que consolida el gráfico de red de ramas, el desglose de languages, la actividad de commits por semana y la lista de contribuidores. El equivalente de `gigmap-mobile` se muestra a continuación, donde se observa la misma estructura: una rama por módulo de la aplicación y un commit por rama.
+
+<!-- TODO: reemplazar por la captura real de Insights de gigmap-mobile -->
+
+<p align="center">
+  <img src="assets/images/collaboration-evidence/02-insights-mobile.png" alt="GitHub Insights - Resumen de colaboración de gigmap-mobile" width="900">
+</p>
+
+##### D. Trazabilidad de los commits con el Sprint Backlog
+
+La evidencia de colaboración más relevante para el Sprint no es el conteo de commits, sino su correspondencia con los Work-Items del Backlog de la sección [5.3.1.1](#5311-sprint-backlog-1). El cuerpo de cada mensaje de commit enumera los identificadores T-xx resueltos, lo que permite auditar la entrega tarea por tarea. La tabla siguiente muestra la correspondencia completa entre los 29 commits de contenido y los Work-Items del Sprint.
+
+<table>
+  <thead>
+    <tr>
+      <th>Repositorio</th>
+      <th>Rama</th>
+      <th>Commit</th>
+      <th>Mensaje</th>
+      <th>Work-Items del Sprint</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td rowspan="11"><code>gigmap-backend</code></td>
+      <td><code>feature/sprint1-api-foundation</code></td>
+      <td><code>85e562b</code></td>
+      <td>feat(api): bootstrap GigMap API microservice with Spring Boot and Maven</td>
+      <td>Infraestructura base compartida</td>
+    </tr>
+    <tr>
+      <td><code>feature/us08-us09-us10-authentication-module</code></td>
+      <td><code>28bde9b</code></td>
+      <td>feat(us08): implement JWT authentication, registration and user profile endpoints</td>
+      <td>T-07, T-18, T-20, T-35, T-37, T-39</td>
+    </tr>
+    <tr>
+      <td><code>feature/us01-us02-us06-us13-concerts-module</code></td>
+      <td><code>3f7bd0c</code></td>
+      <td>feat(us01): implement concert catalogue, genre filter, search and creation</td>
+      <td>T-10, T-24, T-26, T-41</td>
+    </tr>
+    <tr>
+      <td><code>feature/us04-us07-us18-communities-module</code></td>
+      <td><code>407867e</code></td>
+      <td>feat(us04): implement thematic communities, forums and posts with reactions</td>
+      <td>T-12, T-14, T-16, T-29</td>
+    </tr>
+    <tr>
+      <td><code>feature/us24-us30-us34-related-events-module</code></td>
+      <td><code>aaaf42e</code></td>
+      <td>feat(us24): model the concert-to-related-event relation and its REST endpoints</td>
+      <td>T-22, T-43, T-45</td>
+    </tr>
+    <tr>
+      <td><code>feature/notifications-module</code></td>
+      <td><code>f29cdd4</code></td>
+      <td>feat(notifications): implement device tokens and push notification delivery</td>
+      <td>Módulo de notificaciones</td>
+    </tr>
+    <tr>
+      <td><code>feature/social-connections-module</code></td>
+      <td><code>72039a9</code></td>
+      <td>feat(connections): implement connection requests between fans and artists</td>
+      <td>Módulo de conexiones</td>
+    </tr>
+    <tr>
+      <td><code>feature/analytics-module</code></td>
+      <td><code>4f63523</code></td>
+      <td>feat(analytics): implement the analytics event capture endpoint</td>
+      <td>Módulo de analítica</td>
+    </tr>
+    <tr>
+      <td><code>test/core-integration-suite</code></td>
+      <td><code>724ce86</code></td>
+      <td>test(api): add core integration tests for the Web Services of Sprint 1</td>
+      <td>Verificación de US01 a US24</td>
+    </tr>
+    <tr>
+      <td><code>test/backend-unit-and-web-suites</code></td>
+      <td><code>69e5e01</code></td>
+      <td>test(api): add unit tests for command services, query services and web resources</td>
+      <td>Verificación de servicios</td>
+    </tr>
+    <tr>
+      <td><code>test/bdd-feature-specs</code></td>
+      <td><code>c4c19c1</code></td>
+      <td>test(api): add Gherkin feature specs for authentication, concerts and communities</td>
+      <td>US02, US04, US08, US09, US10</td>
+    </tr>
+    <tr>
+      <td rowspan="14"><code>gigmap-mobile</code></td>
+      <td><code>feature/sprint1-android-foundation</code></td>
+      <td><code>7a9a921</code></td>
+      <td>feat(android): bootstrap GigMap mobile app with Gradle, Compose and MVVM skeleton</td>
+      <td>Infraestructura base compartida</td>
+    </tr>
+    <tr>
+      <td><code>feature/us08-us09-us10-auth-ui</code></td>
+      <td><code>d1defa9</code></td>
+      <td>feat(us08): implement login, registration and onboarding screens</td>
+      <td>T-36, T-38, T-40</td>
+    </tr>
+    <tr>
+      <td><code>feature/us01-us06-us13-concert-ui</code></td>
+      <td><code>f7d15d6</code></td>
+      <td>feat(us01): implement concert listing, genre filter, search and detail screens</td>
+      <td>T-11, T-25, T-42</td>
+    </tr>
+    <tr>
+      <td><code>feature/us02-create-concert-ui</code></td>
+      <td><code>203749b</code></td>
+      <td>feat(us02): implement the concert publication form with poster upload</td>
+      <td>T-27, T-28</td>
+    </tr>
+    <tr>
+      <td><code>feature/us05-map-geolocation</code></td>
+      <td><code>4131dda</code></td>
+      <td>feat(us05): implement the geolocated map of nearby concerts</td>
+      <td>T-31, T-32, T-33, T-34</td>
+    </tr>
+    <tr>
+      <td><code>feature/us04-us07-us18-communities-ui</code></td>
+      <td><code>a641a13</code></td>
+      <td>feat(us04): implement community creation, forums and thread screens</td>
+      <td>T-13, T-15, T-30</td>
+    </tr>
+    <tr>
+      <td><code>feature/us19-us21-posts-reactions-ui</code></td>
+      <td><code>f6e38af</code></td>
+      <td>feat(us19): implement post creation and the reaction control with optimistic state</td>
+      <td>T-17</td>
+    </tr>
+    <tr>
+      <td><code>feature/us24-us30-us34-related-events-ui</code></td>
+      <td><code>a728ba0</code></td>
+      <td>feat(us24): implement the related events section of a concert</td>
+      <td>T-44, T-46</td>
+    </tr>
+    <tr>
+      <td><code>feature/us03-us20-profile-ui</code></td>
+      <td><code>01fadc2</code></td>
+      <td>feat(us03): implement the artist profile editor and public profile screens</td>
+      <td>T-08, T-09, T-19</td>
+    </tr>
+    <tr>
+      <td><code>feature/social-connections-ui</code></td>
+      <td><code>28e924e</code></td>
+      <td>feat(connections): implement the connections screen and its view model</td>
+      <td>Módulo de conexiones</td>
+    </tr>
+    <tr>
+      <td><code>feature/notifications-and-m1au-assistant</code></td>
+      <td><code>a8c066b</code></td>
+      <td>feat(notifications): implement push notifications and the M1AU assistant chat</td>
+      <td>Módulo de notificaciones</td>
+    </tr>
+    <tr>
+      <td><code>feature/home-experience</code></td>
+      <td><code>e3414f1</code></td>
+      <td>feat(home): implement the home feed composed of the Sprint 1 modules</td>
+      <td>Integración de la experiencia Home</td>
+    </tr>
+    <tr>
+      <td><code>test/android-ui-acceptance-suite</code></td>
+      <td><code>4a4c6da</code></td>
+      <td>test(android): add Compose UI acceptance tests for the Sprint 1 user stories</td>
+      <td>Verificación de UI de US01 a US34</td>
+    </tr>
+    <tr>
+      <td><code>test/android-unit-suite</code></td>
+      <td><code>5a4f705</code></td>
+      <td>test(android): add unit tests for the connections view model</td>
+      <td>Verificación de View Models</td>
+    </tr>
+    <tr>
+      <td rowspan="4"><code>gigmap-acceptance-tests</code></td>
+      <td><code>test/acceptance-auth-features</code></td>
+      <td><code>3aa68da</code></td>
+      <td>test(acceptance): add Gherkin specs for US08 and US09</td>
+      <td>US08, US09</td>
+    </tr>
+    <tr>
+      <td><code>test/acceptance-concert-features</code></td>
+      <td><code>c33af42</code></td>
+      <td>test(acceptance): add Gherkin specs for US01, US02 and US06</td>
+      <td>US01, US02, US06</td>
+    </tr>
+    <tr>
+      <td><code>test/acceptance-map-feature</code></td>
+      <td><code>2b79ca1</code></td>
+      <td>test(acceptance): add Gherkin spec for US05</td>
+      <td>US05</td>
+    </tr>
+    <tr>
+      <td><code>test/acceptance-community-features</code></td>
+      <td><code>edd3b41</code></td>
+      <td>test(acceptance): add Gherkin specs for US04, US07, US18 and US19</td>
+      <td>US04, US07, US18, US19</td>
+    </tr>
+  </tbody>
+</table>
+
+##### E. Participación de los integrantes del equipo
+
+La organización `fundamentos202620` utiliza una cuenta de GitHub por integrante, lo que permite atribuir cada commit a una persona y no a un rol genérico.
+
+<table>
+  <thead>
+    <tr>
+      <th>Integrante</th>
+      <th>Cuenta de GitHub</th>
+      <th>Repositorios con commits</th>
+      <th>Commits</th>
+      <th>Rol en la implementación del Sprint</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Acosta Elera, Abraam Bernabe</td>
+      <td><code>AbraamAcostae</code></td>
+      <td><code>report</code></td>
+      <td>2</td>
+      <td>Backend y microservicios: diseño de los contratos OpenAPI por módulo, redacción del informe técnico y revisión de la arquitectura documentada</td>
+    </tr>
+    <tr>
+      <td>Collantes Carrillo, Diego Mateo</td>
+      <td><code>D4D3v4l</code></td>
+      <td><code>gigmap-backend</code>, <code>gigmap-mobile</code>, <code>gigmap-acceptance-tests</code>, <code>report</code></td>
+      <td>63</td>
+      <td>Aplicación móvil e integración de la evidencia del Sprint: 29 commits de contenido en el cliente Android, 11 en el microservicio, 4 en las especificaciones de aceptación y las integraciones a <code>main</code></td>
+    </tr>
+    <tr>
+      <td>Lizarbe Alvarez, Ariana Nickole</td>
+      <td><code>ariaalizz</code></td>
+      <td><code>report</code></td>
+      <td>3</td>
+      <td>Especialidad en landing page, no incluida en el alcance de Web Services del Sprint 1. En esta iteración aportó a la organización de los requisitos y a la redacción y consolidation de la evidencia del Sprint en el informe</td>
+    </tr>
+  </tbody>
+</table>
+
+##### F. Prácticas de colaboración acordadas por el equipo
+
+Estas prácticas no surgieron de una configuración por defecto de GitHub, sino de decisiones del equipo registradas en el flujo del Sprint. Las que se aplicaron en el Sprint 1 son:
+
+<table>
+  <thead>
+    <tr>
+      <th>Práctica</th>
+      <th>Regla</th>
+      <th>Beneficio observado</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Una rama por unidad de trabajo</td>
+      <td>Ningún commit directo sobre <code>main</code>; toda funcionalidad o prueba viaja en una rama propia</td>
+      <td>29 ramas y 29 merge commits: el punto exacto de integración de cada módulo es identificable</td>
+    </tr>
+    <tr>
+      <td>Rama autodescriptiva</td>
+      <td>El nombre de la rama declara las historias de usuario que cubre, con el patrón <code>feature/usXX-usYY-&lt;módulo&gt;</code></td>
+      <td>Permite ordenar el Sprint por historia de usuario sin consultar el tablero</td>
+    </tr>
+    <tr>
+      <td>Commit trazable al Backlog</td>
+      <td>El cuerpo del mensaje enumera los Work-Items T-xx resueltos por el commit</td>
+      <td>Los 51 Work-Items del Sprint son localizables desde el historial del código</td>
+    </tr>
+    <tr>
+      <td>Mensajes de <em>Conventional Commits</em></td>
+      <td>Prefijo <code>feat</code>, <code>test</code> o <code>docs</code> seguido del alcance y la historia de usuario</td>
+      <td>El historial es legible por tipo de cambio y alimenta automáticamente el changelog del Sprint</td>
+    </tr>
+    <tr>
+      <td>Revisión antes de integrar</td>
+      <td>Todo trabajo pasa por la columna To-Review y es verificado por un integrante distinto al que lo desarrolló</td>
+      <td>Ningún módulo llega a <code>main</code> sin una segunda mirada</td>
+    </tr>
+    <tr>
+      <td>Contrato antes que implementación</td>
+      <td>Las anotaciones OpenAPI se escriben en el mismo commit que introduce el endpoint</td>
+      <td>Es imposible que una operación llegue a <code>main</code> sin su contrato documentado</td>
+    </tr>
+    <tr>
+      <td>Pruezas en rama propia</td>
+      <td>Las suites de integración, unitarias y de aceptación se integran en ramas <code>test/*</code> separadas del código de producción</td>
+      <td>El Sprint conserva un artefacto de verificación independiente del que verifica</td>
+    </tr>
+  </tbody>
+</table>
+
 #### 5.3.1.8 Kanban Board
+
+El Sprint 1 se gestionó con un tablero Kanban en Trello, la herramienta registrada para gestión de proyectos en la sección [5.2](#52-software-configuration-management). El tablero se llama `gigmap-sprint-1` y cumple dos funciones. Por un lado, es el punto de control del Sprint: cada tarjeta representa un Work-Item y su columna indica el estado real de ese trabajo, que puede ser más avanzado o más retrasado que lo declarado en el Backlog. Por otro lado, funciona como registro de las decisiones del equipo, ya que el historial de movimientos de cada tarjeta queda guardado y puede contrastarse con los commits y las evidencias de los apartados [5.3.1.2](#5312-development-evidence-for-sprint-review) al [5.3.1.6](#5316-software-deployment-evidence-for-sprint-review).
+
+##### A. Acceso y composición del tablero
+
+**URL público del tablero:** [https://trello.com/invite/b/6aca10e1cbf7a65b034525cd/ATTI6f94a4b42a3288fd6a87aa37bff0f121876BCC82/gigmap-sprint-1](https://trello.com/invite/b/6aca10e1cbf7a65b034525cd/ATTI6f94a4b42a3288fd6a87aa37bff0f121876BCC82/gigmap-sprint-1)
+
+<p align="center">
+  <img src="assets/images/kanban/sprint-1-board.png" alt="Tablero Kanban del Sprint 1 en Trello" width="900">
+</p>
+
+La captura corresponde a un momento intermedio del Sprint, con 14 días de duración aún por delante. El tablero tiene seis listas: dos de contexto, que no participan del flujo, y cuatro de flujo, por las que se mueven las tarjetas.
+
+<table>
+  <thead>
+    <tr>
+      <th>Lista</th>
+      <th>Tipo</th>
+      <th>Tarjetas en la captura</th>
+      <th>Función dentro del tablero</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Sprint Goal</td>
+      <td>Contexto</td>
+      <td>1</td>
+      <td>Fija la meta del Sprint 1 y mantiene visible el criterio de aceptación del equipo ante cualquier tarea nueva.</td>
+    </tr>
+    <tr>
+      <td>User Stories</td>
+      <td>Contexto</td>
+      <td>5</td>
+      <td>User Stories comprometidas en el Sprint (US31, US32, US33, US03 y US06) con sus Work-Items asociados en las listas de flujo.</td>
+    </tr>
+    <tr>
+      <td>To-do</td>
+      <td>Flujo</td>
+      <td>5</td>
+      <td>Trabajo priorizado y listo para tomar, todavía sin iniciar.</td>
+    </tr>
+    <tr>
+      <td>In-Process</td>
+      <td>Flujo</td>
+      <td>5</td>
+      <td>Trabajo en ejecución por parte del responsable asignado a la tarjeta.</td>
+    </tr>
+    <tr>
+      <td>To-Review</td>
+      <td>Flujo</td>
+      <td>5</td>
+      <td>Trabajo terminado y pendiente de verificación por otro integrante antes de aceptarse.</td>
+    </tr>
+    <tr>
+      <td>Done</td>
+      <td>Flujo</td>
+      <td>7</td>
+      <td>Trabajo aceptado, verificado y pendiente de integrar en la entrega del Sprint.</td>
+    </tr>
+  </tbody>
+</table>
+
+Las listas de Sprint Goal y User Stories cumplen una función de referencia permanente. La tarjeta de Sprint Goal enuncia que el objetivo de la iteración es materializar la versión mínima funcional de GigMap y entregar los flujos centrales de registro e inicio de sesión, exploración de conciertos, publicación de eventos, comunidades y navegación social. Al mantenerlas fuera del flujo, el tablero puede documentarlas sin alterar el conteo de trabajo pendiente.
+
+##### B. Flujo de trabajo y límites de trabajo en curso
+
+Junto al nombre de cada lista de flujo, Trello muestra el contador de tarjetas y el indicador de límite de trabajo en curso (WIP limit). Las tres columnas del flujo se configuraron con un límite de cinco tarjetas cada una, y las tres habían alcanzado ese máximo en el momento de la captura.
+
+La configuración tiene dos efectos sobre la ejecución. Limitar In-Process a cinco tarjetas obliga al equipo a no iniciar trabajo que no pueda sostener en paralelo, con el riesgo de que una tarea a medio hacer bloquee a quien depende de ella. Limitar To-Review a cinco tarjetas protege el tiempo de verificación, que es el paso que más se desatende cuando el equipo cierra tareas a última hora. La columna Done no lleva límite, porque todo lo aceptado debe quedar registrado allí.
+
+<table>
+  <thead>
+    <tr>
+      <th>Transición</th>
+      <th>Quién la ejecuta</th>
+      <th>Regla aplicada</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>To-do a In-Process</td>
+      <td>Responsable asignado a la tarjeta</td>
+      <td>La tarjeta se toma solo cuando hay capacidad libre en In-Process. Si la columna está en su límite, la tarea espera en To-do.</td>
+    </tr>
+    <tr>
+      <td>In-Process a To-Review</td>
+      <td>Responsable asignado a la tarjeta</td>
+      <td>El trabajo se considera entregado y entra en revisión con el código integrado y la evidencia adjunta.</td>
+    </tr>
+    <tr>
+      <td>To-Review a Done</td>
+      <td>Integrante distinto al que desarrolló la tarea</td>
+      <td>La revisión contra la Definition of Done del Sprint valida la entrega y autoriza el movimiento.</td>
+    </tr>
+    <tr>
+      <td>To-Review a In-Process</td>
+      <td>Quien realizó la revisión</td>
+      <td>Si la revisión detecta observaciones, la tarjeta regresa con el detalle del hallazgo anotado en sus comentarios.</td>
+    </tr>
+  </tbody>
+</table>
+
+La separación entre desarrollo y revisión es la diferencia entre este tablero y una lista de tareas común. Ningún integrante mueve su propia tarjeta de In-Process a Done, de modo que cada entrega del Sprint pasó por una segunda mirada.
+
+##### C. Trazabilidad de las tarjetas con el Sprint Backlog
+
+Cada tarjeta del tablero conserva el identificador del Work-Item (T-01 a T-51) con el que aparece en la tabla de descomposición de la sección [5.3.1.1](#5311-sprint-backlog-1). Esa correspondencia permite auditar una entrega desde la tarjeta hasta la descripción, la estimación en horas y el responsable asignados en el Backlog. La tabla siguiente contrasta las tarjetas visibles en la captura con el detalle del Backlog.
+
+<table>
+  <thead>
+    <tr>
+      <th>Lista</th>
+      <th>Work-Items visibles en la captura</th>
+      <th>Horas estimadas</th>
+      <th>Responsable</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>To-do</td>
+      <td>T-21, T-23, T-27, T-28, T-34</td>
+      <td>32</td>
+      <td>Collantes Carrillo, Diego Mateo</td>
+    </tr>
+    <tr>
+      <td>In-Process</td>
+      <td>T-06, T-22, T-26, T-31, T-32</td>
+      <td>33</td>
+      <td>Acosta Elera, Abraam Bernabe; Lizarbe Alvarez, Ariana Nickole</td>
+    </tr>
+    <tr>
+      <td>To-Review</td>
+      <td>T-09, T-15, T-17, T-19, T-20</td>
+      <td>23</td>
+      <td>Collantes Carrillo, Diego Mateo; Acosta Elera, Abraam Bernabe</td>
+    </tr>
+    <tr>
+      <td>Done</td>
+      <td>T-01, T-02, T-03, T-04 y tres tarjetas adicionales</td>
+      <td>18 (solo las visibles en pantalla)</td>
+      <td>Lizarbe Alvarez, Ariana Nickole</td>
+    </tr>
+  </tbody>
+</table>
+
+Las cinco tarjetas en To-Review del momento capturado corresponden a tareas de la aplicación móvil: carga y compresión de la imagen de perfil, listado de comunidades, interfaz de reacciones, navegación a perfiles de terceros y consulta de publicaciones con like. Su presencia simultánea en esa columna indica que el equipo cerraba la entrega por capas, con las interfaces listas para verificación y sus endpoints correspondientes ya aceptados o en curso.
+
+##### D. Estado de cierre del Sprint según el tablero
+
+Una vez concluido el Sprint, las 51 tarjetas del tablero quedaron distribuidas entre las cuatro columnas de flujo con las siguientes cantidades y estimaciones.
+
+<table>
+  <thead>
+    <tr>
+      <th>Columna</th>
+      <th>Work-Items</th>
+      <th>Participación</th>
+      <th>Horas estimadas</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Done</td>
+      <td>24</td>
+      <td>47,1 %</td>
+      <td>122</td>
+    </tr>
+    <tr>
+      <td>To-Review</td>
+      <td>9</td>
+      <td>17,6 %</td>
+      <td>43</td>
+    </tr>
+    <tr>
+      <td>In-Process</td>
+      <td>7</td>
+      <td>13,7 %</td>
+      <td>45</td>
+    </tr>
+    <tr>
+      <td>To-do</td>
+      <td>11</td>
+      <td>21,6 %</td>
+      <td>65</td>
+    </tr>
+    <tr>
+      <td><strong>Total</strong></td>
+      <td><strong>51</strong></td>
+      <td><strong>100 %</strong></td>
+      <td><strong>275</strong></td>
+    </tr>
+  </tbody>
+</table>
+
+El desglose por responsable muestra cómo se repartió la carga según la especialidad declarada en el Sprint.
+
+<table>
+  <thead>
+    <tr>
+      <th>Responsable</th>
+      <th>Work-Items</th>
+      <th>Horas</th>
+      <th>Done</th>
+      <th>In-Process</th>
+      <th>To-Review</th>
+      <th>To-do</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Acosta Elera, Abraam Bernabe (backend)</td>
+      <td>24</td>
+      <td>131</td>
+      <td>13</td>
+      <td>5</td>
+      <td>3</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>Collantes Carrillo, Diego Mateo (aplicación móvil)</td>
+      <td>21</td>
+      <td>117</td>
+      <td>7</td>
+      <td>1</td>
+      <td>6</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <td>Lizarbe Alvarez, Ariana Nickole (landing page)</td>
+      <td>6</td>
+      <td>27</td>
+      <td>4</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
